@@ -44,12 +44,12 @@ Primary node labels:
     * Can have properties relevant to the venue.  For example, an event may have a start_time and end_time.  A store, may have an street address.
     * Can also carry labels that further classify the `type` of location.  e.g. :Event, :Retail, :Restaurant, :Home, :Activity, etc.
 
-* :Item - a node that can be sold or purchased.
+<!-- * :Item - a node that can be sold or purchased.
     * Can have properties pertaining to scope of the application, e.g. purchase price, url, etc.
-    * Can have a relationship directly to the :Machine that the device was purchased with, as well as any nodes that are descriptive, for instance an :Interest node.
+    * Can have a relationship directly to the :Machine that the device was purchased with, as well as any nodes that are descriptive, for instance an :Interest node. -->
 
-* :Purchase - an intermediate node holding attribute and relation data of a purchase of an :Item.
-    * Can have properties 
+<!-- * :Purchase - an intermediate node holding attribute and relation data of a purchase of an :Item.
+    * Can have properties  -->
 
 Secondary node labels:
 
@@ -76,8 +76,8 @@ Primary relationship types:
 * :HAS - a relationship that indicates closeness to an interest.
     * (:Location|:Item|:Human|:User)-[:HAS]->(:Interest)
 
-* :PURCHASED - a relationship from device or person indicating a purchase.
-    * (:Human|:Machine)-[:PURCHASED]->(:Purchase)-[:PURCHASED]->(:Item)
+<!-- * :PURCHASED - a relationship from device or person indicating a purchase.
+    * (:Human|:Machine)-[:PURCHASED]->(:Purchase)-[:PURCHASED]->(:Item) -->
 
 Secondary relationship types:
 * :MONTH, :DAY - a relationship in the time hierarchy indicating when a range of times into which an event should be grouped.
