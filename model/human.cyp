@@ -17,4 +17,12 @@ CREATE CONSTRAINT ON (person:HUMAN) ASSERT person.fullname IS UNIQUE
 CREATE 
        (n:Human)-[:USES]-(n:Device)
        (n:Device)-[:LOCATED]->(n:Location)
-       (n:Device)-[:
+       (n:Device)-[:HAS]->(n:Interest)
+       (n:Device)-[:TYPE]->(n:DeviceType)
+
+CREATE
+      (phone:DeviceType {type: "Phone App"})
+      (fitbit:DeviceType {type: "fitbit"})
+      (fitbit:DeviceType {type: "fitbit flex"})
+      (nike:DeviceType {type: "FuelBand"})
+      (shine:DeviceType {type: "Shine"})
