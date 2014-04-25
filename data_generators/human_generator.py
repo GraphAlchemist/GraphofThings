@@ -82,7 +82,7 @@ interest = Template("""
 """)
 
 device = Template("""
-(d:Device)-[:Type]->($device),
+(d:MACHINE)-[:TYPE]->($device),
 (p)-[:USES]->(d),
 """)
 
