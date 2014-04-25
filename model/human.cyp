@@ -1,33 +1,33 @@
 CREATE 
-       (n:Human)-[:FRIEND]->(n:Human),
-       (n:Human)-[:USES]->(n:Device),
-       (n:Human)-[:HAS]->(n:Interest),
-       (n:Human)-[:PARTICIPANT]->(n:Event);
+       (n:HUMAN)-[:FRIEND]->(n:HUMAN),
+       (n:HUMAN)-[:USES]->(n:MACHINE),
+       (n:HUMAN)-[:HAS]->(n:INTEREST),
+       (n:HUMAN)-[:PARTICIPANT]->(n:EVENT);
 
 //template Human
-// CREATE (p:Human { 
-//        firstname: "$firstname",
-//        lastname: "$lastname",
-//        fullname: "$firstname $lastname"
-//        })
+CREATE (p:HUMAN { 
+       firstname: "$firstname",
+       lastname: "$lastname",
+       fullname: "$firstname $lastname"
+       })
 
-CREATE INDEX ON :Human(fullname);
+CREATE INDEX ON :HUMAN(fullname);
 CREATE CONSTRAINT ON (person:HUMAN) ASSERT person.fullname IS UNIQUE;
 
 CREATE 
-       (n:Human)-[:USES]-(n:Device),
-       (n:Device)-[:LOCATED]->(n:Location),
-       (n:Device)-[:HAS]->(n:Interest),
-       (n:Device)-[:TYPE]->(n:DeviceType);
+       (n:HUMAN)-[:USES]-(n:MACHINE),
+       (n:MACHINE)-[:LOCATED]->(n:LOCATION),
+       (n:MACHINE)-[:HAS]->(n:INTEREST),
+       (n:MACHINE)-[:TYPE]->(n:MACHINETYPE);
 
 
 
 CREATE
-      (phone:DeviceType {type: "Phone App"}),
-      (fitbit:DeviceType {type: "fitbit"}),
-      (fitbitflex:DeviceType {type: "fitbit flex"}),
-      (nike:DeviceType {type: "FuelBand"}),
-      (shine:DeviceType {type: "Shine"});
+      (phone:MACHINETYPE {type: "Phone App"}),
+      (fitbit:MACHINETYPE {type: "fitbit"}),
+      (fitbitflex:MACHINETYPE {type: "fitbit flex"}),
+      (nike:MACHINETYPE {type: "FuelBand"}),
+      (shine:MACHINETYPE {type: "Shine"});
 
-CREATE CONSTRAINT ON (device:DeviceType) ASSERT device.DeviceType IS UNIQUE;
+CREATE CONSTRAINT ON (device:MACHINETYPE) ASSERT device.type IS UNIQUE;
 
