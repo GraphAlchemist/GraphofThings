@@ -52,9 +52,10 @@ def generate_lastname():
 
 def pick_friends(crowd):
     if len(crowd) > 10:
-        return [ f for f in sample(crowd, randint(3,5)) ]
+        besties = [ f for f in sample(crowd, randint(3,5)) ]
+        return [friend.safe_substitute(Profiles[f]) for f in besties]
     else:
-        return []
+        return ""
 
 def choose_device():
     return choice([
@@ -86,7 +87,7 @@ device = Template("""
 """)
 
 friend = Template("""
-(p)-[:Friend]->(:Human {fullname: '$fullname'}),
+(p)-[:Friend]->(:Human {fullname: '$firstname $lastname'})
 """)
 
 Profiles = {}
@@ -105,14 +106,12 @@ def generate_profile(p):
         profile.safe_substitute(person),
         device.safe_substitute(person)
         ]
-    output.append([friend.safe_substitute(Profiles[f]) for f in person['friends']])
+    output.append(",".join(person['friends']))
     output.append(';')
-    return join(output)
+    return "".join(output)
                   
 
 
 if __name__=='__main__':
-    generated_cypher = join([ generate_profile(p) for p in range(100) ])
-    with open(os.path.join(projectroot,'data','artificial_humans.cyp')) as output:
-        output.write(generated_cypher)
-    print len(generated_cypher)," profiles written"
+    generated_cypher = "\n".join([ generate_profile(p) for p in range(100) ])
+    print generated_cypher.encode('utf-8')
