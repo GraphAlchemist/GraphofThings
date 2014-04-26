@@ -50,10 +50,10 @@ def generate_lastname():
     ]
     return choice(lastnames)
 
-def pick_friends(crowd):
+def pick_friends(crowd,profile):
     if len(crowd) > 10:
-        besties = [ f for f in sample(crowd, randint(3,5)) ]
-        return [friend.safe_substitute(Profiles[f]) for f in besties]
+        besties = [ {'id': f, 'profile': profile } for f in sample(crowd, randint(3,5)) ]
+        return [friend.safe_substitute(f) for f in besties]
     else:
         return ""
 
@@ -70,7 +70,7 @@ interests = [
 ]
 
 profile = Template("""
-CREATE (p:Human { 
+CREATE (h$id:Human { 
        firstname: "$firstname",
        lastname: "$lastname",
        fullname: "$firstname $lastname",
@@ -82,12 +82,12 @@ interest = Template("""
 """)
 
 device = Template("""
-(d:MACHINE)-[:TYPE]->($device),
+(d:Machine)-[:TYPE]->($device),
 (p)-[:USES]->(d),
 """)
 
 friend = Template("""
-(p)-[:Friend]->(:Human {fullname: '$firstname $lastname'})
+(h$id)-[:FRIEND]->(h$profile)
 """)
 
 Profiles = {}
@@ -100,7 +100,7 @@ def generate_profile(p):
         'lastname': generate_lastname(),
         'device': choose_device(),
         'interests': [ i for i in sample(interests,3) ],
-        'friends': pick_friends(population)
+        'friends': pick_friends(population,p)
         }
     output = [
         profile.safe_substitute(person),
