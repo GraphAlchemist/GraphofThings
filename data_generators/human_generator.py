@@ -75,20 +75,16 @@ CREATE (h$id:Human {
        lastname: "$lastname",
        fullname: "$firstname $lastname",
        id: "$id"
-       }),
-""")
+       })""")
 
 interest = Template("""
 """)
 
 device = Template("""
-(d:Machine)-[:TYPE]->($device),
-(p)-[:USES]->(d),
+(d:Machine)-[:TYPE]->($device),(h$id)-[:USES]->(d)
 """)
 
-friend = Template("""
-(h$id)-[:FRIEND]->(h$profile)
-""")
+friend = Template("""(h$id)-[:FRIEND]->(h$profile)""")
 
 Profiles = {}
 
@@ -104,14 +100,14 @@ def generate_profile(p):
         }
     output = [
         profile.safe_substitute(person),
-        device.safe_substitute(person)
+        device.safe_substitute(person),
         ]
-    output.append(",".join(person['friends']))
-    output.append(';')
-    return "".join(output)
+    if person['friends']:
+        output.append(",".join(person['friends']))
+    return ",".join(output)
                   
 
 
 if __name__=='__main__':
-    generated_cypher = "\n".join([ generate_profile(p) for p in range(100) ])
+    generated_cypher = "\n".join([ generate_profile(p) for p in range(100) ]) +";"
     print generated_cypher.encode('utf-8')
