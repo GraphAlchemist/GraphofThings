@@ -16,10 +16,17 @@ Visit [Neo4j](http://www.neo4j.org/download) and download version >= 2.0.
 Neo4j is now running on port 7474.   
 
 ** Generate Database with our cypher script: **
+
 `./bin/neo4j-shell < path/to/this/repo/data/artificial_humans.cyp`    
 
 ** Generate your own data with our generator: **
-...
+
+In the `data_generators/` directory use the command `python generate_humans.py` 
+and pipe the output to the neo4j shell or a file. `generate_humans.py` script 
+generates 100 profiles by default but can be called with a `-n <integer>` flag
+that will generate as many as you need 
+(caution: this will fail for larger values of n 
+since it needs to keep an array of profiles to link them)
 
 ## The Data Model
 Neo4j operates off of a Property-Label Graph Model.  As concisely as possible, a graph is made up of nodes that can be categorized by one or more labels.  Node are connected by instances of directed relationships that can be queried bidirectionally.  Both relationships and nodes store properties which can be any primitive or array of primitives (string, float, integer, etc.).  You can read more about the Property-Label Graph Model [here](http://docs.neo4j.org/chunked/stable/graphdb-neo4j.html).
