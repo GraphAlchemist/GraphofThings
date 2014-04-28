@@ -53,8 +53,12 @@ def generate_lastname():
 
 def pick_friends(crowd,profile):
     if len(crowd) > 10:
-        besties = [ {'id': f, 'profile': profile } for f in sample(crowd, randint(3,5)) ]
-        return [friend.safe_substitute(f) for f in besties]
+        besties = [ {'id': f, 'profile': profile } 
+                    for f in sample(crowd, randint(3,5)) ]
+        output = [ "CREATE UNIQUE ",
+                   ",".join([friend.safe_substitute(f) for f in besties]) ]
+        output = "".join(output)
+        return output
     else:
         return ""
 
@@ -82,7 +86,7 @@ interest = Template("""
 """)
 
 device = Template("""
-(d:Machine)-[:TYPE]->($device),(h$id)-[:USES]->(d)
+CREATE UNIQUE (d$id:Machine)-[:TYPE]->($device),(h$id)-[:USES]->(d$id)
 """)
 
 friend = Template("""(h$id)-[:FRIEND]->(h$profile)""")
@@ -104,8 +108,8 @@ def generate_profile(p):
         device.safe_substitute(person),
         ]
     if person['friends']:
-        output.append(",".join(person['friends']))
-    return ",".join(output)
+        output.append(person['friends'])
+    return "".join(output)
                   
 
 
