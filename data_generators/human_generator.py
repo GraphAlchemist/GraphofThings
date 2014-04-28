@@ -1,6 +1,7 @@
 #!/usr/bin/env python
 
 import os
+import argparse
 from random import choice, randint, sample
 from string import Template, join
 
@@ -109,5 +110,13 @@ def generate_profile(p):
 
 
 if __name__=='__main__':
+    parser = argparse.ArgumentParser(description="""
+Human Generator: 
+    Generates a fictional set of profiles of humans with their friends
+    and devices. Use the -n argument to adjust the size of the network you want""")
+    parser.add_argument("-n","--number",dest='number', action='store', default=100)
+    humans = parser.parse_args()
+    number = int(humans.number)
+    print "//%d humans on the way" % number
     generated_cypher = "\n".join([ generate_profile(p) for p in range(100) ]) +";"
     print generated_cypher.encode('utf-8')
