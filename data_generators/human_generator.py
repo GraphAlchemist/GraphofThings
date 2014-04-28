@@ -118,5 +118,5 @@ Human Generator:
     humans = parser.parse_args()
     number = int(humans.number)
     print "//%d humans on the way" % number
-    generated_cypher = "\n".join([ generate_profile(p) for p in range(100) ]) +";"
+    generated_cypher = "\n".join([ generate_profile(p) for p in range(number) ]) +";"
     print generated_cypher.encode('utf-8')
