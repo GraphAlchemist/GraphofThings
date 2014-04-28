@@ -1,1804 +1,900 @@
 
-CREATE (p:Human { 
-       firstname: "Jessie",
-       lastname: "Cruz",
-       fullname: "Jessie Cruz",
+CREATE (h0:Human { 
+       firstname: "Emory",
+       lastname: "Johnson",
+       fullname: "Emory Johnson",
        id: "0"
        }),
+(d:Machine)-[:TYPE]->(nike),(h0)-[:USES]->(d)
 
-(d:Device)-[:Type]->(shine),
-(p)-[:USES]->(d),
-;
 
-CREATE (p:Human { 
-       firstname: "Blake",
-       lastname: "Murphy",
-       fullname: "Blake Murphy",
+CREATE (h1:Human { 
+       firstname: "Cameron",
+       lastname: "Reed",
+       fullname: "Cameron Reed",
        id: "1"
        }),
+(d:Machine)-[:TYPE]->(fitbitflex),(h1)-[:USES]->(d)
 
-(d:Device)-[:Type]->(shine),
-(p)-[:USES]->(d),
-;
 
-CREATE (p:Human { 
-       firstname: "Skyler",
-       lastname: "Torres",
-       fullname: "Skyler Torres",
-       id: "2"
-       }),
-
-(d:Device)-[:Type]->(fitbit),
-(p)-[:USES]->(d),
-;
-
-CREATE (p:Human { 
-       firstname: "Payton",
-       lastname: "Morales",
-       fullname: "Payton Morales",
-       id: "3"
-       }),
-
-(d:Device)-[:Type]->(fitbit),
-(p)-[:USES]->(d),
-;
-
-CREATE (p:Human { 
-       firstname: "Camryn",
-       lastname: "Scott",
-       fullname: "Camryn Scott",
-       id: "4"
-       }),
-
-(d:Device)-[:Type]->(shine),
-(p)-[:USES]->(d),
-;
-
-CREATE (p:Human { 
-       firstname: "Skylar",
-       lastname: "Turner",
-       fullname: "Skylar Turner",
-       id: "5"
-       }),
-
-(d:Device)-[:Type]->(fitbitflex),
-(p)-[:USES]->(d),
-;
-
-CREATE (p:Human { 
-       firstname: "Micah",
-       lastname: "Watson",
-       fullname: "Micah Watson",
-       id: "6"
-       }),
-
-(d:Device)-[:Type]->(fitbit),
-(p)-[:USES]->(d),
-;
-
-CREATE (p:Human { 
-       firstname: "River",
-       lastname: "Bell",
-       fullname: "River Bell",
-       id: "7"
-       }),
-
-(d:Device)-[:Type]->(fitbit),
-(p)-[:USES]->(d),
-;
-
-CREATE (p:Human { 
-       firstname: "Payton",
-       lastname: "Barnes",
-       fullname: "Payton Barnes",
-       id: "8"
-       }),
-
-(d:Device)-[:Type]->(shine),
-(p)-[:USES]->(d),
-;
-
-CREATE (p:Human { 
-       firstname: "Jordyn",
-       lastname: "Wright",
-       fullname: "Jordyn Wright",
-       id: "9"
-       }),
-
-(d:Device)-[:Type]->(nike),
-(p)-[:USES]->(d),
-;
-
-CREATE (p:Human { 
-       firstname: "Sidney",
-       lastname: "Watson",
-       fullname: "Sidney Watson",
-       id: "10"
-       }),
-
-(d:Device)-[:Type]->(nike),
-(p)-[:USES]->(d),
-;
-
-CREATE (p:Human { 
-       firstname: "Dakota",
-       lastname: "Davis",
-       fullname: "Dakota Davis",
-       id: "11"
-       }),
-
-(d:Device)-[:Type]->(nike),
-(p)-[:USES]->(d),
-
-(p)-[:Friend]->(:Human {fullname: 'Jessie Cruz'})
-,
-(p)-[:Friend]->(:Human {fullname: 'Skylar Turner'})
-,
-(p)-[:Friend]->(:Human {fullname: 'Skyler Torres'})
-,
-(p)-[:Friend]->(:Human {fullname: 'River Bell'})
-;
-
-CREATE (p:Human { 
-       firstname: "Charlie",
-       lastname: "Pérez",
-       fullname: "Charlie Pérez",
-       id: "12"
-       }),
-
-(d:Device)-[:Type]->(shine),
-(p)-[:USES]->(d),
-
-(p)-[:Friend]->(:Human {fullname: 'Sidney Watson'})
-,
-(p)-[:Friend]->(:Human {fullname: 'Dakota Davis'})
-,
-(p)-[:Friend]->(:Human {fullname: 'Skyler Torres'})
-,
-(p)-[:Friend]->(:Human {fullname: 'Blake Murphy'})
-,
-(p)-[:Friend]->(:Human {fullname: 'Jessie Cruz'})
-;
-
-CREATE (p:Human { 
-       firstname: "Hayden",
-       lastname: "Ross",
-       fullname: "Hayden Ross",
-       id: "13"
-       }),
-
-(d:Device)-[:Type]->(phone),
-(p)-[:USES]->(d),
-
-(p)-[:Friend]->(:Human {fullname: 'Dakota Davis'})
-,
-(p)-[:Friend]->(:Human {fullname: 'Payton Barnes'})
-,
-(p)-[:Friend]->(:Human {fullname: 'Charlie Pérez'})
-,
-(p)-[:Friend]->(:Human {fullname: 'Blake Murphy'})
-,
-(p)-[:Friend]->(:Human {fullname: 'Skylar Turner'})
-;
-
-CREATE (p:Human { 
-       firstname: "Amari",
-       lastname: "Gray",
-       fullname: "Amari Gray",
-       id: "14"
-       }),
-
-(d:Device)-[:Type]->(fitbit),
-(p)-[:USES]->(d),
-
-(p)-[:Friend]->(:Human {fullname: 'Jordyn Wright'})
-,
-(p)-[:Friend]->(:Human {fullname: 'Skyler Torres'})
-,
-(p)-[:Friend]->(:Human {fullname: 'Hayden Ross'})
-,
-(p)-[:Friend]->(:Human {fullname: 'Payton Barnes'})
-;
-
-CREATE (p:Human { 
-       firstname: "Ariel",
-       lastname: "Rogers",
-       fullname: "Ariel Rogers",
-       id: "15"
-       }),
-
-(d:Device)-[:Type]->(fitbit),
-(p)-[:USES]->(d),
-
-(p)-[:Friend]->(:Human {fullname: 'Charlie Pérez'})
-,
-(p)-[:Friend]->(:Human {fullname: 'River Bell'})
-,
-(p)-[:Friend]->(:Human {fullname: 'Camryn Scott'})
-,
-(p)-[:Friend]->(:Human {fullname: 'Payton Barnes'})
-;
-
-CREATE (p:Human { 
-       firstname: "Phoenix",
-       lastname: "Allen",
-       fullname: "Phoenix Allen",
-       id: "16"
-       }),
-
-(d:Device)-[:Type]->(shine),
-(p)-[:USES]->(d),
-
-(p)-[:Friend]->(:Human {fullname: 'Camryn Scott'})
-,
-(p)-[:Friend]->(:Human {fullname: 'Sidney Watson'})
-,
-(p)-[:Friend]->(:Human {fullname: 'Jordyn Wright'})
-,
-(p)-[:Friend]->(:Human {fullname: 'Blake Murphy'})
-,
-(p)-[:Friend]->(:Human {fullname: 'Skylar Turner'})
-;
-
-CREATE (p:Human { 
-       firstname: "Angel",
-       lastname: "Martin",
-       fullname: "Angel Martin",
-       id: "17"
-       }),
-
-(d:Device)-[:Type]->(fitbitflex),
-(p)-[:USES]->(d),
-
-(p)-[:Friend]->(:Human {fullname: 'Hayden Ross'})
-,
-(p)-[:Friend]->(:Human {fullname: 'Jordyn Wright'})
-,
-(p)-[:Friend]->(:Human {fullname: 'Charlie Pérez'})
-,
-(p)-[:Friend]->(:Human {fullname: 'Payton Barnes'})
-,
-(p)-[:Friend]->(:Human {fullname: 'Camryn Scott'})
-;
-
-CREATE (p:Human { 
-       firstname: "Sage",
-       lastname: "Thomas",
-       fullname: "Sage Thomas",
-       id: "18"
-       }),
-
-(d:Device)-[:Type]->(nike),
-(p)-[:USES]->(d),
-
-(p)-[:Friend]->(:Human {fullname: 'Payton Barnes'})
-,
-(p)-[:Friend]->(:Human {fullname: 'Angel Martin'})
-,
-(p)-[:Friend]->(:Human {fullname: 'River Bell'})
-;
-
-CREATE (p:Human { 
-       firstname: "Cameron",
-       lastname: "Wilson",
-       fullname: "Cameron Wilson",
-       id: "19"
-       }),
-
-(d:Device)-[:Type]->(shine),
-(p)-[:USES]->(d),
-
-(p)-[:Friend]->(:Human {fullname: 'Micah Watson'})
-,
-(p)-[:Friend]->(:Human {fullname: 'Skylar Turner'})
-,
-(p)-[:Friend]->(:Human {fullname: 'Hayden Ross'})
-;
-
-CREATE (p:Human { 
-       firstname: "Ariel",
-       lastname: "Nguyen",
-       fullname: "Ariel Nguyen",
-       id: "20"
-       }),
-
-(d:Device)-[:Type]->(phone),
-(p)-[:USES]->(d),
-
-(p)-[:Friend]->(:Human {fullname: 'Dakota Davis'})
-,
-(p)-[:Friend]->(:Human {fullname: 'Jessie Cruz'})
-,
-(p)-[:Friend]->(:Human {fullname: 'Charlie Pérez'})
-,
-(p)-[:Friend]->(:Human {fullname: 'Angel Martin'})
-;
-
-CREATE (p:Human { 
-       firstname: "Rylee",
-       lastname: "González",
-       fullname: "Rylee González",
-       id: "21"
-       }),
-
-(d:Device)-[:Type]->(nike),
-(p)-[:USES]->(d),
-
-(p)-[:Friend]->(:Human {fullname: 'Micah Watson'})
-,
-(p)-[:Friend]->(:Human {fullname: 'Cameron Wilson'})
-,
-(p)-[:Friend]->(:Human {fullname: 'River Bell'})
-;
-
-CREATE (p:Human { 
-       firstname: "Angel",
-       lastname: "Morgan",
-       fullname: "Angel Morgan",
-       id: "22"
-       }),
-
-(d:Device)-[:Type]->(nike),
-(p)-[:USES]->(d),
-
-(p)-[:Friend]->(:Human {fullname: 'Blake Murphy'})
-,
-(p)-[:Friend]->(:Human {fullname: 'Cameron Wilson'})
-,
-(p)-[:Friend]->(:Human {fullname: 'Charlie Pérez'})
-;
-
-CREATE (p:Human { 
-       firstname: "Jessie",
-       lastname: "Scott",
-       fullname: "Jessie Scott",
-       id: "23"
-       }),
-
-(d:Device)-[:Type]->(fitbitflex),
-(p)-[:USES]->(d),
-
-(p)-[:Friend]->(:Human {fullname: 'Payton Barnes'})
-,
-(p)-[:Friend]->(:Human {fullname: 'Blake Murphy'})
-,
-(p)-[:Friend]->(:Human {fullname: 'Skylar Turner'})
-;
-
-CREATE (p:Human { 
-       firstname: "Landry",
-       lastname: "Murphy",
-       fullname: "Landry Murphy",
-       id: "24"
-       }),
-
-(d:Device)-[:Type]->(shine),
-(p)-[:USES]->(d),
-
-(p)-[:Friend]->(:Human {fullname: 'Jessie Scott'})
-,
-(p)-[:Friend]->(:Human {fullname: 'Phoenix Allen'})
-,
-(p)-[:Friend]->(:Human {fullname: 'Rylee González'})
-,
-(p)-[:Friend]->(:Human {fullname: 'Skylar Turner'})
-;
-
-CREATE (p:Human { 
-       firstname: "Charlie",
-       lastname: "Young",
-       fullname: "Charlie Young",
-       id: "25"
-       }),
-
-(d:Device)-[:Type]->(shine),
-(p)-[:USES]->(d),
-
-(p)-[:Friend]->(:Human {fullname: 'Skyler Torres'})
-,
-(p)-[:Friend]->(:Human {fullname: 'Camryn Scott'})
-,
-(p)-[:Friend]->(:Human {fullname: 'Jessie Cruz'})
-;
-
-CREATE (p:Human { 
-       firstname: "Hayden",
-       lastname: "Lee",
-       fullname: "Hayden Lee",
-       id: "26"
-       }),
-
-(d:Device)-[:Type]->(fitbit),
-(p)-[:USES]->(d),
-
-(p)-[:Friend]->(:Human {fullname: 'Hayden Ross'})
-,
-(p)-[:Friend]->(:Human {fullname: 'Micah Watson'})
-,
-(p)-[:Friend]->(:Human {fullname: 'Jordyn Wright'})
-;
-
-CREATE (p:Human { 
-       firstname: "Logan",
-       lastname: "Rogers",
-       fullname: "Logan Rogers",
-       id: "27"
-       }),
-
-(d:Device)-[:Type]->(phone),
-(p)-[:USES]->(d),
-
-(p)-[:Friend]->(:Human {fullname: 'Jessie Cruz'})
-,
-(p)-[:Friend]->(:Human {fullname: 'Skyler Torres'})
-,
-(p)-[:Friend]->(:Human {fullname: 'Angel Morgan'})
-,
-(p)-[:Friend]->(:Human {fullname: 'Skylar Turner'})
-;
-
-CREATE (p:Human { 
-       firstname: "Teagan",
-       lastname: "Clark",
-       fullname: "Teagan Clark",
-       id: "28"
-       }),
-
-(d:Device)-[:Type]->(nike),
-(p)-[:USES]->(d),
-
-(p)-[:Friend]->(:Human {fullname: 'Payton Morales'})
-,
-(p)-[:Friend]->(:Human {fullname: 'Hayden Lee'})
-,
-(p)-[:Friend]->(:Human {fullname: 'Camryn Scott'})
-,
-(p)-[:Friend]->(:Human {fullname: 'Charlie Pérez'})
-,
-(p)-[:Friend]->(:Human {fullname: 'Ariel Rogers'})
-;
-
-CREATE (p:Human { 
-       firstname: "Jordan",
-       lastname: "Wood",
-       fullname: "Jordan Wood",
-       id: "29"
-       }),
-
-(d:Device)-[:Type]->(nike),
-(p)-[:USES]->(d),
-
-(p)-[:Friend]->(:Human {fullname: 'Payton Morales'})
-,
-(p)-[:Friend]->(:Human {fullname: 'Charlie Young'})
-,
-(p)-[:Friend]->(:Human {fullname: 'Hayden Ross'})
-,
-(p)-[:Friend]->(:Human {fullname: 'Skylar Turner'})
-;
-
-CREATE (p:Human { 
-       firstname: "Morgan",
-       lastname: "Watson",
-       fullname: "Morgan Watson",
-       id: "30"
-       }),
-
-(d:Device)-[:Type]->(phone),
-(p)-[:USES]->(d),
-
-(p)-[:Friend]->(:Human {fullname: 'Charlie Young'})
-,
-(p)-[:Friend]->(:Human {fullname: 'Camryn Scott'})
-,
-(p)-[:Friend]->(:Human {fullname: 'River Bell'})
-,
-(p)-[:Friend]->(:Human {fullname: 'Hayden Lee'})
-,
-(p)-[:Friend]->(:Human {fullname: 'Jessie Scott'})
-;
-
-CREATE (p:Human { 
-       firstname: "Ryan",
-       lastname: "Parker",
-       fullname: "Ryan Parker",
-       id: "31"
-       }),
-
-(d:Device)-[:Type]->(phone),
-(p)-[:USES]->(d),
-
-(p)-[:Friend]->(:Human {fullname: 'Jordyn Wright'})
-,
-(p)-[:Friend]->(:Human {fullname: 'River Bell'})
-,
-(p)-[:Friend]->(:Human {fullname: 'Sage Thomas'})
-;
-
-CREATE (p:Human { 
-       firstname: "Emory",
-       lastname: "Bennett",
-       fullname: "Emory Bennett",
-       id: "32"
-       }),
-
-(d:Device)-[:Type]->(phone),
-(p)-[:USES]->(d),
-
-(p)-[:Friend]->(:Human {fullname: 'River Bell'})
-,
-(p)-[:Friend]->(:Human {fullname: 'Camryn Scott'})
-,
-(p)-[:Friend]->(:Human {fullname: 'Angel Morgan'})
-;
-
-CREATE (p:Human { 
-       firstname: "Ryan",
-       lastname: "Ramírez",
-       fullname: "Ryan Ramírez",
-       id: "33"
-       }),
-
-(d:Device)-[:Type]->(nike),
-(p)-[:USES]->(d),
-
-(p)-[:Friend]->(:Human {fullname: 'Micah Watson'})
-,
-(p)-[:Friend]->(:Human {fullname: 'Amari Gray'})
-,
-(p)-[:Friend]->(:Human {fullname: 'Skylar Turner'})
-,
-(p)-[:Friend]->(:Human {fullname: 'Hayden Ross'})
-,
-(p)-[:Friend]->(:Human {fullname: 'Dakota Davis'})
-;
-
-CREATE (p:Human { 
-       firstname: "Hayden",
-       lastname: "Nakamoto",
-       fullname: "Hayden Nakamoto",
-       id: "34"
-       }),
-
-(d:Device)-[:Type]->(nike),
-(p)-[:USES]->(d),
-
-(p)-[:Friend]->(:Human {fullname: 'Dakota Davis'})
-,
-(p)-[:Friend]->(:Human {fullname: 'Teagan Clark'})
-,
-(p)-[:Friend]->(:Human {fullname: 'Micah Watson'})
-,
-(p)-[:Friend]->(:Human {fullname: 'Angel Morgan'})
-;
-
-CREATE (p:Human { 
-       firstname: "Dakota",
-       lastname: "Richardson",
-       fullname: "Dakota Richardson",
-       id: "35"
-       }),
-
-(d:Device)-[:Type]->(phone),
-(p)-[:USES]->(d),
-
-(p)-[:Friend]->(:Human {fullname: 'Micah Watson'})
-,
-(p)-[:Friend]->(:Human {fullname: 'Ariel Nguyen'})
-,
-(p)-[:Friend]->(:Human {fullname: 'Cameron Wilson'})
-;
-
-CREATE (p:Human { 
-       firstname: "Amari",
-       lastname: "Cooper",
-       fullname: "Amari Cooper",
-       id: "36"
-       }),
-
-(d:Device)-[:Type]->(fitbit),
-(p)-[:USES]->(d),
-
-(p)-[:Friend]->(:Human {fullname: 'Ariel Nguyen'})
-,
-(p)-[:Friend]->(:Human {fullname: 'Ryan Parker'})
-,
-(p)-[:Friend]->(:Human {fullname: 'Logan Rogers'})
-,
-(p)-[:Friend]->(:Human {fullname: 'Jordan Wood'})
-;
-
-CREATE (p:Human { 
-       firstname: "Logan",
-       lastname: "Fisher",
-       fullname: "Logan Fisher",
-       id: "37"
-       }),
-
-(d:Device)-[:Type]->(nike),
-(p)-[:USES]->(d),
-
-(p)-[:Friend]->(:Human {fullname: 'Rylee González'})
-,
-(p)-[:Friend]->(:Human {fullname: 'Angel Morgan'})
-,
-(p)-[:Friend]->(:Human {fullname: 'Charlie Young'})
-,
-(p)-[:Friend]->(:Human {fullname: 'Hayden Nakamoto'})
-,
-(p)-[:Friend]->(:Human {fullname: 'Skyler Torres'})
-;
-
-CREATE (p:Human { 
-       firstname: "River",
-       lastname: "Ross",
-       fullname: "River Ross",
-       id: "38"
-       }),
-
-(d:Device)-[:Type]->(nike),
-(p)-[:USES]->(d),
-
-(p)-[:Friend]->(:Human {fullname: 'Emory Bennett'})
-,
-(p)-[:Friend]->(:Human {fullname: 'Landry Murphy'})
-,
-(p)-[:Friend]->(:Human {fullname: 'Dakota Richardson'})
-,
-(p)-[:Friend]->(:Human {fullname: 'Camryn Scott'})
-,
-(p)-[:Friend]->(:Human {fullname: 'Sage Thomas'})
-;
-
-CREATE (p:Human { 
-       firstname: "Ariel",
-       lastname: "Bennett",
-       fullname: "Ariel Bennett",
-       id: "39"
-       }),
-
-(d:Device)-[:Type]->(phone),
-(p)-[:USES]->(d),
-
-(p)-[:Friend]->(:Human {fullname: 'Camryn Scott'})
-,
-(p)-[:Friend]->(:Human {fullname: 'Morgan Watson'})
-,
-(p)-[:Friend]->(:Human {fullname: 'Blake Murphy'})
-,
-(p)-[:Friend]->(:Human {fullname: 'Charlie Young'})
-;
-
-CREATE (p:Human { 
-       firstname: "Parker",
-       lastname: "Smith",
-       fullname: "Parker Smith",
-       id: "40"
-       }),
-
-(d:Device)-[:Type]->(nike),
-(p)-[:USES]->(d),
-
-(p)-[:Friend]->(:Human {fullname: 'Skylar Turner'})
-,
-(p)-[:Friend]->(:Human {fullname: 'Jessie Scott'})
-,
-(p)-[:Friend]->(:Human {fullname: 'Logan Rogers'})
-,
-(p)-[:Friend]->(:Human {fullname: 'Jessie Cruz'})
-;
-
-CREATE (p:Human { 
-       firstname: "Sidney",
-       lastname: "Turner",
-       fullname: "Sidney Turner",
-       id: "41"
-       }),
-
-(d:Device)-[:Type]->(shine),
-(p)-[:USES]->(d),
-
-(p)-[:Friend]->(:Human {fullname: 'Ariel Bennett'})
-,
-(p)-[:Friend]->(:Human {fullname: 'Landry Murphy'})
-,
-(p)-[:Friend]->(:Human {fullname: 'Phoenix Allen'})
-;
-
-CREATE (p:Human { 
-       firstname: "Taylor",
-       lastname: "Morgan",
-       fullname: "Taylor Morgan",
-       id: "42"
-       }),
-
-(d:Device)-[:Type]->(phone),
-(p)-[:USES]->(d),
-
-(p)-[:Friend]->(:Human {fullname: 'Logan Fisher'})
-,
-(p)-[:Friend]->(:Human {fullname: 'Sage Thomas'})
-,
-(p)-[:Friend]->(:Human {fullname: 'Parker Smith'})
-,
-(p)-[:Friend]->(:Human {fullname: 'Jordyn Wright'})
-;
-
-CREATE (p:Human { 
-       firstname: "Tatum",
-       lastname: "Davis",
-       fullname: "Tatum Davis",
-       id: "43"
-       }),
-
-(d:Device)-[:Type]->(fitbitflex),
-(p)-[:USES]->(d),
-
-(p)-[:Friend]->(:Human {fullname: 'Rylee González'})
-,
-(p)-[:Friend]->(:Human {fullname: 'Dakota Richardson'})
-,
-(p)-[:Friend]->(:Human {fullname: 'Sidney Watson'})
-,
-(p)-[:Friend]->(:Human {fullname: 'Amari Gray'})
-,
-(p)-[:Friend]->(:Human {fullname: 'Sage Thomas'})
-;
-
-CREATE (p:Human { 
-       firstname: "Kayden",
-       lastname: "Rodríguez",
-       fullname: "Kayden Rodríguez",
-       id: "44"
-       }),
-
-(d:Device)-[:Type]->(phone),
-(p)-[:USES]->(d),
-
-(p)-[:Friend]->(:Human {fullname: 'Hayden Lee'})
-,
-(p)-[:Friend]->(:Human {fullname: 'Ryan Ramírez'})
-,
-(p)-[:Friend]->(:Human {fullname: 'Hayden Nakamoto'})
-,
-(p)-[:Friend]->(:Human {fullname: 'Angel Martin'})
-;
-
-CREATE (p:Human { 
-       firstname: "Micah",
-       lastname: "Miller",
-       fullname: "Micah Miller",
-       id: "45"
-       }),
-
-(d:Device)-[:Type]->(shine),
-(p)-[:USES]->(d),
-
-(p)-[:Friend]->(:Human {fullname: 'Dakota Davis'})
-,
-(p)-[:Friend]->(:Human {fullname: 'Dakota Richardson'})
-,
-(p)-[:Friend]->(:Human {fullname: 'Jordan Wood'})
-,
-(p)-[:Friend]->(:Human {fullname: 'Ryan Parker'})
-;
-
-CREATE (p:Human { 
-       firstname: "Harley",
-       lastname: "Butler",
-       fullname: "Harley Butler",
-       id: "46"
-       }),
-
-(d:Device)-[:Type]->(shine),
-(p)-[:USES]->(d),
-
-(p)-[:Friend]->(:Human {fullname: 'Charlie Young'})
-,
-(p)-[:Friend]->(:Human {fullname: 'Ariel Rogers'})
-,
-(p)-[:Friend]->(:Human {fullname: 'Hayden Lee'})
-;
-
-CREATE (p:Human { 
-       firstname: "Ali",
-       lastname: "Russell",
-       fullname: "Ali Russell",
-       id: "47"
-       }),
-
-(d:Device)-[:Type]->(fitbitflex),
-(p)-[:USES]->(d),
-
-(p)-[:Friend]->(:Human {fullname: 'Ryan Parker'})
-,
-(p)-[:Friend]->(:Human {fullname: 'Cameron Wilson'})
-,
-(p)-[:Friend]->(:Human {fullname: 'Jessie Cruz'})
-;
-
-CREATE (p:Human { 
-       firstname: "Ali",
-       lastname: "Sanders",
-       fullname: "Ali Sanders",
-       id: "48"
-       }),
-
-(d:Device)-[:Type]->(fitbit),
-(p)-[:USES]->(d),
-
-(p)-[:Friend]->(:Human {fullname: 'Jessie Cruz'})
-,
-(p)-[:Friend]->(:Human {fullname: 'Dakota Davis'})
-,
-(p)-[:Friend]->(:Human {fullname: 'Charlie Young'})
-,
-(p)-[:Friend]->(:Human {fullname: 'Landry Murphy'})
-;
-
-CREATE (p:Human { 
-       firstname: "Cameron",
-       lastname: "James",
-       fullname: "Cameron James",
-       id: "49"
-       }),
-
-(d:Device)-[:Type]->(phone),
-(p)-[:USES]->(d),
-
-(p)-[:Friend]->(:Human {fullname: 'Hayden Lee'})
-,
-(p)-[:Friend]->(:Human {fullname: 'Jordan Wood'})
-,
-(p)-[:Friend]->(:Human {fullname: 'Ryan Ramírez'})
-,
-(p)-[:Friend]->(:Human {fullname: 'Ariel Rogers'})
-,
-(p)-[:Friend]->(:Human {fullname: 'Ali Russell'})
-;
-
-CREATE (p:Human { 
-       firstname: "Sawyer",
-       lastname: "Thompson",
-       fullname: "Sawyer Thompson",
-       id: "50"
-       }),
-
-(d:Device)-[:Type]->(fitbit),
-(p)-[:USES]->(d),
-
-(p)-[:Friend]->(:Human {fullname: 'Logan Rogers'})
-,
-(p)-[:Friend]->(:Human {fullname: 'Micah Watson'})
-,
-(p)-[:Friend]->(:Human {fullname: 'Payton Morales'})
-,
-(p)-[:Friend]->(:Human {fullname: 'Tatum Davis'})
-;
-
-CREATE (p:Human { 
-       firstname: "Lyric",
-       lastname: "Gómez",
-       fullname: "Lyric Gómez",
-       id: "51"
-       }),
-
-(d:Device)-[:Type]->(fitbit),
-(p)-[:USES]->(d),
-
-(p)-[:Friend]->(:Human {fullname: 'Ryan Parker'})
-,
-(p)-[:Friend]->(:Human {fullname: 'Ali Sanders'})
-,
-(p)-[:Friend]->(:Human {fullname: 'Cameron Wilson'})
-,
-(p)-[:Friend]->(:Human {fullname: 'Harley Butler'})
-;
-
-CREATE (p:Human { 
-       firstname: "Dakota",
-       lastname: "Morris",
-       fullname: "Dakota Morris",
-       id: "52"
-       }),
-
-(d:Device)-[:Type]->(nike),
-(p)-[:USES]->(d),
-
-(p)-[:Friend]->(:Human {fullname: 'Tatum Davis'})
-,
-(p)-[:Friend]->(:Human {fullname: 'Hayden Lee'})
-,
-(p)-[:Friend]->(:Human {fullname: 'Sidney Turner'})
-,
-(p)-[:Friend]->(:Human {fullname: 'Angel Morgan'})
-,
-(p)-[:Friend]->(:Human {fullname: 'Micah Miller'})
-;
-
-CREATE (p:Human { 
-       firstname: "Skylar",
-       lastname: "Scott",
-       fullname: "Skylar Scott",
-       id: "53"
-       }),
-
-(d:Device)-[:Type]->(phone),
-(p)-[:USES]->(d),
-
-(p)-[:Friend]->(:Human {fullname: 'Lyric Gómez'})
-,
-(p)-[:Friend]->(:Human {fullname: 'Jordyn Wright'})
-,
-(p)-[:Friend]->(:Human {fullname: 'Tatum Davis'})
-,
-(p)-[:Friend]->(:Human {fullname: 'Hayden Lee'})
-;
-
-CREATE (p:Human { 
-       firstname: "Logan",
-       lastname: "Young",
-       fullname: "Logan Young",
-       id: "54"
-       }),
-
-(d:Device)-[:Type]->(nike),
-(p)-[:USES]->(d),
-
-(p)-[:Friend]->(:Human {fullname: 'Angel Morgan'})
-,
-(p)-[:Friend]->(:Human {fullname: 'Amari Gray'})
-,
-(p)-[:Friend]->(:Human {fullname: 'Hayden Lee'})
-,
-(p)-[:Friend]->(:Human {fullname: 'Sawyer Thompson'})
-;
-
-CREATE (p:Human { 
-       firstname: "Riley",
-       lastname: "Mitchell",
-       fullname: "Riley Mitchell",
-       id: "55"
-       }),
-
-(d:Device)-[:Type]->(fitbit),
-(p)-[:USES]->(d),
-
-(p)-[:Friend]->(:Human {fullname: 'Harley Butler'})
-,
-(p)-[:Friend]->(:Human {fullname: 'Jordyn Wright'})
-,
-(p)-[:Friend]->(:Human {fullname: 'Payton Barnes'})
-;
-
-CREATE (p:Human { 
-       firstname: "Tatum",
-       lastname: "López",
-       fullname: "Tatum López",
-       id: "56"
-       }),
-
-(d:Device)-[:Type]->(fitbit),
-(p)-[:USES]->(d),
-
-(p)-[:Friend]->(:Human {fullname: 'Jordan Wood'})
-,
-(p)-[:Friend]->(:Human {fullname: 'Hayden Nakamoto'})
-,
-(p)-[:Friend]->(:Human {fullname: 'Skylar Turner'})
-,
-(p)-[:Friend]->(:Human {fullname: 'Amari Gray'})
-,
-(p)-[:Friend]->(:Human {fullname: 'Ariel Bennett'})
-;
-
-CREATE (p:Human { 
-       firstname: "Morgan",
-       lastname: "Jenkins",
-       fullname: "Morgan Jenkins",
-       id: "57"
-       }),
-
-(d:Device)-[:Type]->(fitbitflex),
-(p)-[:USES]->(d),
-
-(p)-[:Friend]->(:Human {fullname: 'Taylor Morgan'})
-,
-(p)-[:Friend]->(:Human {fullname: 'Tatum Davis'})
-,
-(p)-[:Friend]->(:Human {fullname: 'Sawyer Thompson'})
-,
-(p)-[:Friend]->(:Human {fullname: 'Skylar Scott'})
-;
-
-CREATE (p:Human { 
-       firstname: "Zion",
-       lastname: "Gómez",
-       fullname: "Zion Gómez",
-       id: "58"
-       }),
-
-(d:Device)-[:Type]->(shine),
-(p)-[:USES]->(d),
-
-(p)-[:Friend]->(:Human {fullname: 'Ali Sanders'})
-,
-(p)-[:Friend]->(:Human {fullname: 'Logan Rogers'})
-,
-(p)-[:Friend]->(:Human {fullname: 'Harley Butler'})
-,
-(p)-[:Friend]->(:Human {fullname: 'Taylor Morgan'})
-;
-
-CREATE (p:Human { 
-       firstname: "Finley",
-       lastname: "Hill",
-       fullname: "Finley Hill",
-       id: "59"
-       }),
-
-(d:Device)-[:Type]->(fitbit),
-(p)-[:USES]->(d),
-
-(p)-[:Friend]->(:Human {fullname: 'Ali Russell'})
-,
-(p)-[:Friend]->(:Human {fullname: 'Morgan Watson'})
-,
-(p)-[:Friend]->(:Human {fullname: 'Sidney Watson'})
-,
-(p)-[:Friend]->(:Human {fullname: 'Zion Gómez'})
-;
-
-CREATE (p:Human { 
-       firstname: "Teagan",
-       lastname: "Williams",
-       fullname: "Teagan Williams",
-       id: "60"
-       }),
-
-(d:Device)-[:Type]->(shine),
-(p)-[:USES]->(d),
-
-(p)-[:Friend]->(:Human {fullname: 'Jordan Wood'})
-,
-(p)-[:Friend]->(:Human {fullname: 'Parker Smith'})
-,
-(p)-[:Friend]->(:Human {fullname: 'Ali Russell'})
-,
-(p)-[:Friend]->(:Human {fullname: 'Kayden Rodríguez'})
-,
-(p)-[:Friend]->(:Human {fullname: 'Logan Fisher'})
-;
-
-CREATE (p:Human { 
-       firstname: "Kamryn",
-       lastname: "Suzuki",
-       fullname: "Kamryn Suzuki",
-       id: "61"
-       }),
-
-(d:Device)-[:Type]->(fitbitflex),
-(p)-[:USES]->(d),
-
-(p)-[:Friend]->(:Human {fullname: 'Dakota Richardson'})
-,
-(p)-[:Friend]->(:Human {fullname: 'Blake Murphy'})
-,
-(p)-[:Friend]->(:Human {fullname: 'Amari Gray'})
-;
-
-CREATE (p:Human { 
-       firstname: "Skyler",
-       lastname: "Hughes",
-       fullname: "Skyler Hughes",
-       id: "62"
-       }),
-
-(d:Device)-[:Type]->(fitbit),
-(p)-[:USES]->(d),
-
-(p)-[:Friend]->(:Human {fullname: 'Ryan Parker'})
-,
-(p)-[:Friend]->(:Human {fullname: 'Hayden Ross'})
-,
-(p)-[:Friend]->(:Human {fullname: 'Morgan Watson'})
-,
-(p)-[:Friend]->(:Human {fullname: 'Lyric Gómez'})
-,
-(p)-[:Friend]->(:Human {fullname: 'Payton Barnes'})
-;
-
-CREATE (p:Human { 
-       firstname: "Ali",
-       lastname: "Collins",
-       fullname: "Ali Collins",
-       id: "63"
-       }),
-
-(d:Device)-[:Type]->(nike),
-(p)-[:USES]->(d),
-
-(p)-[:Friend]->(:Human {fullname: 'Sage Thomas'})
-,
-(p)-[:Friend]->(:Human {fullname: 'Amari Gray'})
-,
-(p)-[:Friend]->(:Human {fullname: 'Logan Fisher'})
-;
-
-CREATE (p:Human { 
-       firstname: "Blake",
-       lastname: "Hill",
-       fullname: "Blake Hill",
-       id: "64"
-       }),
-
-(d:Device)-[:Type]->(shine),
-(p)-[:USES]->(d),
-
-(p)-[:Friend]->(:Human {fullname: 'Skylar Turner'})
-,
-(p)-[:Friend]->(:Human {fullname: 'Angel Morgan'})
-,
-(p)-[:Friend]->(:Human {fullname: 'Skyler Torres'})
-,
-(p)-[:Friend]->(:Human {fullname: 'Emory Bennett'})
-;
-
-CREATE (p:Human { 
+CREATE (h2:Human { 
        firstname: "Ariel",
        lastname: "Kelly",
        fullname: "Ariel Kelly",
+       id: "2"
+       }),
+(d:Machine)-[:TYPE]->(nike),(h2)-[:USES]->(d)
+
+
+CREATE (h3:Human { 
+       firstname: "River",
+       lastname: "Foster",
+       fullname: "River Foster",
+       id: "3"
+       }),
+(d:Machine)-[:TYPE]->(phone),(h3)-[:USES]->(d)
+
+
+CREATE (h4:Human { 
+       firstname: "Riley",
+       lastname: "Sánchez",
+       fullname: "Riley Sánchez",
+       id: "4"
+       }),
+(d:Machine)-[:TYPE]->(phone),(h4)-[:USES]->(d)
+
+
+CREATE (h5:Human { 
+       firstname: "Jordyn",
+       lastname: "Cooper",
+       fullname: "Jordyn Cooper",
+       id: "5"
+       }),
+(d:Machine)-[:TYPE]->(fitbit),(h5)-[:USES]->(d)
+
+
+CREATE (h6:Human { 
+       firstname: "Kai",
+       lastname: "Taylor",
+       fullname: "Kai Taylor",
+       id: "6"
+       }),
+(d:Machine)-[:TYPE]->(nike),(h6)-[:USES]->(d)
+
+
+CREATE (h7:Human { 
+       firstname: "Phoenix",
+       lastname: "Green",
+       fullname: "Phoenix Green",
+       id: "7"
+       }),
+(d:Machine)-[:TYPE]->(fitbit),(h7)-[:USES]->(d)
+
+
+CREATE (h8:Human { 
+       firstname: "Emery",
+       lastname: "Taylor",
+       fullname: "Emery Taylor",
+       id: "8"
+       }),
+(d:Machine)-[:TYPE]->(phone),(h8)-[:USES]->(d)
+
+
+CREATE (h9:Human { 
+       firstname: "Micah",
+       lastname: "Hernández",
+       fullname: "Micah Hernández",
+       id: "9"
+       }),
+(d:Machine)-[:TYPE]->(fitbitflex),(h9)-[:USES]->(d)
+
+
+CREATE (h10:Human { 
+       firstname: "Kamryn",
+       lastname: "Wong",
+       fullname: "Kamryn Wong",
+       id: "10"
+       }),
+(d:Machine)-[:TYPE]->(fitbit),(h10)-[:USES]->(d)
+
+
+CREATE (h11:Human { 
+       firstname: "Sage",
+       lastname: "Cox",
+       fullname: "Sage Cox",
+       id: "11"
+       }),
+(d:Machine)-[:TYPE]->(fitbit),(h11)-[:USES]->(d)
+,(h5)-[:FRIEND]->(h11),(h1)-[:FRIEND]->(h11),(h10)-[:FRIEND]->(h11)
+
+CREATE (h12:Human { 
+       firstname: "Hayden",
+       lastname: "Anderson",
+       fullname: "Hayden Anderson",
+       id: "12"
+       }),
+(d:Machine)-[:TYPE]->(nike),(h12)-[:USES]->(d)
+,(h4)-[:FRIEND]->(h12),(h0)-[:FRIEND]->(h12),(h8)-[:FRIEND]->(h12)
+
+CREATE (h13:Human { 
+       firstname: "Rowan",
+       lastname: "Barnes",
+       fullname: "Rowan Barnes",
+       id: "13"
+       }),
+(d:Machine)-[:TYPE]->(nike),(h13)-[:USES]->(d)
+,(h7)-[:FRIEND]->(h13),(h2)-[:FRIEND]->(h13),(h12)-[:FRIEND]->(h13),(h1)-[:FRIEND]->(h13),(h10)-[:FRIEND]->(h13)
+
+CREATE (h14:Human { 
+       firstname: "Kayden",
+       lastname: "Sullivan",
+       fullname: "Kayden Sullivan",
+       id: "14"
+       }),
+(d:Machine)-[:TYPE]->(shine),(h14)-[:USES]->(d)
+,(h4)-[:FRIEND]->(h14),(h7)-[:FRIEND]->(h14),(h10)-[:FRIEND]->(h14),(h5)-[:FRIEND]->(h14)
+
+CREATE (h15:Human { 
+       firstname: "Kayden",
+       lastname: "Hill",
+       fullname: "Kayden Hill",
+       id: "15"
+       }),
+(d:Machine)-[:TYPE]->(phone),(h15)-[:USES]->(d)
+,(h14)-[:FRIEND]->(h15),(h0)-[:FRIEND]->(h15),(h7)-[:FRIEND]->(h15),(h13)-[:FRIEND]->(h15)
+
+CREATE (h16:Human { 
+       firstname: "Reagan",
+       lastname: "Brown",
+       fullname: "Reagan Brown",
+       id: "16"
+       }),
+(d:Machine)-[:TYPE]->(fitbit),(h16)-[:USES]->(d)
+,(h13)-[:FRIEND]->(h16),(h5)-[:FRIEND]->(h16),(h2)-[:FRIEND]->(h16)
+
+CREATE (h17:Human { 
+       firstname: "Dallas",
+       lastname: "González",
+       fullname: "Dallas González",
+       id: "17"
+       }),
+(d:Machine)-[:TYPE]->(phone),(h17)-[:USES]->(d)
+,(h11)-[:FRIEND]->(h17),(h5)-[:FRIEND]->(h17),(h3)-[:FRIEND]->(h17),(h16)-[:FRIEND]->(h17)
+
+CREATE (h18:Human { 
+       firstname: "Peyton",
+       lastname: "Thomas",
+       fullname: "Peyton Thomas",
+       id: "18"
+       }),
+(d:Machine)-[:TYPE]->(shine),(h18)-[:USES]->(d)
+,(h15)-[:FRIEND]->(h18),(h8)-[:FRIEND]->(h18),(h1)-[:FRIEND]->(h18)
+
+CREATE (h19:Human { 
+       firstname: "Emery",
+       lastname: "Sato",
+       fullname: "Emery Sato",
+       id: "19"
+       }),
+(d:Machine)-[:TYPE]->(phone),(h19)-[:USES]->(d)
+,(h18)-[:FRIEND]->(h19),(h5)-[:FRIEND]->(h19),(h9)-[:FRIEND]->(h19)
+
+CREATE (h20:Human { 
+       firstname: "Jordan",
+       lastname: "Suzuki",
+       fullname: "Jordan Suzuki",
+       id: "20"
+       }),
+(d:Machine)-[:TYPE]->(nike),(h20)-[:USES]->(d)
+,(h5)-[:FRIEND]->(h20),(h4)-[:FRIEND]->(h20),(h18)-[:FRIEND]->(h20)
+
+CREATE (h21:Human { 
+       firstname: "Skyler",
+       lastname: "Richardson",
+       fullname: "Skyler Richardson",
+       id: "21"
+       }),
+(d:Machine)-[:TYPE]->(fitbit),(h21)-[:USES]->(d)
+,(h13)-[:FRIEND]->(h21),(h7)-[:FRIEND]->(h21),(h9)-[:FRIEND]->(h21),(h15)-[:FRIEND]->(h21)
+
+CREATE (h22:Human { 
+       firstname: "Hayden",
+       lastname: "Fisher",
+       fullname: "Hayden Fisher",
+       id: "22"
+       }),
+(d:Machine)-[:TYPE]->(fitbit),(h22)-[:USES]->(d)
+,(h19)-[:FRIEND]->(h22),(h20)-[:FRIEND]->(h22),(h5)-[:FRIEND]->(h22),(h6)-[:FRIEND]->(h22)
+
+CREATE (h23:Human { 
+       firstname: "Logan",
+       lastname: "Jenkins",
+       fullname: "Logan Jenkins",
+       id: "23"
+       }),
+(d:Machine)-[:TYPE]->(shine),(h23)-[:USES]->(d)
+,(h17)-[:FRIEND]->(h23),(h10)-[:FRIEND]->(h23),(h22)-[:FRIEND]->(h23),(h15)-[:FRIEND]->(h23),(h9)-[:FRIEND]->(h23)
+
+CREATE (h24:Human { 
+       firstname: "Emery",
+       lastname: "Davis",
+       fullname: "Emery Davis",
+       id: "24"
+       }),
+(d:Machine)-[:TYPE]->(fitbit),(h24)-[:USES]->(d)
+,(h0)-[:FRIEND]->(h24),(h21)-[:FRIEND]->(h24),(h11)-[:FRIEND]->(h24)
+
+CREATE (h25:Human { 
+       firstname: "Dylan",
+       lastname: "Hughes",
+       fullname: "Dylan Hughes",
+       id: "25"
+       }),
+(d:Machine)-[:TYPE]->(fitbitflex),(h25)-[:USES]->(d)
+,(h8)-[:FRIEND]->(h25),(h23)-[:FRIEND]->(h25),(h6)-[:FRIEND]->(h25),(h3)-[:FRIEND]->(h25)
+
+CREATE (h26:Human { 
+       firstname: "Ryan",
+       lastname: "Perry",
+       fullname: "Ryan Perry",
+       id: "26"
+       }),
+(d:Machine)-[:TYPE]->(nike),(h26)-[:USES]->(d)
+,(h17)-[:FRIEND]->(h26),(h14)-[:FRIEND]->(h26),(h15)-[:FRIEND]->(h26),(h23)-[:FRIEND]->(h26)
+
+CREATE (h27:Human { 
+       firstname: "Teagan",
+       lastname: "González",
+       fullname: "Teagan González",
+       id: "27"
+       }),
+(d:Machine)-[:TYPE]->(nike),(h27)-[:USES]->(d)
+,(h25)-[:FRIEND]->(h27),(h1)-[:FRIEND]->(h27),(h7)-[:FRIEND]->(h27),(h5)-[:FRIEND]->(h27),(h20)-[:FRIEND]->(h27)
+
+CREATE (h28:Human { 
+       firstname: "Jessie",
+       lastname: "Sánchez",
+       fullname: "Jessie Sánchez",
+       id: "28"
+       }),
+(d:Machine)-[:TYPE]->(fitbitflex),(h28)-[:USES]->(d)
+,(h7)-[:FRIEND]->(h28),(h26)-[:FRIEND]->(h28),(h21)-[:FRIEND]->(h28),(h18)-[:FRIEND]->(h28)
+
+CREATE (h29:Human { 
+       firstname: "Jayden",
+       lastname: "Ward",
+       fullname: "Jayden Ward",
+       id: "29"
+       }),
+(d:Machine)-[:TYPE]->(shine),(h29)-[:USES]->(d)
+,(h28)-[:FRIEND]->(h29),(h4)-[:FRIEND]->(h29),(h26)-[:FRIEND]->(h29)
+
+CREATE (h30:Human { 
+       firstname: "Ali",
+       lastname: "Chowdhury",
+       fullname: "Ali Chowdhury",
+       id: "30"
+       }),
+(d:Machine)-[:TYPE]->(phone),(h30)-[:USES]->(d)
+,(h15)-[:FRIEND]->(h30),(h0)-[:FRIEND]->(h30),(h14)-[:FRIEND]->(h30),(h7)-[:FRIEND]->(h30)
+
+CREATE (h31:Human { 
+       firstname: "Avery",
+       lastname: "Walker",
+       fullname: "Avery Walker",
+       id: "31"
+       }),
+(d:Machine)-[:TYPE]->(shine),(h31)-[:USES]->(d)
+,(h7)-[:FRIEND]->(h31),(h24)-[:FRIEND]->(h31),(h18)-[:FRIEND]->(h31)
+
+CREATE (h32:Human { 
+       firstname: "Harper",
+       lastname: "Barnes",
+       fullname: "Harper Barnes",
+       id: "32"
+       }),
+(d:Machine)-[:TYPE]->(phone),(h32)-[:USES]->(d)
+,(h5)-[:FRIEND]->(h32),(h6)-[:FRIEND]->(h32),(h15)-[:FRIEND]->(h32),(h14)-[:FRIEND]->(h32),(h13)-[:FRIEND]->(h32)
+
+CREATE (h33:Human { 
+       firstname: "Phoenix",
+       lastname: "Campbell",
+       fullname: "Phoenix Campbell",
+       id: "33"
+       }),
+(d:Machine)-[:TYPE]->(fitbitflex),(h33)-[:USES]->(d)
+,(h1)-[:FRIEND]->(h33),(h22)-[:FRIEND]->(h33),(h3)-[:FRIEND]->(h33),(h29)-[:FRIEND]->(h33),(h6)-[:FRIEND]->(h33)
+
+CREATE (h34:Human { 
+       firstname: "Tatum",
+       lastname: "Gray",
+       fullname: "Tatum Gray",
+       id: "34"
+       }),
+(d:Machine)-[:TYPE]->(fitbit),(h34)-[:USES]->(d)
+,(h9)-[:FRIEND]->(h34),(h21)-[:FRIEND]->(h34),(h15)-[:FRIEND]->(h34),(h24)-[:FRIEND]->(h34)
+
+CREATE (h35:Human { 
+       firstname: "Riley",
+       lastname: "Jones",
+       fullname: "Riley Jones",
+       id: "35"
+       }),
+(d:Machine)-[:TYPE]->(shine),(h35)-[:USES]->(d)
+,(h1)-[:FRIEND]->(h35),(h20)-[:FRIEND]->(h35),(h22)-[:FRIEND]->(h35)
+
+CREATE (h36:Human { 
+       firstname: "Avery",
+       lastname: "Harris",
+       fullname: "Avery Harris",
+       id: "36"
+       }),
+(d:Machine)-[:TYPE]->(fitbitflex),(h36)-[:USES]->(d)
+,(h10)-[:FRIEND]->(h36),(h20)-[:FRIEND]->(h36),(h5)-[:FRIEND]->(h36),(h6)-[:FRIEND]->(h36),(h33)-[:FRIEND]->(h36)
+
+CREATE (h37:Human { 
+       firstname: "Jayden",
+       lastname: "Sanders",
+       fullname: "Jayden Sanders",
+       id: "37"
+       }),
+(d:Machine)-[:TYPE]->(nike),(h37)-[:USES]->(d)
+,(h13)-[:FRIEND]->(h37),(h26)-[:FRIEND]->(h37),(h29)-[:FRIEND]->(h37)
+
+CREATE (h38:Human { 
+       firstname: "Rylan",
+       lastname: "Ross",
+       fullname: "Rylan Ross",
+       id: "38"
+       }),
+(d:Machine)-[:TYPE]->(nike),(h38)-[:USES]->(d)
+,(h21)-[:FRIEND]->(h38),(h24)-[:FRIEND]->(h38),(h0)-[:FRIEND]->(h38)
+
+CREATE (h39:Human { 
+       firstname: "Kendall",
+       lastname: "Reed",
+       fullname: "Kendall Reed",
+       id: "39"
+       }),
+(d:Machine)-[:TYPE]->(fitbitflex),(h39)-[:USES]->(d)
+,(h3)-[:FRIEND]->(h39),(h14)-[:FRIEND]->(h39),(h33)-[:FRIEND]->(h39)
+
+CREATE (h40:Human { 
+       firstname: "Kamryn",
+       lastname: "Suzuki",
+       fullname: "Kamryn Suzuki",
+       id: "40"
+       }),
+(d:Machine)-[:TYPE]->(fitbitflex),(h40)-[:USES]->(d)
+,(h13)-[:FRIEND]->(h40),(h34)-[:FRIEND]->(h40),(h38)-[:FRIEND]->(h40),(h6)-[:FRIEND]->(h40),(h36)-[:FRIEND]->(h40)
+
+CREATE (h41:Human { 
+       firstname: "Taylor",
+       lastname: "Morris",
+       fullname: "Taylor Morris",
+       id: "41"
+       }),
+(d:Machine)-[:TYPE]->(nike),(h41)-[:USES]->(d)
+,(h31)-[:FRIEND]->(h41),(h8)-[:FRIEND]->(h41),(h18)-[:FRIEND]->(h41)
+
+CREATE (h42:Human { 
+       firstname: "Dakota",
+       lastname: "Murphy",
+       fullname: "Dakota Murphy",
+       id: "42"
+       }),
+(d:Machine)-[:TYPE]->(shine),(h42)-[:USES]->(d)
+,(h40)-[:FRIEND]->(h42),(h35)-[:FRIEND]->(h42),(h16)-[:FRIEND]->(h42)
+
+CREATE (h43:Human { 
+       firstname: "Sidney",
+       lastname: "Foster",
+       fullname: "Sidney Foster",
+       id: "43"
+       }),
+(d:Machine)-[:TYPE]->(phone),(h43)-[:USES]->(d)
+,(h4)-[:FRIEND]->(h43),(h7)-[:FRIEND]->(h43),(h42)-[:FRIEND]->(h43),(h38)-[:FRIEND]->(h43)
+
+CREATE (h44:Human { 
+       firstname: "London",
+       lastname: "Butler",
+       fullname: "London Butler",
+       id: "44"
+       }),
+(d:Machine)-[:TYPE]->(shine),(h44)-[:USES]->(d)
+,(h6)-[:FRIEND]->(h44),(h32)-[:FRIEND]->(h44),(h15)-[:FRIEND]->(h44)
+
+CREATE (h45:Human { 
+       firstname: "Charlie",
+       lastname: "Walker",
+       fullname: "Charlie Walker",
+       id: "45"
+       }),
+(d:Machine)-[:TYPE]->(fitbit),(h45)-[:USES]->(d)
+,(h42)-[:FRIEND]->(h45),(h26)-[:FRIEND]->(h45),(h39)-[:FRIEND]->(h45)
+
+CREATE (h46:Human { 
+       firstname: "Dallas",
+       lastname: "Hernández",
+       fullname: "Dallas Hernández",
+       id: "46"
+       }),
+(d:Machine)-[:TYPE]->(nike),(h46)-[:USES]->(d)
+,(h24)-[:FRIEND]->(h46),(h2)-[:FRIEND]->(h46),(h3)-[:FRIEND]->(h46)
+
+CREATE (h47:Human { 
+       firstname: "Sidney",
+       lastname: "Taylor",
+       fullname: "Sidney Taylor",
+       id: "47"
+       }),
+(d:Machine)-[:TYPE]->(fitbitflex),(h47)-[:USES]->(d)
+,(h33)-[:FRIEND]->(h47),(h34)-[:FRIEND]->(h47),(h13)-[:FRIEND]->(h47),(h31)-[:FRIEND]->(h47)
+
+CREATE (h48:Human { 
+       firstname: "Dylan",
+       lastname: "Turner",
+       fullname: "Dylan Turner",
+       id: "48"
+       }),
+(d:Machine)-[:TYPE]->(fitbit),(h48)-[:USES]->(d)
+,(h1)-[:FRIEND]->(h48),(h43)-[:FRIEND]->(h48),(h15)-[:FRIEND]->(h48)
+
+CREATE (h49:Human { 
+       firstname: "Sidney",
+       lastname: "Nguyen",
+       fullname: "Sidney Nguyen",
+       id: "49"
+       }),
+(d:Machine)-[:TYPE]->(shine),(h49)-[:USES]->(d)
+,(h18)-[:FRIEND]->(h49),(h19)-[:FRIEND]->(h49),(h28)-[:FRIEND]->(h49),(h23)-[:FRIEND]->(h49),(h37)-[:FRIEND]->(h49)
+
+CREATE (h50:Human { 
+       firstname: "Skyler",
+       lastname: "Evans",
+       fullname: "Skyler Evans",
+       id: "50"
+       }),
+(d:Machine)-[:TYPE]->(phone),(h50)-[:USES]->(d)
+,(h2)-[:FRIEND]->(h50),(h19)-[:FRIEND]->(h50),(h42)-[:FRIEND]->(h50),(h9)-[:FRIEND]->(h50),(h44)-[:FRIEND]->(h50)
+
+CREATE (h51:Human { 
+       firstname: "Amari",
+       lastname: "Barnes",
+       fullname: "Amari Barnes",
+       id: "51"
+       }),
+(d:Machine)-[:TYPE]->(shine),(h51)-[:USES]->(d)
+,(h41)-[:FRIEND]->(h51),(h13)-[:FRIEND]->(h51),(h37)-[:FRIEND]->(h51),(h7)-[:FRIEND]->(h51)
+
+CREATE (h52:Human { 
+       firstname: "Kai",
+       lastname: "Phillips",
+       fullname: "Kai Phillips",
+       id: "52"
+       }),
+(d:Machine)-[:TYPE]->(fitbitflex),(h52)-[:USES]->(d)
+,(h38)-[:FRIEND]->(h52),(h6)-[:FRIEND]->(h52),(h37)-[:FRIEND]->(h52),(h41)-[:FRIEND]->(h52),(h9)-[:FRIEND]->(h52)
+
+CREATE (h53:Human { 
+       firstname: "Hayden",
+       lastname: "Morales",
+       fullname: "Hayden Morales",
+       id: "53"
+       }),
+(d:Machine)-[:TYPE]->(phone),(h53)-[:USES]->(d)
+,(h7)-[:FRIEND]->(h53),(h33)-[:FRIEND]->(h53),(h46)-[:FRIEND]->(h53),(h17)-[:FRIEND]->(h53)
+
+CREATE (h54:Human { 
+       firstname: "Reagan",
+       lastname: "Sato",
+       fullname: "Reagan Sato",
+       id: "54"
+       }),
+(d:Machine)-[:TYPE]->(fitbit),(h54)-[:USES]->(d)
+,(h28)-[:FRIEND]->(h54),(h26)-[:FRIEND]->(h54),(h47)-[:FRIEND]->(h54)
+
+CREATE (h55:Human { 
+       firstname: "Casey",
+       lastname: "Russell",
+       fullname: "Casey Russell",
+       id: "55"
+       }),
+(d:Machine)-[:TYPE]->(fitbitflex),(h55)-[:USES]->(d)
+,(h50)-[:FRIEND]->(h55),(h30)-[:FRIEND]->(h55),(h46)-[:FRIEND]->(h55),(h17)-[:FRIEND]->(h55),(h2)-[:FRIEND]->(h55)
+
+CREATE (h56:Human { 
+       firstname: "Armani",
+       lastname: "Ross",
+       fullname: "Armani Ross",
+       id: "56"
+       }),
+(d:Machine)-[:TYPE]->(phone),(h56)-[:USES]->(d)
+,(h36)-[:FRIEND]->(h56),(h43)-[:FRIEND]->(h56),(h52)-[:FRIEND]->(h56)
+
+CREATE (h57:Human { 
+       firstname: "Rylan",
+       lastname: "Allen",
+       fullname: "Rylan Allen",
+       id: "57"
+       }),
+(d:Machine)-[:TYPE]->(nike),(h57)-[:USES]->(d)
+,(h30)-[:FRIEND]->(h57),(h47)-[:FRIEND]->(h57),(h18)-[:FRIEND]->(h57),(h16)-[:FRIEND]->(h57)
+
+CREATE (h58:Human { 
+       firstname: "Elliot",
+       lastname: "Cook",
+       fullname: "Elliot Cook",
+       id: "58"
+       }),
+(d:Machine)-[:TYPE]->(fitbit),(h58)-[:USES]->(d)
+,(h45)-[:FRIEND]->(h58),(h18)-[:FRIEND]->(h58),(h6)-[:FRIEND]->(h58),(h51)-[:FRIEND]->(h58)
+
+CREATE (h59:Human { 
+       firstname: "Jordyn",
+       lastname: "Kelly",
+       fullname: "Jordyn Kelly",
+       id: "59"
+       }),
+(d:Machine)-[:TYPE]->(fitbit),(h59)-[:USES]->(d)
+,(h58)-[:FRIEND]->(h59),(h15)-[:FRIEND]->(h59),(h5)-[:FRIEND]->(h59),(h21)-[:FRIEND]->(h59)
+
+CREATE (h60:Human { 
+       firstname: "Jaylin",
+       lastname: "Foster",
+       fullname: "Jaylin Foster",
+       id: "60"
+       }),
+(d:Machine)-[:TYPE]->(phone),(h60)-[:USES]->(d)
+,(h7)-[:FRIEND]->(h60),(h41)-[:FRIEND]->(h60),(h44)-[:FRIEND]->(h60),(h42)-[:FRIEND]->(h60)
+
+CREATE (h61:Human { 
+       firstname: "Harper",
+       lastname: "Reed",
+       fullname: "Harper Reed",
+       id: "61"
+       }),
+(d:Machine)-[:TYPE]->(phone),(h61)-[:USES]->(d)
+,(h3)-[:FRIEND]->(h61),(h58)-[:FRIEND]->(h61),(h17)-[:FRIEND]->(h61),(h35)-[:FRIEND]->(h61),(h40)-[:FRIEND]->(h61)
+
+CREATE (h62:Human { 
+       firstname: "Kai",
+       lastname: "Price",
+       fullname: "Kai Price",
+       id: "62"
+       }),
+(d:Machine)-[:TYPE]->(phone),(h62)-[:USES]->(d)
+,(h42)-[:FRIEND]->(h62),(h37)-[:FRIEND]->(h62),(h1)-[:FRIEND]->(h62),(h7)-[:FRIEND]->(h62)
+
+CREATE (h63:Human { 
+       firstname: "Kamryn",
+       lastname: "Miller",
+       fullname: "Kamryn Miller",
+       id: "63"
+       }),
+(d:Machine)-[:TYPE]->(fitbit),(h63)-[:USES]->(d)
+,(h9)-[:FRIEND]->(h63),(h59)-[:FRIEND]->(h63),(h19)-[:FRIEND]->(h63)
+
+CREATE (h64:Human { 
+       firstname: "Skylar",
+       lastname: "Hernández",
+       fullname: "Skylar Hernández",
+       id: "64"
+       }),
+(d:Machine)-[:TYPE]->(shine),(h64)-[:USES]->(d)
+,(h3)-[:FRIEND]->(h64),(h52)-[:FRIEND]->(h64),(h56)-[:FRIEND]->(h64),(h35)-[:FRIEND]->(h64)
+
+CREATE (h65:Human { 
+       firstname: "Taylor",
+       lastname: "Reyes",
+       fullname: "Taylor Reyes",
        id: "65"
        }),
+(d:Machine)-[:TYPE]->(shine),(h65)-[:USES]->(d)
+,(h9)-[:FRIEND]->(h65),(h38)-[:FRIEND]->(h65),(h57)-[:FRIEND]->(h65),(h5)-[:FRIEND]->(h65)
 
-(d:Device)-[:Type]->(nike),
-(p)-[:USES]->(d),
-
-(p)-[:Friend]->(:Human {fullname: 'Charlie Young'})
-,
-(p)-[:Friend]->(:Human {fullname: 'Parker Smith'})
-,
-(p)-[:Friend]->(:Human {fullname: 'Logan Young'})
-,
-(p)-[:Friend]->(:Human {fullname: 'Sawyer Thompson'})
-;
-
-CREATE (p:Human { 
-       firstname: "Alexis",
-       lastname: "Flores",
-       fullname: "Alexis Flores",
+CREATE (h66:Human { 
+       firstname: "River",
+       lastname: "Morris",
+       fullname: "River Morris",
        id: "66"
        }),
+(d:Machine)-[:TYPE]->(nike),(h66)-[:USES]->(d)
+,(h20)-[:FRIEND]->(h66),(h5)-[:FRIEND]->(h66),(h14)-[:FRIEND]->(h66),(h4)-[:FRIEND]->(h66),(h9)-[:FRIEND]->(h66)
 
-(d:Device)-[:Type]->(phone),
-(p)-[:USES]->(d),
-
-(p)-[:Friend]->(:Human {fullname: 'Ryan Parker'})
-,
-(p)-[:Friend]->(:Human {fullname: 'Jordan Wood'})
-,
-(p)-[:Friend]->(:Human {fullname: 'Hayden Ross'})
-,
-(p)-[:Friend]->(:Human {fullname: 'Camryn Scott'})
-;
-
-CREATE (p:Human { 
-       firstname: "River",
-       lastname: "Cruz",
-       fullname: "River Cruz",
+CREATE (h67:Human { 
+       firstname: "Kendall",
+       lastname: "Watson",
+       fullname: "Kendall Watson",
        id: "67"
        }),
+(d:Machine)-[:TYPE]->(phone),(h67)-[:USES]->(d)
+,(h8)-[:FRIEND]->(h67),(h7)-[:FRIEND]->(h67),(h9)-[:FRIEND]->(h67),(h2)-[:FRIEND]->(h67)
 
-(d:Device)-[:Type]->(nike),
-(p)-[:USES]->(d),
-
-(p)-[:Friend]->(:Human {fullname: 'Camryn Scott'})
-,
-(p)-[:Friend]->(:Human {fullname: 'Harley Butler'})
-,
-(p)-[:Friend]->(:Human {fullname: 'Ryan Ramírez'})
-,
-(p)-[:Friend]->(:Human {fullname: 'Dakota Morris'})
-;
-
-CREATE (p:Human { 
-       firstname: "Amari",
-       lastname: "Baker",
-       fullname: "Amari Baker",
+CREATE (h68:Human { 
+       firstname: "River",
+       lastname: "Johnson",
+       fullname: "River Johnson",
        id: "68"
        }),
+(d:Machine)-[:TYPE]->(fitbit),(h68)-[:USES]->(d)
+,(h48)-[:FRIEND]->(h68),(h65)-[:FRIEND]->(h68),(h38)-[:FRIEND]->(h68),(h44)-[:FRIEND]->(h68)
 
-(d:Device)-[:Type]->(fitbit),
-(p)-[:USES]->(d),
-
-(p)-[:Friend]->(:Human {fullname: 'Angel Morgan'})
-,
-(p)-[:Friend]->(:Human {fullname: 'River Bell'})
-,
-(p)-[:Friend]->(:Human {fullname: 'Phoenix Allen'})
-,
-(p)-[:Friend]->(:Human {fullname: 'Skylar Scott'})
-,
-(p)-[:Friend]->(:Human {fullname: 'Micah Watson'})
-;
-
-CREATE (p:Human { 
-       firstname: "Cameron",
-       lastname: "Evans",
-       fullname: "Cameron Evans",
+CREATE (h69:Human { 
+       firstname: "Dallas",
+       lastname: "Williams",
+       fullname: "Dallas Williams",
        id: "69"
        }),
+(d:Machine)-[:TYPE]->(phone),(h69)-[:USES]->(d)
+,(h63)-[:FRIEND]->(h69),(h43)-[:FRIEND]->(h69),(h59)-[:FRIEND]->(h69),(h52)-[:FRIEND]->(h69),(h19)-[:FRIEND]->(h69)
 
-(d:Device)-[:Type]->(fitbit),
-(p)-[:USES]->(d),
-
-(p)-[:Friend]->(:Human {fullname: 'Emory Bennett'})
-,
-(p)-[:Friend]->(:Human {fullname: 'Teagan Clark'})
-,
-(p)-[:Friend]->(:Human {fullname: 'Ali Russell'})
-,
-(p)-[:Friend]->(:Human {fullname: 'Teagan Williams'})
-;
-
-CREATE (p:Human { 
+CREATE (h70:Human { 
        firstname: "Casey",
-       lastname: "Smith",
-       fullname: "Casey Smith",
+       lastname: "Cohen",
+       fullname: "Casey Cohen",
        id: "70"
        }),
+(d:Machine)-[:TYPE]->(nike),(h70)-[:USES]->(d)
+,(h44)-[:FRIEND]->(h70),(h47)-[:FRIEND]->(h70),(h10)-[:FRIEND]->(h70)
 
-(d:Device)-[:Type]->(fitbitflex),
-(p)-[:USES]->(d),
-
-(p)-[:Friend]->(:Human {fullname: 'Payton Morales'})
-,
-(p)-[:Friend]->(:Human {fullname: 'Blake Murphy'})
-,
-(p)-[:Friend]->(:Human {fullname: 'Teagan Clark'})
-,
-(p)-[:Friend]->(:Human {fullname: 'Riley Mitchell'})
-,
-(p)-[:Friend]->(:Human {fullname: 'Dakota Morris'})
-;
-
-CREATE (p:Human { 
-       firstname: "Landry",
-       lastname: "King",
-       fullname: "Landry King",
+CREATE (h71:Human { 
+       firstname: "Rowan",
+       lastname: "Myers",
+       fullname: "Rowan Myers",
        id: "71"
        }),
+(d:Machine)-[:TYPE]->(phone),(h71)-[:USES]->(d)
+,(h20)-[:FRIEND]->(h71),(h57)-[:FRIEND]->(h71),(h42)-[:FRIEND]->(h71),(h0)-[:FRIEND]->(h71),(h3)-[:FRIEND]->(h71)
 
-(d:Device)-[:Type]->(fitbit),
-(p)-[:USES]->(d),
-
-(p)-[:Friend]->(:Human {fullname: 'Skylar Scott'})
-,
-(p)-[:Friend]->(:Human {fullname: 'Dakota Richardson'})
-,
-(p)-[:Friend]->(:Human {fullname: 'Kayden Rodríguez'})
-;
-
-CREATE (p:Human { 
-       firstname: "Sidney",
-       lastname: "Allen",
-       fullname: "Sidney Allen",
-       id: "72"
-       }),
-
-(d:Device)-[:Type]->(nike),
-(p)-[:USES]->(d),
-
-(p)-[:Friend]->(:Human {fullname: 'Sidney Watson'})
-,
-(p)-[:Friend]->(:Human {fullname: 'Kayden Rodríguez'})
-,
-(p)-[:Friend]->(:Human {fullname: 'Sawyer Thompson'})
-,
-(p)-[:Friend]->(:Human {fullname: 'Jessie Cruz'})
-,
-(p)-[:Friend]->(:Human {fullname: 'Skyler Hughes'})
-;
-
-CREATE (p:Human { 
-       firstname: "Finley",
-       lastname: "Pérez",
-       fullname: "Finley Pérez",
-       id: "73"
-       }),
-
-(d:Device)-[:Type]->(nike),
-(p)-[:USES]->(d),
-
-(p)-[:Friend]->(:Human {fullname: 'Cameron Evans'})
-,
-(p)-[:Friend]->(:Human {fullname: 'Landry Murphy'})
-,
-(p)-[:Friend]->(:Human {fullname: 'Sage Thomas'})
-,
-(p)-[:Friend]->(:Human {fullname: 'Teagan Clark'})
-,
-(p)-[:Friend]->(:Human {fullname: 'Jordyn Wright'})
-;
-
-CREATE (p:Human { 
-       firstname: "Sawyer",
-       lastname: "Suzuki",
-       fullname: "Sawyer Suzuki",
-       id: "74"
-       }),
-
-(d:Device)-[:Type]->(nike),
-(p)-[:USES]->(d),
-
-(p)-[:Friend]->(:Human {fullname: 'Logan Young'})
-,
-(p)-[:Friend]->(:Human {fullname: 'Rylee González'})
-,
-(p)-[:Friend]->(:Human {fullname: 'Jordyn Wright'})
-;
-
-CREATE (p:Human { 
-       firstname: "Quinn",
-       lastname: "Fisher",
-       fullname: "Quinn Fisher",
-       id: "75"
-       }),
-
-(d:Device)-[:Type]->(fitbitflex),
-(p)-[:USES]->(d),
-
-(p)-[:Friend]->(:Human {fullname: 'Angel Martin'})
-,
-(p)-[:Friend]->(:Human {fullname: 'Skyler Torres'})
-,
-(p)-[:Friend]->(:Human {fullname: 'Phoenix Allen'})
-;
-
-CREATE (p:Human { 
-       firstname: "Blake",
-       lastname: "Díaz",
-       fullname: "Blake Díaz",
-       id: "76"
-       }),
-
-(d:Device)-[:Type]->(fitbit),
-(p)-[:USES]->(d),
-
-(p)-[:Friend]->(:Human {fullname: 'Jordyn Wright'})
-,
-(p)-[:Friend]->(:Human {fullname: 'Landry Murphy'})
-,
-(p)-[:Friend]->(:Human {fullname: 'Ariel Rogers'})
-,
-(p)-[:Friend]->(:Human {fullname: 'Dakota Morris'})
-;
-
-CREATE (p:Human { 
-       firstname: "Sage",
-       lastname: "Ward",
-       fullname: "Sage Ward",
-       id: "77"
-       }),
-
-(d:Device)-[:Type]->(shine),
-(p)-[:USES]->(d),
-
-(p)-[:Friend]->(:Human {fullname: 'Amari Gray'})
-,
-(p)-[:Friend]->(:Human {fullname: 'Morgan Jenkins'})
-,
-(p)-[:Friend]->(:Human {fullname: 'Finley Pérez'})
-;
-
-CREATE (p:Human { 
-       firstname: "Dallas",
-       lastname: "Walker",
-       fullname: "Dallas Walker",
-       id: "78"
-       }),
-
-(d:Device)-[:Type]->(fitbitflex),
-(p)-[:USES]->(d),
-
-(p)-[:Friend]->(:Human {fullname: 'Rylee González'})
-,
-(p)-[:Friend]->(:Human {fullname: 'Sidney Allen'})
-,
-(p)-[:Friend]->(:Human {fullname: 'Tatum López'})
-;
-
-CREATE (p:Human { 
-       firstname: "Harley",
-       lastname: "Jenkins",
-       fullname: "Harley Jenkins",
-       id: "79"
-       }),
-
-(d:Device)-[:Type]->(fitbitflex),
-(p)-[:USES]->(d),
-
-(p)-[:Friend]->(:Human {fullname: 'Sawyer Thompson'})
-,
-(p)-[:Friend]->(:Human {fullname: 'Finley Hill'})
-,
-(p)-[:Friend]->(:Human {fullname: 'Parker Smith'})
-;
-
-CREATE (p:Human { 
-       firstname: "Avery",
-       lastname: "Sullivan",
-       fullname: "Avery Sullivan",
-       id: "80"
-       }),
-
-(d:Device)-[:Type]->(nike),
-(p)-[:USES]->(d),
-
-(p)-[:Friend]->(:Human {fullname: 'Ariel Kelly'})
-,
-(p)-[:Friend]->(:Human {fullname: 'Lyric Gómez'})
-,
-(p)-[:Friend]->(:Human {fullname: 'Sidney Watson'})
-,
-(p)-[:Friend]->(:Human {fullname: 'Cameron Evans'})
-,
-(p)-[:Friend]->(:Human {fullname: 'Jessie Cruz'})
-;
-
-CREATE (p:Human { 
-       firstname: "Dylan",
-       lastname: "Perry",
-       fullname: "Dylan Perry",
-       id: "81"
-       }),
-
-(d:Device)-[:Type]->(shine),
-(p)-[:USES]->(d),
-
-(p)-[:Friend]->(:Human {fullname: 'Finley Pérez'})
-,
-(p)-[:Friend]->(:Human {fullname: 'Hayden Nakamoto'})
-,
-(p)-[:Friend]->(:Human {fullname: 'Payton Morales'})
-,
-(p)-[:Friend]->(:Human {fullname: 'River Ross'})
-;
-
-CREATE (p:Human { 
-       firstname: "Avery",
-       lastname: "Rivera",
-       fullname: "Avery Rivera",
-       id: "82"
-       }),
-
-(d:Device)-[:Type]->(fitbitflex),
-(p)-[:USES]->(d),
-
-(p)-[:Friend]->(:Human {fullname: 'Sidney Turner'})
-,
-(p)-[:Friend]->(:Human {fullname: 'Blake Murphy'})
-,
-(p)-[:Friend]->(:Human {fullname: 'Teagan Williams'})
-,
-(p)-[:Friend]->(:Human {fullname: 'Angel Morgan'})
-;
-
-CREATE (p:Human { 
-       firstname: "Avery",
-       lastname: "Allen",
-       fullname: "Avery Allen",
-       id: "83"
-       }),
-
-(d:Device)-[:Type]->(shine),
-(p)-[:USES]->(d),
-
-(p)-[:Friend]->(:Human {fullname: 'Finley Hill'})
-,
-(p)-[:Friend]->(:Human {fullname: 'Sage Thomas'})
-,
-(p)-[:Friend]->(:Human {fullname: 'Camryn Scott'})
-,
-(p)-[:Friend]->(:Human {fullname: 'Angel Martin'})
-,
-(p)-[:Friend]->(:Human {fullname: 'Taylor Morgan'})
-;
-
-CREATE (p:Human { 
-       firstname: "Emery",
-       lastname: "Butler",
-       fullname: "Emery Butler",
-       id: "84"
-       }),
-
-(d:Device)-[:Type]->(fitbit),
-(p)-[:USES]->(d),
-
-(p)-[:Friend]->(:Human {fullname: 'Ariel Bennett'})
-,
-(p)-[:Friend]->(:Human {fullname: 'Casey Smith'})
-,
-(p)-[:Friend]->(:Human {fullname: 'Angel Martin'})
-;
-
-CREATE (p:Human { 
-       firstname: "Finley",
-       lastname: "Hernández",
-       fullname: "Finley Hernández",
-       id: "85"
-       }),
-
-(d:Device)-[:Type]->(nike),
-(p)-[:USES]->(d),
-
-(p)-[:Friend]->(:Human {fullname: 'Avery Allen'})
-,
-(p)-[:Friend]->(:Human {fullname: 'Amari Baker'})
-,
-(p)-[:Friend]->(:Human {fullname: 'Amari Cooper'})
-;
-
-CREATE (p:Human { 
-       firstname: "Camryn",
-       lastname: "Hill",
-       fullname: "Camryn Hill",
-       id: "86"
-       }),
-
-(d:Device)-[:Type]->(shine),
-(p)-[:USES]->(d),
-
-(p)-[:Friend]->(:Human {fullname: 'Payton Barnes'})
-,
-(p)-[:Friend]->(:Human {fullname: 'Blake Murphy'})
-,
-(p)-[:Friend]->(:Human {fullname: 'River Bell'})
-,
-(p)-[:Friend]->(:Human {fullname: 'Charlie Pérez'})
-;
-
-CREATE (p:Human { 
-       firstname: "Eden",
-       lastname: "Wong",
-       fullname: "Eden Wong",
-       id: "87"
-       }),
-
-(d:Device)-[:Type]->(fitbit),
-(p)-[:USES]->(d),
-
-(p)-[:Friend]->(:Human {fullname: 'Sage Thomas'})
-,
-(p)-[:Friend]->(:Human {fullname: 'Teagan Clark'})
-,
-(p)-[:Friend]->(:Human {fullname: 'Finley Pérez'})
-;
-
-CREATE (p:Human { 
+CREATE (h72:Human { 
        firstname: "Jamie",
        lastname: "White",
        fullname: "Jamie White",
+       id: "72"
+       }),
+(d:Machine)-[:TYPE]->(nike),(h72)-[:USES]->(d)
+,(h63)-[:FRIEND]->(h72),(h9)-[:FRIEND]->(h72),(h29)-[:FRIEND]->(h72),(h3)-[:FRIEND]->(h72)
+
+CREATE (h73:Human { 
+       firstname: "Ryan",
+       lastname: "Evans",
+       fullname: "Ryan Evans",
+       id: "73"
+       }),
+(d:Machine)-[:TYPE]->(fitbit),(h73)-[:USES]->(d)
+,(h12)-[:FRIEND]->(h73),(h36)-[:FRIEND]->(h73),(h9)-[:FRIEND]->(h73)
+
+CREATE (h74:Human { 
+       firstname: "Jaylin",
+       lastname: "Taylor",
+       fullname: "Jaylin Taylor",
+       id: "74"
+       }),
+(d:Machine)-[:TYPE]->(fitbitflex),(h74)-[:USES]->(d)
+,(h17)-[:FRIEND]->(h74),(h10)-[:FRIEND]->(h74),(h5)-[:FRIEND]->(h74),(h42)-[:FRIEND]->(h74)
+
+CREATE (h75:Human { 
+       firstname: "Emerson",
+       lastname: "Wood",
+       fullname: "Emerson Wood",
+       id: "75"
+       }),
+(d:Machine)-[:TYPE]->(fitbitflex),(h75)-[:USES]->(d)
+,(h70)-[:FRIEND]->(h75),(h41)-[:FRIEND]->(h75),(h61)-[:FRIEND]->(h75),(h14)-[:FRIEND]->(h75)
+
+CREATE (h76:Human { 
+       firstname: "Jayden",
+       lastname: "Nguyen",
+       fullname: "Jayden Nguyen",
+       id: "76"
+       }),
+(d:Machine)-[:TYPE]->(phone),(h76)-[:USES]->(d)
+,(h31)-[:FRIEND]->(h76),(h1)-[:FRIEND]->(h76),(h63)-[:FRIEND]->(h76)
+
+CREATE (h77:Human { 
+       firstname: "Micah",
+       lastname: "Cooper",
+       fullname: "Micah Cooper",
+       id: "77"
+       }),
+(d:Machine)-[:TYPE]->(fitbit),(h77)-[:USES]->(d)
+,(h36)-[:FRIEND]->(h77),(h24)-[:FRIEND]->(h77),(h64)-[:FRIEND]->(h77)
+
+CREATE (h78:Human { 
+       firstname: "Reagan",
+       lastname: "Myers",
+       fullname: "Reagan Myers",
+       id: "78"
+       }),
+(d:Machine)-[:TYPE]->(phone),(h78)-[:USES]->(d)
+,(h49)-[:FRIEND]->(h78),(h44)-[:FRIEND]->(h78),(h31)-[:FRIEND]->(h78),(h56)-[:FRIEND]->(h78),(h68)-[:FRIEND]->(h78)
+
+CREATE (h79:Human { 
+       firstname: "Kendall",
+       lastname: "Kelly",
+       fullname: "Kendall Kelly",
+       id: "79"
+       }),
+(d:Machine)-[:TYPE]->(phone),(h79)-[:USES]->(d)
+,(h8)-[:FRIEND]->(h79),(h64)-[:FRIEND]->(h79),(h65)-[:FRIEND]->(h79)
+
+CREATE (h80:Human { 
+       firstname: "Emery",
+       lastname: "Cox",
+       fullname: "Emery Cox",
+       id: "80"
+       }),
+(d:Machine)-[:TYPE]->(shine),(h80)-[:USES]->(d)
+,(h10)-[:FRIEND]->(h80),(h47)-[:FRIEND]->(h80),(h66)-[:FRIEND]->(h80),(h72)-[:FRIEND]->(h80)
+
+CREATE (h81:Human { 
+       firstname: "Casey",
+       lastname: "Perry",
+       fullname: "Casey Perry",
+       id: "81"
+       }),
+(d:Machine)-[:TYPE]->(shine),(h81)-[:USES]->(d)
+,(h0)-[:FRIEND]->(h81),(h78)-[:FRIEND]->(h81),(h36)-[:FRIEND]->(h81)
+
+CREATE (h82:Human { 
+       firstname: "Jaylin",
+       lastname: "Evans",
+       fullname: "Jaylin Evans",
+       id: "82"
+       }),
+(d:Machine)-[:TYPE]->(fitbitflex),(h82)-[:USES]->(d)
+,(h56)-[:FRIEND]->(h82),(h28)-[:FRIEND]->(h82),(h70)-[:FRIEND]->(h82)
+
+CREATE (h83:Human { 
+       firstname: "Landry",
+       lastname: "Cox",
+       fullname: "Landry Cox",
+       id: "83"
+       }),
+(d:Machine)-[:TYPE]->(phone),(h83)-[:USES]->(d)
+,(h64)-[:FRIEND]->(h83),(h51)-[:FRIEND]->(h83),(h78)-[:FRIEND]->(h83),(h12)-[:FRIEND]->(h83),(h49)-[:FRIEND]->(h83)
+
+CREATE (h84:Human { 
+       firstname: "Reagan",
+       lastname: "Jenkins",
+       fullname: "Reagan Jenkins",
+       id: "84"
+       }),
+(d:Machine)-[:TYPE]->(fitbit),(h84)-[:USES]->(d)
+,(h0)-[:FRIEND]->(h84),(h52)-[:FRIEND]->(h84),(h13)-[:FRIEND]->(h84)
+
+CREATE (h85:Human { 
+       firstname: "Cameron",
+       lastname: "Cox",
+       fullname: "Cameron Cox",
+       id: "85"
+       }),
+(d:Machine)-[:TYPE]->(phone),(h85)-[:USES]->(d)
+,(h25)-[:FRIEND]->(h85),(h73)-[:FRIEND]->(h85),(h82)-[:FRIEND]->(h85),(h13)-[:FRIEND]->(h85),(h17)-[:FRIEND]->(h85)
+
+CREATE (h86:Human { 
+       firstname: "Jamie",
+       lastname: "Cohen",
+       fullname: "Jamie Cohen",
+       id: "86"
+       }),
+(d:Machine)-[:TYPE]->(fitbitflex),(h86)-[:USES]->(d)
+,(h11)-[:FRIEND]->(h86),(h3)-[:FRIEND]->(h86),(h48)-[:FRIEND]->(h86),(h6)-[:FRIEND]->(h86)
+
+CREATE (h87:Human { 
+       firstname: "Charlie",
+       lastname: "Sato",
+       fullname: "Charlie Sato",
+       id: "87"
+       }),
+(d:Machine)-[:TYPE]->(phone),(h87)-[:USES]->(d)
+,(h40)-[:FRIEND]->(h87),(h74)-[:FRIEND]->(h87),(h6)-[:FRIEND]->(h87),(h25)-[:FRIEND]->(h87)
+
+CREATE (h88:Human { 
+       firstname: "Dakota",
+       lastname: "Davis",
+       fullname: "Dakota Davis",
        id: "88"
        }),
+(d:Machine)-[:TYPE]->(phone),(h88)-[:USES]->(d)
+,(h45)-[:FRIEND]->(h88),(h28)-[:FRIEND]->(h88),(h60)-[:FRIEND]->(h88),(h56)-[:FRIEND]->(h88)
 
-(d:Device)-[:Type]->(shine),
-(p)-[:USES]->(d),
-
-(p)-[:Friend]->(:Human {fullname: 'Taylor Morgan'})
-,
-(p)-[:Friend]->(:Human {fullname: 'Sage Ward'})
-,
-(p)-[:Friend]->(:Human {fullname: 'Avery Rivera'})
-,
-(p)-[:Friend]->(:Human {fullname: 'Ariel Kelly'})
-;
-
-CREATE (p:Human { 
-       firstname: "Casey",
-       lastname: "Thomas",
-       fullname: "Casey Thomas",
+CREATE (h89:Human { 
+       firstname: "Lyric",
+       lastname: "Cohen",
+       fullname: "Lyric Cohen",
        id: "89"
        }),
+(d:Machine)-[:TYPE]->(phone),(h89)-[:USES]->(d)
+,(h45)-[:FRIEND]->(h89),(h36)-[:FRIEND]->(h89),(h1)-[:FRIEND]->(h89),(h39)-[:FRIEND]->(h89)
 
-(d:Device)-[:Type]->(fitbitflex),
-(p)-[:USES]->(d),
-
-(p)-[:Friend]->(:Human {fullname: 'Charlie Young'})
-,
-(p)-[:Friend]->(:Human {fullname: 'Morgan Jenkins'})
-,
-(p)-[:Friend]->(:Human {fullname: 'Blake Murphy'})
-;
-
-CREATE (p:Human { 
-       firstname: "Alexis",
-       lastname: "Bailey",
-       fullname: "Alexis Bailey",
+CREATE (h90:Human { 
+       firstname: "Peyton",
+       lastname: "López",
+       fullname: "Peyton López",
        id: "90"
        }),
+(d:Machine)-[:TYPE]->(nike),(h90)-[:USES]->(d)
+,(h85)-[:FRIEND]->(h90),(h87)-[:FRIEND]->(h90),(h89)-[:FRIEND]->(h90)
 
-(d:Device)-[:Type]->(shine),
-(p)-[:USES]->(d),
-
-(p)-[:Friend]->(:Human {fullname: 'Dakota Davis'})
-,
-(p)-[:Friend]->(:Human {fullname: 'Parker Smith'})
-,
-(p)-[:Friend]->(:Human {fullname: 'Sidney Watson'})
-;
-
-CREATE (p:Human { 
-       firstname: "Armani",
-       lastname: "Chowdhury",
-       fullname: "Armani Chowdhury",
+CREATE (h91:Human { 
+       firstname: "Peyton",
+       lastname: "Young",
+       fullname: "Peyton Young",
        id: "91"
        }),
+(d:Machine)-[:TYPE]->(nike),(h91)-[:USES]->(d)
+,(h1)-[:FRIEND]->(h91),(h11)-[:FRIEND]->(h91),(h26)-[:FRIEND]->(h91),(h68)-[:FRIEND]->(h91)
 
-(d:Device)-[:Type]->(nike),
-(p)-[:USES]->(d),
-
-(p)-[:Friend]->(:Human {fullname: 'Dylan Perry'})
-,
-(p)-[:Friend]->(:Human {fullname: 'River Ross'})
-,
-(p)-[:Friend]->(:Human {fullname: 'Ali Russell'})
-;
-
-CREATE (p:Human { 
-       firstname: "Harper",
-       lastname: "García",
-       fullname: "Harper García",
+CREATE (h92:Human { 
+       firstname: "Casey",
+       lastname: "Ward",
+       fullname: "Casey Ward",
        id: "92"
        }),
+(d:Machine)-[:TYPE]->(fitbit),(h92)-[:USES]->(d)
+,(h6)-[:FRIEND]->(h92),(h90)-[:FRIEND]->(h92),(h14)-[:FRIEND]->(h92),(h87)-[:FRIEND]->(h92)
 
-(d:Device)-[:Type]->(fitbit),
-(p)-[:USES]->(d),
-
-(p)-[:Friend]->(:Human {fullname: 'Jordan Wood'})
-,
-(p)-[:Friend]->(:Human {fullname: 'Armani Chowdhury'})
-,
-(p)-[:Friend]->(:Human {fullname: 'Jordyn Wright'})
-,
-(p)-[:Friend]->(:Human {fullname: 'Kamryn Suzuki'})
-,
-(p)-[:Friend]->(:Human {fullname: 'Skylar Turner'})
-;
-
-CREATE (p:Human { 
-       firstname: "Finley",
-       lastname: "Nelson",
-       fullname: "Finley Nelson",
+CREATE (h93:Human { 
+       firstname: "Jessie",
+       lastname: "Wood",
+       fullname: "Jessie Wood",
        id: "93"
        }),
+(d:Machine)-[:TYPE]->(fitbitflex),(h93)-[:USES]->(d)
+,(h34)-[:FRIEND]->(h93),(h40)-[:FRIEND]->(h93),(h90)-[:FRIEND]->(h93)
 
-(d:Device)-[:Type]->(fitbit),
-(p)-[:USES]->(d),
-
-(p)-[:Friend]->(:Human {fullname: 'Morgan Watson'})
-,
-(p)-[:Friend]->(:Human {fullname: 'Taylor Morgan'})
-,
-(p)-[:Friend]->(:Human {fullname: 'Casey Thomas'})
-,
-(p)-[:Friend]->(:Human {fullname: 'Ryan Parker'})
-;
-
-CREATE (p:Human { 
-       firstname: "Alexis",
-       lastname: "Reed",
-       fullname: "Alexis Reed",
+CREATE (h94:Human { 
+       firstname: "Payton",
+       lastname: "Lee",
+       fullname: "Payton Lee",
        id: "94"
        }),
+(d:Machine)-[:TYPE]->(shine),(h94)-[:USES]->(d)
+,(h22)-[:FRIEND]->(h94),(h35)-[:FRIEND]->(h94),(h84)-[:FRIEND]->(h94)
 
-(d:Device)-[:Type]->(fitbit),
-(p)-[:USES]->(d),
-
-(p)-[:Friend]->(:Human {fullname: 'Phoenix Allen'})
-,
-(p)-[:Friend]->(:Human {fullname: 'Hayden Ross'})
-,
-(p)-[:Friend]->(:Human {fullname: 'Armani Chowdhury'})
-,
-(p)-[:Friend]->(:Human {fullname: 'Teagan Clark'})
-,
-(p)-[:Friend]->(:Human {fullname: 'River Ross'})
-;
-
-CREATE (p:Human { 
-       firstname: "Dallas",
-       lastname: "Foster",
-       fullname: "Dallas Foster",
+CREATE (h95:Human { 
+       firstname: "Micah",
+       lastname: "Powell",
+       fullname: "Micah Powell",
        id: "95"
        }),
+(d:Machine)-[:TYPE]->(fitbit),(h95)-[:USES]->(d)
+,(h87)-[:FRIEND]->(h95),(h20)-[:FRIEND]->(h95),(h60)-[:FRIEND]->(h95)
 
-(d:Device)-[:Type]->(nike),
-(p)-[:USES]->(d),
-
-(p)-[:Friend]->(:Human {fullname: 'Sawyer Suzuki'})
-,
-(p)-[:Friend]->(:Human {fullname: 'Logan Young'})
-,
-(p)-[:Friend]->(:Human {fullname: 'Dakota Richardson'})
-;
-
-CREATE (p:Human { 
-       firstname: "Tatum",
-       lastname: "Bell",
-       fullname: "Tatum Bell",
+CREATE (h96:Human { 
+       firstname: "Blake",
+       lastname: "Ortiz",
+       fullname: "Blake Ortiz",
        id: "96"
        }),
+(d:Machine)-[:TYPE]->(phone),(h96)-[:USES]->(d)
+,(h77)-[:FRIEND]->(h96),(h45)-[:FRIEND]->(h96),(h30)-[:FRIEND]->(h96),(h9)-[:FRIEND]->(h96)
 
-(d:Device)-[:Type]->(phone),
-(p)-[:USES]->(d),
-
-(p)-[:Friend]->(:Human {fullname: 'Sawyer Suzuki'})
-,
-(p)-[:Friend]->(:Human {fullname: 'Emory Bennett'})
-,
-(p)-[:Friend]->(:Human {fullname: 'Charlie Pérez'})
-,
-(p)-[:Friend]->(:Human {fullname: 'Amari Baker'})
-,
-(p)-[:Friend]->(:Human {fullname: 'Angel Morgan'})
-;
-
-CREATE (p:Human { 
-       firstname: "Emerson",
-       lastname: "Rivera",
-       fullname: "Emerson Rivera",
+CREATE (h97:Human { 
+       firstname: "Kamryn",
+       lastname: "Wilson",
+       fullname: "Kamryn Wilson",
        id: "97"
        }),
+(d:Machine)-[:TYPE]->(shine),(h97)-[:USES]->(d)
+,(h92)-[:FRIEND]->(h97),(h23)-[:FRIEND]->(h97),(h16)-[:FRIEND]->(h97)
 
-(d:Device)-[:Type]->(nike),
-(p)-[:USES]->(d),
-
-(p)-[:Friend]->(:Human {fullname: 'Kamryn Suzuki'})
-,
-(p)-[:Friend]->(:Human {fullname: 'Tatum Davis'})
-,
-(p)-[:Friend]->(:Human {fullname: 'Morgan Jenkins'})
-,
-(p)-[:Friend]->(:Human {fullname: 'Avery Rivera'})
-,
-(p)-[:Friend]->(:Human {fullname: 'Micah Miller'})
-;
-
-CREATE (p:Human { 
-       firstname: "Hayden",
-       lastname: "Peterson",
-       fullname: "Hayden Peterson",
+CREATE (h98:Human { 
+       firstname: "Avery",
+       lastname: "Nguyen",
+       fullname: "Avery Nguyen",
        id: "98"
        }),
+(d:Machine)-[:TYPE]->(fitbitflex),(h98)-[:USES]->(d)
+,(h4)-[:FRIEND]->(h98),(h55)-[:FRIEND]->(h98),(h54)-[:FRIEND]->(h98),(h66)-[:FRIEND]->(h98),(h87)-[:FRIEND]->(h98)
 
-(d:Device)-[:Type]->(fitbitflex),
-(p)-[:USES]->(d),
-
-(p)-[:Friend]->(:Human {fullname: 'Hayden Lee'})
-,
-(p)-[:Friend]->(:Human {fullname: 'Riley Mitchell'})
-,
-(p)-[:Friend]->(:Human {fullname: 'Logan Young'})
-,
-(p)-[:Friend]->(:Human {fullname: 'Logan Fisher'})
-,
-(p)-[:Friend]->(:Human {fullname: 'Payton Barnes'})
-;
-
-CREATE (p:Human { 
-       firstname: "Angel",
-       lastname: "Williams",
-       fullname: "Angel Williams",
+CREATE (h99:Human { 
+       firstname: "Sage",
+       lastname: "Butler",
+       fullname: "Sage Butler",
        id: "99"
        }),
-
-(d:Device)-[:Type]->(nike),
-(p)-[:USES]->(d),
-
-(p)-[:Friend]->(:Human {fullname: 'Alexis Flores'})
-,
-(p)-[:Friend]->(:Human {fullname: 'Lyric Gómez'})
-,
-(p)-[:Friend]->(:Human {fullname: 'Tatum Bell'})
-;
+(d:Machine)-[:TYPE]->(shine),(h99)-[:USES]->(d)
+,(h96)-[:FRIEND]->(h99),(h95)-[:FRIEND]->(h99),(h82)-[:FRIEND]->(h99),(h8)-[:FRIEND]->(h99);

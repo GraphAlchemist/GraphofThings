@@ -49,7 +49,7 @@ Primary node labels:
     * Can also carry labels that further classify the `type` of location.  e.g. :Event, :Retail, :Restaurant, :Home, :Activity, etc.
 
 Secondary node labels:
-* :DeviceType - a node that categorizes the :Machine that a :Human USES.
+* :MachineType - a node that categorizes the :Machine that a :Human USES.
     * Must contain properties that denote the device model and year
     * Must have a makes relationship with a company
 
