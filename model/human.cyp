@@ -28,6 +28,14 @@ CREATE
       (fitbitflex:MachineType {type: "fitbit flex"}),
       (nike:MachineType {type: "FuelBand"}),
       (shine:MachineType {type: "Shine"});
-
+CREATE INDEX ON :MachineType(type);
 CREATE CONSTRAINT ON (device:MachineType) ASSERT device.type IS UNIQUE;
 
+// CREATE UNIQUE ( company:Company { name: "$name" }),
+//        (company)-[:MAKES]->($x:MachineType),
+//        (company)-[:DISTRIBUTES]->($o:OperatingSystem);
+
+CREATE 
+       (ios:OperatingSystem { name: "iOS", version: "6.0.1" }),
+       (windows:OperatingSystem {name: "windows", version: "8"}),
+       (android:OperatingSystem {name: "android", version: "kitkat"});
