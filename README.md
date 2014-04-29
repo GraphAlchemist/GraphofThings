@@ -43,7 +43,7 @@ Primary node labels:
     * Must have version property, to denote version of operating system.
     * Can have any number of properties relevant to the use case including firmware version, operating system, etc.
     * Can form a relationship with :Human, :Location, and other :Mobile nodes.
-    * Can also form a TYPE relationship with :DeviceType nodes to further denote the the category of device.
+    * Can also form a TYPE relationship with :MachineType nodes to further denote the the category of device.
 
 * :User - a node that indicates a persona, typically from social media, that does not exist in the scope of the IoT application currently.  Obvious example would include Facebook user, Linkedin, Twitter, etc. gathered from a :Human social sign-on data.
     * Can have any number of properties relevant to the persona and use case - E.g age, email, gender.
@@ -66,7 +66,7 @@ Secondary node labels:
 
 
 * :Company - a node that represents a device manufacturer, designer, or operating system distributor.
-    * Must have relationship to :OperatingSystem and :DeviceType
+    * Must have relationship to :OperatingSystem and :MachineType
 
 * :Interest - an intermediary node that holds a single 'interest' category.
     * May connect to n number of :Human, :Location, :User nodes.
@@ -101,10 +101,10 @@ Secondary relationship types:
     * (:Location)-[:LOCATED]->(:LocationHier {value: "Main Street"})-[:LOCATED]->(:LocationHier {value: "Everytown"})-[:LOCATED]->(:LocationHier {value: "Oregon"}).
 
 * :TYPE - a relationship indicating the class of product that a :Machine is connected to.
-    * (:Machine)-[:TYPE]->(:DeviceType)
+    * (:Machine)-[:TYPE]->(:MachineType)
 
 * :MAKES - for simplicity, a relationship indicating that a company designs, manufactuers, or distributes a device.  e.g. Nike makes Fuelband.  Apple makes iPhone.
-    * (:Company)-[:MAKES]->(:DeviceType)
+    * (:Company)-[:MAKES]->(:MachineType)
 
 * :DISTRIBUTES
     * (:Company)-[:DISTRIBUTES]->(:OperatingSystem)
