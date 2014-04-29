@@ -1,0 +1,9 @@
+*~
+.credentials
+credentials.sh
+*.pyc
+*.pyo
+.DS_Store
+.#*
+#*
+\#*
