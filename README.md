@@ -1,14 +1,14 @@
 GraphofThings
 =============
 
-An Internet of Things sample data set, queries, and Neo4j database.
+An Internet of Things sample data set and queries, for Neo4j, the leading graph database.
 
 ## Philosophy
 "The Internet of Things," or "The Internet of Everything," at its core deals with the ability for devices to communicate with each other and to cooperate with humans.  Per Tim O'Reilly, we might even extend our understanding of IoT to the IoTH, the "Internet of Things and Humans" where the ability for things and humans to cooperate gets more nuanced when the things become smarter. 
 
 Because the IoT is all about interactions between devices and humans, the data is very naturally a graph.  This repo houses a sample data set in Neo4j, as well as the scripts used to create the data set, and a number of sample queries.
 
-## Getting Started
+## Quick Start
 `git clone <this_repo>`    
 Visit [Neo4j](http://www.neo4j.org/download) and download version >= 2.0.   
 `cd <your_neo_directory>`
@@ -17,17 +17,19 @@ Neo4j is now running on port 7474.
 
 ** Generate Database with our cypher script: **
 
-`./bin/neo4j-shell < path/to/this/repo/data/artificial_humans.cyp`    
+`./bin/neo4j-shell < path/to/this/repo/data/GraphofThings.cyp`    
 
-** Generate your own data with our generator: **
-
+## Using the Generator
+...
+<!-- ** Generate your own data with our generator: **
+...
 In the `data_generators/` directory use the command `python generate_humans.py` 
 and pipe the output to the neo4j shell or a file. `generate_humans.py` script 
 generates 100 profiles by default but can be called with a `-n <integer>` flag
 that will generate as many as you need 
 (caution: this will fail for larger values of n 
 since it needs to keep an array of profiles to link them)
-
+ -->
 ## The Data Model
 Neo4j operates off of a Property-Label Graph Model.  As concisely as possible, a graph is made up of nodes that can be categorized by one or more labels.  Node are connected by instances of directed relationships that can be queried bidirectionally.  Both relationships and nodes store properties which can be any primitive or array of primitives (string, float, integer, etc.).  You can read more about the Property-Label Graph Model [here](http://docs.neo4j.org/chunked/stable/graphdb-neo4j.html).
 
@@ -120,7 +122,7 @@ Secondary relationship types:
 All friends and friends of friends of x user that attended y event:
 
 ...
-
+i 
 Other events that event attendees may be interested in:
 
 ...
