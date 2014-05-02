@@ -119,23 +119,63 @@ Secondary relationship types:
 ## Example Queries
 ** Human based queries:  **
 
-All friends and friends of friends of x user that attended y event:
+[DRAFT] All friends and friends of friends of x user that attended y event:
+```
+MATCH (h:Human)-[:USES]->(:Machine)-[:LOCATED]->(l:Location)
+WHERE l.name = "The Fray"
+WITH h, l
+MATCH (h)-[:FRIEND]-(f)-[:FRIEND]-(fof), (f)-[:USES]->(:Machine)-[:LOCATED]->(l)
+WHERE (h)-[:FRIEND]-(fof)
+RETURN DISTINCT h, f as friends, collect(fof) as friendsOfFriends
+```
 
-...
-i 
-Other events that event attendees may be interested in:
+[DRAFT] Friends of people that attended an event, but that did not attend the event themselves:
+```
+MATCH (h:Human)-[:USES]->(:Machine)-[:LOCATED]->(l:Location)
+WHERE l.name = "The Fray"
+WITH h, l
+MATCH (h)-[:FRIEND]->(f:User)
+WHERE NOT (f)-[:USES]->(:Machine)-[:LOCATED]->(l)
+RETURN DISTINCT f
+```
 
-...
+[DRAFT] Infer interests of users based on events they attend:
+```
+MATCH (h:Human)-[:USES]->(:Machine)-[:LOCATED]->(l:Location)
+WHERE l.name = "The Fray"
+WITH h, l
+MATCH (l)-[:HAS]->(locationInterest:Interest)
+WHERE NOT (h)-[:HAS]->(locationInterest)
+RETURN DISTINCT h as target, collect(locationInterest) as InferredInterests
+```
 
-Friends of people that attended an event, but that did not attend the event themselves:
-
-...
+[DRAFT] Other events that event attendees may be interested in:
+```
+MATCH (h:Human)-[:USES]->(:Machine)-[:LOCATED]->(l:Location)
+WHERE l.name = "The Fray"
+WITH h, l
+MATCH (l)-[:HAS]->(locInt:Interest), (otherLoc:Location)-[r:HAS]->(locInt)
+RETURN l, collect(DISTINCT otherLoc)
+```
 
 ** Machine based queries:  **
 
-TIE this to a business questions: Percentage of event attendees that have iOS, Android, and Glass components:
-
-...
+[DRAFT] Device Demographics for an event:
+```
+MATCH (m:Machine)-[:LOCATED]->(l:Location)
+WHERE l.name = "The Fray"
+WITH collect(m.type) as type
+RETURN reduce(phone= 0, x IN type | 
+    CASE x
+     WHEN 'phone' THEN phone + 1
+     ELSE phone + 0
+    END) as phoneCount, 
+reduce(wear= 0, x IN type | 
+    CASE x
+     WHEN 'wearable' THEN wear + 1
+     ELSE wear
+    END) as wearCount
+```
 
 Individuals with x device that has y version:
 

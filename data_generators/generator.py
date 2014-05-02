@@ -5,6 +5,7 @@ import argparse
 import textwrap
 from random import choice, randint, sample, uniform
 from string import Template, join
+from operator import add, sub
 
 projectroot = os.path.abspath(os.path.join(os.path.dirname(__file__), '../'))
 
@@ -12,6 +13,7 @@ def set_up_db():
   uniqueness = (
     """
     begin
+    CREATE CONSTRAINT ON (company:Company) ASSERT company.name IS UNIQUE;
     CREATE CONSTRAINT ON (user:User) ASSERT user.fullname IS UNIQUE;
     CREATE CONSTRAINT ON (machine:Machine) ASSERT machine.id IS UNIQUE;
     CREATE CONSTRAINT ON (interest:Interest) ASSERT interest.name IS UNIQUE;
@@ -129,16 +131,101 @@ def pick_devices(human):
       CREATE UNIQUE (h)-[:USES]->(d);
       commit
       """)
-  device_ids = sample(Devices, randint(1,2))
+  if len(Devices) > 2:
+    device_ids = sample(Devices, randint(1,3))
+  else:
+    device_ids = Devices.keys()
   devicez = []
   if len(device_ids) > 1:
     if Devices[device_ids[0]]['type'] == 'phone' and Devices[device_ids[1]]['type'] == 'phone':
       devicez = [choice(device_ids)]
+      for d in devicez: del Devices[d]
+    else:
+      devicez = device_ids
+      for d in devicez: del Devices[d]
   else:
-    devicez = device_ids  
+    devicez = device_ids
+    for d in devicez: del Devices[d]
   output = [device.safe_substitute(device_id=dev, user_id=human) for dev in devicez]
   output = textwrap.dedent("\n".join(output))
   return output
+
+def pick_locations(human):
+  temp = Template(
+    """
+    begin
+    MATCH (h:Human)-[:USES]->(m:Machine), (l:Location)
+    WHERE m.type = "phone" AND h.id = $id AND l.name = "$name"
+    CREATE UNIQUE (m)-[:LOCATED {type: "$type", time: "$time"}]->(l);  
+    commit
+    """)
+  locale = sample(Locations, randint(1,5))
+  interactions = ['facebook_checkin', 'photo_tag', 'yelp_review']
+  times =  ['20140501', '20140502', '20140503', '20140504', '20140505']
+  data = [[loc, choice(interactions), choice(times)] for loc in locale]
+  output = "\n".join([temp.safe_substitute(id=human, name=d[0], type=d[1], time=d[2]) for d in data])
+  return output
+
+Companies = {}
+def create_companies():
+  temp = Template(
+    """
+    begin
+    MERGE (:Company {name: "$name"});
+    commit
+    """)
+  companies = [{"name": "Google"},
+               {"name": "Motorola"},
+               {"name": "Samsung"},
+               {"name": "Apple"},
+               {"name": "Fitbit"}]
+  output = [temp.safe_substitute(c) for c in companies]
+  return textwrap.dedent("".join(output))
+
+Locations = []
+def create_locations():
+  tempLo = Template(
+    """
+    begin
+    MERGE (l:Location {type: "$type", name: "$name", lat: $randLat, lon: $randLon})
+    WITH l
+    MATCH (lh:LocationHier)
+    WHERE lh.lat = $lhLat
+    CREATE UNIQUE (l)-[:LOCATED]->(lh);
+    commit
+    """)
+  tempInt = Template(
+    """
+    begin
+    MATCH (l:Location), (i:Interest)
+    WHERE l.name = "$name" AND i.name = "$intName"
+    CREATE UNIQUE (l)-[:HAS]->(i);
+    commit
+    """
+    )
+  operations = (add, sub)
+  coord_options = [[-122.6228893, 45.5121984], [-122.698686, 45.5319207],
+                   [-122.680078, 45.5589799], [-122.675562, 45.5478202],
+                   [-122.6805955, 45.5304324], [-122.647152, 45.521872]]
+  name_options = {'concert': ['The Fray', 'Foster The People', 'Christina Perri', 'Warpaint'],
+                  'restaurant': ['Besaws', 'Robo Taco', 'EastBurn', 'McMenamins', 'Hollywood Theatre'],
+                  'retail': ['Nordstroms', 'Starbucks', 'Caffe Umbria', 'Nike']}
+  output = []
+  for item in name_options.iteritems():
+    for value in item[1]:
+      coord = choice(coord_options)
+      op = choice(operations)
+      randLon = op(coord[0] , uniform(0.000, 0.009))
+      randLat = op(coord[1], uniform(0.000, 0.009))
+      cypher = tempLo.safe_substitute(type=item[0], name=value, randLat=randLat, 
+                                    randLon=randLon, lhLat=coord[1])
+      output.append(cypher)
+      intNames =  sample(interests, randint(1,3))
+      for i in intNames:
+        intCypher = tempInt.safe_substitute(name=value, intName=i)
+        output.append(intCypher)
+      Locations.append(value)
+  return textwrap.dedent("".join(output))
 
 Devices = {}
 def create_devices(d):
@@ -146,7 +233,11 @@ def create_devices(d):
   temp = Template(
           """
           begin
-          MERGE (:Machine {id: $id, name: "$name"});
+          MERGE (m:Machine {id: $id, name: "$name", type: "$type"})
+          WITH m
+          MATCH (c:Company)
+          WHERE c.name = "$maker"
+          CREATE UNIQUE (m)<-[:MAKES]-(c);
           commit
           """)
   # rels = pass
@@ -206,18 +297,18 @@ def create_humans(p):
       'gender': choice(['male', 'female']),
       'devices': pick_devices(p),
       'interests': pick_interests(p),
-      'friends': pick_friends(population, p)
+      'friends': pick_friends(population, p),
+      'locations': pick_locations(p)
       }
   output = [
       temp.safe_substitute(person),
       # device.safe_substitute(person),
       ]
-  if person['friends']:
-      output.append(person['friends'])
-  if person['interests']:
-      output.append(person['interests'])
-  if person['devices']:
-      output.append(person['devices'])
+  if person['friends']: output.append(person['friends'])
+  if person['interests']: output.append(person['interests'])
+  if person['devices']: output.append(person['devices'])
+  if person['locations']: output.append(person['locations'])
+
   return textwrap.dedent("".join(output))
 
 Users = {}
@@ -252,14 +343,16 @@ def generate_cypher(number):
   set_up = set_up_db()
   interests = create_interests()
   location_hier = create_location_hier()
-  devices = join([create_devices(d) for d in range(number)])
+  companies = create_companies().encode('utf-8')
+  locations = create_locations().encode('utf-8')
+  # create 20% more devices than humans
+  devices = join([create_devices(d) for d in range(int(number * 1.2))])
   devices = devices.encode('utf-8')
-  humans = "".join([create_humans(p) for p in range(number)])
-  humans = humans.encode('utf-8')
-  users = join([create_users(u) for u in range(number)])
-  users = users.encode('utf-8')
-  components = [set_up, interests, location_hier, humans, devices, users]
-  # components = [humans]
+  humans = "".join([create_humans(p) for p in range(number)]).encode('utf-8')
+  users = join([create_users(u) for u in range(number)]).encode('utf-8')
+  components = [set_up, interests, location_hier, 
+                companies, locations, devices, 
+                humans, users]
   generated_cypher = "\n".join(components)
   return generated_cypher
 
