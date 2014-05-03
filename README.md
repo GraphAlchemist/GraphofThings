@@ -8,16 +8,13 @@ An Internet of Things sample data set and queries, for Neo4j, the leading graph 
 
 Because the IoT is all about interactions between devices and humans, the data is very naturally a graph.  This repo houses a sample data set in Neo4j, as well as the scripts used to create the data set, and a number of sample queries.
 
-## Quick Start
-`git clone <this_repo>`    
-Visit [Neo4j](http://www.neo4j.org/download) and download version >= 2.0.   
-`cd <your_neo_directory>`
-`./bin/neo4j start`
-Neo4j is now running on port 7474.   
-
-** Generate Database with our cypher script: **
-
-`./bin/neo4j-shell < path/to/this/repo/data/GraphofThings.cyp`    
+## Quick Start   
+1. `git clone <this_repo>` 
+2. Visit [Neo4j](http://www.neo4j.org/download) and download and unzip version >= 2.0
+3. `cd <your_neo_directory>`
+1. `./bin/neo4j start`
+4. Visit browser at port 7474.   
+2. `./bin/neo4j-shell < path/to/<this_repo>/data/GraphofThings.cyp`    
 
 ## Using the Generator
 ...
@@ -102,7 +99,7 @@ Relationship types:
 ![IoT Graph Data Model](assets/GraphModel.png)
 
 ## Example Queries
-** Human based read queries:  **
+#### Human based read queries:
 
 All friends and friends of friends of users that attended an event:
 ```
@@ -125,6 +122,7 @@ MATCH (h)-[:FRIEND]->(f:User)
 WHERE NOT (f)-[:USES]->(:Machine)-[:LOCATED]->(l)
 RETURN DISTINCT f
 ```
+![Query2](assets/Query2.png)
 
 [DRAFT] Infer interests of users based on events they attend:
 ```
@@ -135,8 +133,9 @@ MATCH (l)-[:HAS]->(locationInterest:Interest)
 WHERE NOT (h)-[:HAS]->(locationInterest)
 RETURN DISTINCT h as target, collect(locationInterest) as InferredInterests
 ```
+![Query3](assets/Query3.png)
 
-[DRAFT] Other events that event attendees may be interested in:
+Other events that event attendees may be interested in:
 ```
 MATCH (h:Human)-[:USES]->(:Machine)-[:LOCATED]->(l:Location)
 WHERE l.name = "The Fray"
@@ -144,8 +143,9 @@ WITH h, l
 MATCH (l)-[:HAS]->(locInt:Interest), (otherLoc:Location)-[r:HAS]->(locInt)
 RETURN l, collect(DISTINCT otherLoc)
 ```
+![Query4](assets/Query4.png)
 
-** Machine based read queries:  **
+#### Machine based read queries:
 [DRAFT] Device Demographics for an event:
 ```
 MATCH (h:Human)-[:USES]->(m:Machine)-[:LOCATED]->(l:Location)
@@ -164,13 +164,15 @@ reduce(wear= 0, x IN types |
     END) as wearCount,
 length(types) as total
 ```
+![Query5](assets/Query5.png)
 
-Individuals with a device that has runs Android 4.1 or higher:
+Individuals with a device that runs Android 4.1 or higher:
 ```
-MATCH (h:Human)-[:USES]->(m:Machine)-[r:RUNS]->(os:OperatingSystem)
-WHERE os.name = "Android" AND r.version >= 4.1
-RETURN h
+    MATCH (h:Human)-[:USES]->(m:Machine)-[r:RUNS]->(os:OperatingSystem)
+    WHERE os.name = "Android" AND r.version >= 4.1
+    RETURN h
 ```
+![Query6](assets/Query6.png)
 
 Individuals with a device that has Android 4.1 or higher, and who have a Fitbit product.
 ```
@@ -180,25 +182,63 @@ WHERE os.name = "Android"
  AND c.name = "Fitbit"
 RETURN h, c
 ```
+![Query7](assets/Query7.png)
 
-** Location based read queries:  **
-```
+#### Location based read queries:
 
+Return all users with Google Glass and Fitbit (early adopters) in Portland:
 ```
+MATCH (g:Machine)<-[:USES]-(h:Human)-[:USES]->(fb:Machine),
+(fb)<-[:MAKES]-(n:Company)
+WHERE g.name = "Google Glass" AND n.name = "Fitbit"
+WITH h
+MATCH (h)-[:USES]->(m:Machine)-[:LOCATED*]->(lh:LocationHier)
+WHERE m.type = "phone" AND lh.name = "Portland"
+RETURN h
+```
+![Query8](assets/Query8.png)
 
-** Human based write queries: **
-Suggest meeting for people who attend and event and are friends of friends:
+Return all users with Google Glass and Fitbit (early adopters) in a neighborhood:
 ```
+MATCH (g:Machine)<-[:USES]-(h:Human)-[:USES]->(fb:Machine),
+(fb)<-[:MAKES]-(n:Company)
+WHERE g.name = "Google Glass" AND n.name = "Fitbit"
+WITH h
+MATCH (h)-[:USES]->(m:Machine)-[:LOCATED*]->(lh:LocationHier)
+WHERE m.type = "phone" AND lh.name = ""
+RETURN h
+```
+![Query9](assets/Query9.png)
 
+#### Human based write queries:
+Devices communicate for people who attend and event and are friends of friends:
 ```
-
-Suggest other events that people may like because their friends attended them:
+MATCH (h:Human)-[:USES]->(m:Machine)-[:LOCATED]->(l:Location), 
+      (h)-[:FRIEND]-(f:User)-[:USES]->(mm:Machine)-[:LOCATED]->(l),
+      (h)-[:FRIEND]-(:User)-[:FRIEND]-(fof:User)-[:USES]->(mom:Machine)-[:LOCATED]->(l)
+WHERE l.name = "The Fray"
+WITH DISTINCT h, m, collect(distinct mm) as friends, collect(distinct mom) as friendsofFriends
+FOREACH (item IN friends |
+    CREATE UNIQUE (m)-[:PING {time: timestamp(), message: "Your friend is here!"} ]-(item)
+)
+FOREACH (item IN friendsofFriends |
+    CREATE UNIQUE (m)-[:PING {time: timestamp(), message: "A freind of someone you know is here!"} ]-(item)
+)
 ```
-```
+![Query10](assets/Query10.png)
 
 ** Device based write queries: **
-Suggest update for any out of data Android or iOS phones that power a Fitbit Flex:
+Suggest update for any out of date Android or iOS phones that power a Nike Fuelband:
 ```
-
+MATCH (h:Human)-[:USES]->(m:Machine)-[r:RUNS]->(os:OperatingSystem),
+(h)-[:USES]->(:Machine)<-[:MAKES]-(c:Company)
+WHERE c.name = "Nike" AND (os.name = "Android" AND r.version <= 4.1) OR (os.name = "iOS" AND r.version <= 7.0)
+CREATE UNIQUE (m)-[:ALERT {type: 'update', message: 'It looks like your ' + os.name + ' software is out of date!'}]->(h)
 ```
+![Query11](assets/Query11.png)
 
+#### Cleaning the Database after write queries:
+```
+MATCH ()-[r:PING|:ALERT]-()
+DELETE r
+```
