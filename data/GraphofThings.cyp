@@ -4,27 +4,27 @@ CREATE CONSTRAINT ON (company:Company) ASSERT company.name IS UNIQUE;
 CREATE CONSTRAINT ON (user:User) ASSERT user.fullname IS UNIQUE;
 CREATE CONSTRAINT ON (machine:Machine) ASSERT machine.id IS UNIQUE;
 CREATE CONSTRAINT ON (interest:Interest) ASSERT interest.name IS UNIQUE;
-CREATE CONSTRAINT ON (devicetype:DeviceType) ASSERT devicetype.type IS UNIQUE;
+CREATE CONSTRAINT ON (os:OperatingSystem) ASSERT os.name IS UNIQUE;
 commit
 
 begin
-MERGE (:Interest {name: 'Volleyball', id: '1'})
-MERGE (:Interest {name: 'Basketball', id: '2'})
-MERGE (:Interest {name: 'Baseball', id: '3'})
-MERGE (:Interest {name: 'River_Rafting', id: '4'})
-MERGE (:Interest {name: 'Bungee_Jumping', id: '5'})
-MERGE (:Interest {name: 'Hiking', id: '6'})
-MERGE (:Interest {name: 'Scuba_Diving', id: '7'})
-MERGE (:Interest {name: 'Swimming', id: '8'})
-MERGE (:Interest {name: 'Golf', id: '9'})
-MERGE (:Interest {name: 'Walking', id: '10'})
-MERGE (:Interest {name: 'Cycling', id: '11'})
-MERGE (:Interest {name: 'Surfing', id: '12'})
-MERGE (:Interest {name: 'Horse_Riding', id: '13'})
-MERGE (:Interest {name: 'Boating', id: '14'})
-MERGE (:Interest {name: 'Fishing', id: '15'})
-MERGE (:Interest {name: 'Rock_Climbing', id: '16'})
-MERGE (:Interest {name: 'Photography', id: '17'});
+CREATE (:Interest {name: 'Volleyball', id: '1'});
+CREATE (:Interest {name: 'Basketball', id: '2'});
+CREATE (:Interest {name: 'Baseball', id: '3'});
+CREATE (:Interest {name: 'River_Rafting', id: '4'});
+CREATE (:Interest {name: 'Bungee_Jumping', id: '5'});
+CREATE (:Interest {name: 'Hiking', id: '6'});
+CREATE (:Interest {name: 'Scuba_Diving', id: '7'});
+CREATE (:Interest {name: 'Swimming', id: '8'});
+CREATE (:Interest {name: 'Golf', id: '9'});
+CREATE (:Interest {name: 'Walking', id: '10'});
+CREATE (:Interest {name: 'Cycling', id: '11'});
+CREATE (:Interest {name: 'Surfing', id: '12'});
+CREATE (:Interest {name: 'Horse_Riding', id: '13'});
+CREATE (:Interest {name: 'Boating', id: '14'});
+CREATE (:Interest {name: 'Fishing', id: '15'});
+CREATE (:Interest {name: 'Rock_Climbing', id: '16'});
+CREATE (:Interest {name: 'Photography', id: '17'});
 commit
 begin
 CREATE 
@@ -85,38 +85,66 @@ CREATE
 ;
 commit
 
+    begin
+    CREATE (n:OperatingSystem {name: "Android"});
+    CREATE (n:OperatingSystem {name: "iOS"});
+    commit
+    
+
 begin
-MERGE (:Company {name: "Google"});
+CREATE (c:Company {name: "Google"});  
 commit
 
 begin
-MERGE (:Company {name: "Motorola"});
+MATCH (c:Company), (os:OperatingSystem)
+WHERE c.name = "Google" AND os.name = "Android"
+CREATE UNIQUE (c)-[:DISTRIBUTES]->(os);
 commit
 
 begin
-MERGE (:Company {name: "Samsung"});
+CREATE (c:Company {name: "Motorola"});  
 commit
 
 begin
-MERGE (:Company {name: "Apple"});
+CREATE (c:Company {name: "Samsung"});  
 commit
 
 begin
-MERGE (:Company {name: "Fitbit"});
+CREATE (c:Company {name: "Apple"});  
+commit
+
+begin
+MATCH (c:Company), (os:OperatingSystem)
+WHERE c.name = "Apple" AND os.name = "Apple"
+CREATE UNIQUE (c)-[:DISTRIBUTES]->(os);
+commit
+
+begin
+CREATE (c:Company {name: "Fitbit"});  
+commit
+
+begin
+CREATE (c:Company {name: "Nike"});  
 commit
 
 
 begin
-MERGE (l:Location {type: "retail", name: "Nordstroms", lat: 45.5181899585, lon: -122.619449224})
+CREATE (l:Location {type: "retail", name: "Nordstroms", lat: 45.5540238297, lon: -122.682506828})
 WITH l
 MATCH (lh:LocationHier)
-WHERE lh.lat = 45.5121984
+WHERE lh.lat = 45.5589799
 CREATE UNIQUE (l)-[:LOCATED]->(lh);
 commit
 
 begin
 MATCH (l:Location), (i:Interest)
-WHERE l.name = "Nordstroms" AND i.name = "Boating"
+WHERE l.name = "Nordstroms" AND i.name = "Baseball"
+CREATE UNIQUE (l)-[:HAS]->(i);
+commit
+
+begin
+MATCH (l:Location), (i:Interest)
+WHERE l.name = "Nordstroms" AND i.name = "Photography"
 CREATE UNIQUE (l)-[:HAS]->(i);
 commit
 
@@ -127,30 +155,30 @@ CREATE UNIQUE (l)-[:HAS]->(i);
 commit
 
 begin
-MERGE (l:Location {type: "retail", name: "Starbucks", lat: 45.5355289439, lon: -122.693670956})
+CREATE (l:Location {type: "retail", name: "Starbucks", lat: 45.5147488585, lon: -122.652404105})
 WITH l
 MATCH (lh:LocationHier)
-WHERE lh.lat = 45.5319207
+WHERE lh.lat = 45.521872
 CREATE UNIQUE (l)-[:LOCATED]->(lh);
 commit
 
 begin
 MATCH (l:Location), (i:Interest)
-WHERE l.name = "Starbucks" AND i.name = "Boating"
+WHERE l.name = "Starbucks" AND i.name = "River_Rafting"
 CREATE UNIQUE (l)-[:HAS]->(i);
 commit
 
 begin
 MATCH (l:Location), (i:Interest)
-WHERE l.name = "Starbucks" AND i.name = "Baseball"
+WHERE l.name = "Starbucks" AND i.name = "Bungee_Jumping"
 CREATE UNIQUE (l)-[:HAS]->(i);
 commit
 
 begin
-MERGE (l:Location {type: "retail", name: "Caffe Umbria", lat: 45.5299113431, lon: -122.641308701})
+CREATE (l:Location {type: "retail", name: "Caffe Umbria", lat: 45.504693801, lon: -122.624314028})
 WITH l
 MATCH (lh:LocationHier)
-WHERE lh.lat = 45.521872
+WHERE lh.lat = 45.5121984
 CREATE UNIQUE (l)-[:LOCATED]->(lh);
 commit
 
@@ -161,7 +189,7 @@ CREATE UNIQUE (l)-[:HAS]->(i);
 commit
 
 begin
-MERGE (l:Location {type: "retail", name: "Nike", lat: 45.562164797, lon: -122.67503732})
+CREATE (l:Location {type: "retail", name: "Nike", lat: 45.5648543012, lon: -122.672197091})
 WITH l
 MATCH (lh:LocationHier)
 WHERE lh.lat = 45.5589799
@@ -170,84 +198,26 @@ commit
 
 begin
 MATCH (l:Location), (i:Interest)
-WHERE l.name = "Nike" AND i.name = "Walking"
+WHERE l.name = "Nike" AND i.name = "Rock_Climbing"
 CREATE UNIQUE (l)-[:HAS]->(i);
 commit
 
 begin
-MATCH (l:Location), (i:Interest)
-WHERE l.name = "Nike" AND i.name = "Cycling"
-CREATE UNIQUE (l)-[:HAS]->(i);
-commit
-
-begin
-MATCH (l:Location), (i:Interest)
-WHERE l.name = "Nike" AND i.name = "Fishing"
-CREATE UNIQUE (l)-[:HAS]->(i);
-commit
-
-begin
-MERGE (l:Location {type: "concert", name: "The Fray", lat: 45.5195669463, lon: -122.651311402})
+CREATE (l:Location {type: "concert", name: "The Fray", lat: 45.5676074211, lon: -122.672368041})
 WITH l
 MATCH (lh:LocationHier)
-WHERE lh.lat = 45.521872
+WHERE lh.lat = 45.5589799
 CREATE UNIQUE (l)-[:LOCATED]->(lh);
 commit
 
 begin
 MATCH (l:Location), (i:Interest)
-WHERE l.name = "The Fray" AND i.name = "Volleyball"
+WHERE l.name = "The Fray" AND i.name = "Walking"
 CREATE UNIQUE (l)-[:HAS]->(i);
 commit
 
 begin
-MATCH (l:Location), (i:Interest)
-WHERE l.name = "The Fray" AND i.name = "Hiking"
-CREATE UNIQUE (l)-[:HAS]->(i);
-commit
-
-begin
-MERGE (l:Location {type: "concert", name: "Foster The People", lat: 45.5295073826, lon: -122.644035338})
-WITH l
-MATCH (lh:LocationHier)
-WHERE lh.lat = 45.521872
-CREATE UNIQUE (l)-[:LOCATED]->(lh);
-commit
-
-begin
-MATCH (l:Location), (i:Interest)
-WHERE l.name = "Foster The People" AND i.name = "Hiking"
-CREATE UNIQUE (l)-[:HAS]->(i);
-commit
-
-begin
-MERGE (l:Location {type: "concert", name: "Christina Perri", lat: 45.5165674862, lon: -122.652315586})
-WITH l
-MATCH (lh:LocationHier)
-WHERE lh.lat = 45.521872
-CREATE UNIQUE (l)-[:LOCATED]->(lh);
-commit
-
-begin
-MATCH (l:Location), (i:Interest)
-WHERE l.name = "Christina Perri" AND i.name = "Swimming"
-CREATE UNIQUE (l)-[:HAS]->(i);
-commit
-
-begin
-MATCH (l:Location), (i:Interest)
-WHERE l.name = "Christina Perri" AND i.name = "Horse_Riding"
-CREATE UNIQUE (l)-[:HAS]->(i);
-commit
-
-begin
-MATCH (l:Location), (i:Interest)
-WHERE l.name = "Christina Perri" AND i.name = "Golf"
-CREATE UNIQUE (l)-[:HAS]->(i);
-commit
-
-begin
-MERGE (l:Location {type: "concert", name: "Warpaint", lat: 45.5518936698, lon: -122.672036257})
+CREATE (l:Location {type: "concert", name: "Foster The People", lat: 45.5424954818, lon: -122.683441118})
 WITH l
 MATCH (lh:LocationHier)
 WHERE lh.lat = 45.5478202
@@ -256,18 +226,12 @@ commit
 
 begin
 MATCH (l:Location), (i:Interest)
-WHERE l.name = "Warpaint" AND i.name = "Rock_Climbing"
+WHERE l.name = "Foster The People" AND i.name = "Volleyball"
 CREATE UNIQUE (l)-[:HAS]->(i);
 commit
 
 begin
-MATCH (l:Location), (i:Interest)
-WHERE l.name = "Warpaint" AND i.name = "Horse_Riding"
-CREATE UNIQUE (l)-[:HAS]->(i);
-commit
-
-begin
-MERGE (l:Location {type: "restaurant", name: "Besaws", lat: 45.5346830618, lon: -122.697854993})
+CREATE (l:Location {type: "concert", name: "Christina Perri", lat: 45.5252707103, lon: -122.705004879})
 WITH l
 MATCH (lh:LocationHier)
 WHERE lh.lat = 45.5319207
@@ -276,58 +240,18 @@ commit
 
 begin
 MATCH (l:Location), (i:Interest)
-WHERE l.name = "Besaws" AND i.name = "Cycling"
-CREATE UNIQUE (l)-[:HAS]->(i);
-commit
-
-begin
-MERGE (l:Location {type: "restaurant", name: "Robotaco", lat: 45.5260482622, lon: -122.7017197})
-WITH l
-MATCH (lh:LocationHier)
-WHERE lh.lat = 45.5319207
-CREATE UNIQUE (l)-[:LOCATED]->(lh);
-commit
-
-begin
-MATCH (l:Location), (i:Interest)
-WHERE l.name = "Robotaco" AND i.name = "Baseball"
+WHERE l.name = "Christina Perri" AND i.name = "Cycling"
 CREATE UNIQUE (l)-[:HAS]->(i);
 commit
 
 begin
 MATCH (l:Location), (i:Interest)
-WHERE l.name = "Robotaco" AND i.name = "Walking"
+WHERE l.name = "Christina Perri" AND i.name = "Walking"
 CREATE UNIQUE (l)-[:HAS]->(i);
 commit
 
 begin
-MERGE (l:Location {type: "restaurant", name: "Eastburn", lat: 45.5203184774, lon: -122.655763204})
-WITH l
-MATCH (lh:LocationHier)
-WHERE lh.lat = 45.521872
-CREATE UNIQUE (l)-[:LOCATED]->(lh);
-commit
-
-begin
-MATCH (l:Location), (i:Interest)
-WHERE l.name = "Eastburn" AND i.name = "Hiking"
-CREATE UNIQUE (l)-[:HAS]->(i);
-commit
-
-begin
-MATCH (l:Location), (i:Interest)
-WHERE l.name = "Eastburn" AND i.name = "Horse_Riding"
-CREATE UNIQUE (l)-[:HAS]->(i);
-commit
-
-begin
-MATCH (l:Location), (i:Interest)
-WHERE l.name = "Eastburn" AND i.name = "Rock_Climbing"
-CREATE UNIQUE (l)-[:HAS]->(i);
-commit
-
-begin
-MERGE (l:Location {type: "restaurant", name: "McMenamins", lat: 45.5273589749, lon: -122.685582905})
+CREATE (l:Location {type: "concert", name: "Warpaint", lat: 45.5317883962, lon: -122.679837494})
 WITH l
 MATCH (lh:LocationHier)
 WHERE lh.lat = 45.5304324
@@ -336,18 +260,44 @@ commit
 
 begin
 MATCH (l:Location), (i:Interest)
-WHERE l.name = "McMenamins" AND i.name = "Walking"
+WHERE l.name = "Warpaint" AND i.name = "Surfing"
 CREATE UNIQUE (l)-[:HAS]->(i);
 commit
 
 begin
 MATCH (l:Location), (i:Interest)
-WHERE l.name = "McMenamins" AND i.name = "Basketball"
+WHERE l.name = "Warpaint" AND i.name = "Volleyball"
 CREATE UNIQUE (l)-[:HAS]->(i);
 commit
 
 begin
-MERGE (l:Location {type: "restaurant", name: "Hollywood Theatre", lat: 45.5413015818, lon: -122.676535429})
+MATCH (l:Location), (i:Interest)
+WHERE l.name = "Warpaint" AND i.name = "Bungee_Jumping"
+CREATE UNIQUE (l)-[:HAS]->(i);
+commit
+
+begin
+CREATE (l:Location {type: "restaurant", name: "Besaws", lat: 45.5270827562, lon: -122.688710289})
+WITH l
+MATCH (lh:LocationHier)
+WHERE lh.lat = 45.5304324
+CREATE UNIQUE (l)-[:LOCATED]->(lh);
+commit
+
+begin
+MATCH (l:Location), (i:Interest)
+WHERE l.name = "Besaws" AND i.name = "Baseball"
+CREATE UNIQUE (l)-[:HAS]->(i);
+commit
+
+begin
+MATCH (l:Location), (i:Interest)
+WHERE l.name = "Besaws" AND i.name = "Volleyball"
+CREATE UNIQUE (l)-[:HAS]->(i);
+commit
+
+begin
+CREATE (l:Location {type: "restaurant", name: "Robo Taco", lat: 45.5391395404, lon: -122.677653726})
 WITH l
 MATCH (lh:LocationHier)
 WHERE lh.lat = 45.5478202
@@ -356,37 +306,124 @@ commit
 
 begin
 MATCH (l:Location), (i:Interest)
-WHERE l.name = "Hollywood Theatre" AND i.name = "Basketball"
+WHERE l.name = "Robo Taco" AND i.name = "Photography"
+CREATE UNIQUE (l)-[:HAS]->(i);
+commit
+
+begin
+MATCH (l:Location), (i:Interest)
+WHERE l.name = "Robo Taco" AND i.name = "Hiking"
+CREATE UNIQUE (l)-[:HAS]->(i);
+commit
+
+begin
+CREATE (l:Location {type: "restaurant", name: "EastBurn", lat: 45.5383553387, lon: -122.696142968})
+WITH l
+MATCH (lh:LocationHier)
+WHERE lh.lat = 45.5319207
+CREATE UNIQUE (l)-[:LOCATED]->(lh);
+commit
+
+begin
+MATCH (l:Location), (i:Interest)
+WHERE l.name = "EastBurn" AND i.name = "Walking"
+CREATE UNIQUE (l)-[:HAS]->(i);
+commit
+
+begin
+CREATE (l:Location {type: "restaurant", name: "McMenamins", lat: 45.5117312249, lon: -122.624344652})
+WITH l
+MATCH (lh:LocationHier)
+WHERE lh.lat = 45.5121984
+CREATE UNIQUE (l)-[:LOCATED]->(lh);
+commit
+
+begin
+MATCH (l:Location), (i:Interest)
+WHERE l.name = "McMenamins" AND i.name = "Boating"
+CREATE UNIQUE (l)-[:HAS]->(i);
+commit
+
+begin
+MATCH (l:Location), (i:Interest)
+WHERE l.name = "McMenamins" AND i.name = "Surfing"
+CREATE UNIQUE (l)-[:HAS]->(i);
+commit
+
+begin
+CREATE (l:Location {type: "restaurant", name: "Hollywood Theatre", lat: 45.5276729006, lon: -122.700043389})
+WITH l
+MATCH (lh:LocationHier)
+WHERE lh.lat = 45.5319207
+CREATE UNIQUE (l)-[:LOCATED]->(lh);
+commit
+
+begin
+MATCH (l:Location), (i:Interest)
+WHERE l.name = "Hollywood Theatre" AND i.name = "Photography"
+CREATE UNIQUE (l)-[:HAS]->(i);
+commit
+
+begin
+MATCH (l:Location), (i:Interest)
+WHERE l.name = "Hollywood Theatre" AND i.name = "Swimming"
+CREATE UNIQUE (l)-[:HAS]->(i);
+commit
+
+begin
+MATCH (l:Location), (i:Interest)
+WHERE l.name = "Hollywood Theatre" AND i.name = "Bungee_Jumping"
 CREATE UNIQUE (l)-[:HAS]->(i);
 commit
 
 
 begin
-MERGE (m:Machine {id: 1, name: "iPhone 4S", type: "phone"})
+CREATE (m:Machine {id: 1, name: "Samsung Galaxy S 4", type: "phone"})
 WITH m
-MATCH (c:Company)
-WHERE c.name = "Apple"
-CREATE UNIQUE (m)<-[:MAKES]-(c);
+MATCH (c:Company), (os:OperatingSystem)
+WHERE c.name = "Samsung" AND os.name = "Android"
+CREATE UNIQUE (m)<-[:MAKES]-(c)
+CREATE UNIQUE (m)-[:RUNS {version: 4.2}]->(os);
 commit
  
 begin
-MERGE (m:Machine {id: 2, name: "Samsung Galaxy S 4", type: "phone"})
+CREATE (m:Machine {id: 2, name: "iPhone 4S", type: "phone"})
 WITH m
-MATCH (c:Company)
-WHERE c.name = "Samsung"
-CREATE UNIQUE (m)<-[:MAKES]-(c);
+MATCH (c:Company), (os:OperatingSystem)
+WHERE c.name = "Apple" AND os.name = "iOS"
+CREATE UNIQUE (m)<-[:MAKES]-(c)
+CREATE UNIQUE (m)-[:RUNS {version: 5.39}]->(os);
 commit
  
 begin
-MERGE (m:Machine {id: 3, name: "iPhone 4", type: "phone"})
+CREATE (m:Machine {id: 3, name: "Samsung Galaxy S 4", type: "phone"})
 WITH m
-MATCH (c:Company)
-WHERE c.name = "Apple"
-CREATE UNIQUE (m)<-[:MAKES]-(c);
+MATCH (c:Company), (os:OperatingSystem)
+WHERE c.name = "Samsung" AND os.name = "Android"
+CREATE UNIQUE (m)<-[:MAKES]-(c)
+CREATE UNIQUE (m)-[:RUNS {version: 4.2}]->(os);
 commit
  
 begin
-MERGE (m:Machine {id: 4, name: "Fitbit One", type: "wearable"})
+CREATE (m:Machine {id: 4, name: "iPhone 4", type: "phone"})
+WITH m
+MATCH (c:Company), (os:OperatingSystem)
+WHERE c.name = "Apple" AND os.name = "iOS"
+CREATE UNIQUE (m)<-[:MAKES]-(c)
+CREATE UNIQUE (m)-[:RUNS {version: 6.52}]->(os);
+commit
+ 
+begin
+CREATE (m:Machine {id: 5, name: "iPhone 4", type: "phone"})
+WITH m
+MATCH (c:Company), (os:OperatingSystem)
+WHERE c.name = "Apple" AND os.name = "iOS"
+CREATE UNIQUE (m)<-[:MAKES]-(c)
+CREATE UNIQUE (m)-[:RUNS {version: 5.9}]->(os);
+commit
+ 
+begin
+CREATE (m:Machine {id: 6, name: "Fitbit One", type: "wearable"})
 WITH m
 MATCH (c:Company)
 WHERE c.name = "Fitbit"
@@ -394,15 +431,41 @@ CREATE UNIQUE (m)<-[:MAKES]-(c);
 commit
  
 begin
-MERGE (m:Machine {id: 5, name: "iPhone 4S", type: "phone"})
+CREATE (m:Machine {id: 7, name: "Fitbit One", type: "wearable"})
 WITH m
 MATCH (c:Company)
-WHERE c.name = "Apple"
+WHERE c.name = "Fitbit"
 CREATE UNIQUE (m)<-[:MAKES]-(c);
 commit
  
 begin
-MERGE (m:Machine {id: 6, name: "Google Glass", type: "wearable"})
+CREATE (m:Machine {id: 8, name: "iPhone 4S", type: "phone"})
+WITH m
+MATCH (c:Company), (os:OperatingSystem)
+WHERE c.name = "Apple" AND os.name = "iOS"
+CREATE UNIQUE (m)<-[:MAKES]-(c)
+CREATE UNIQUE (m)-[:RUNS {version: 6.68}]->(os);
+commit
+ 
+begin
+CREATE (m:Machine {id: 9, name: "Droid Razr M", type: "phone"})
+WITH m
+MATCH (c:Company), (os:OperatingSystem)
+WHERE c.name = "Motorola" AND os.name = "Android"
+CREATE UNIQUE (m)<-[:MAKES]-(c)
+CREATE UNIQUE (m)-[:RUNS {version: 4.1}]->(os);
+commit
+ 
+begin
+CREATE (m:Machine {id: 10, name: "Fitbit One", type: "wearable"})
+WITH m
+MATCH (c:Company)
+WHERE c.name = "Fitbit"
+CREATE UNIQUE (m)<-[:MAKES]-(c);
+commit
+ 
+begin
+CREATE (m:Machine {id: 11, name: "Google Glass", type: "wearable"})
 WITH m
 MATCH (c:Company)
 WHERE c.name = "Google"
@@ -410,7 +473,7 @@ CREATE UNIQUE (m)<-[:MAKES]-(c);
 commit
  
 begin
-MERGE (m:Machine {id: 7, name: "Fitbit One", type: "wearable"})
+CREATE (m:Machine {id: 12, name: "Fitbit Flex", type: "wearable"})
 WITH m
 MATCH (c:Company)
 WHERE c.name = "Fitbit"
@@ -418,7 +481,50 @@ CREATE UNIQUE (m)<-[:MAKES]-(c);
 commit
  
 begin
-MERGE (m:Machine {id: 8, name: "Fitbit One", type: "wearable"})
+CREATE (m:Machine {id: 13, name: "Nike Fuelband SE", type: "wearable"})
+WITH m
+MATCH (c:Company)
+WHERE c.name = "Nike"
+CREATE UNIQUE (m)<-[:MAKES]-(c);
+commit
+ 
+begin
+CREATE (m:Machine {id: 14, name: "Nike Fuelband", type: "wearable"})
+WITH m
+MATCH (c:Company)
+WHERE c.name = "Nike"
+CREATE UNIQUE (m)<-[:MAKES]-(c);
+commit
+ 
+begin
+CREATE (m:Machine {id: 15, name: "iPhone 4", type: "phone"})
+WITH m
+MATCH (c:Company), (os:OperatingSystem)
+WHERE c.name = "Apple" AND os.name = "iOS"
+CREATE UNIQUE (m)<-[:MAKES]-(c)
+CREATE UNIQUE (m)-[:RUNS {version: 5.87}]->(os);
+commit
+ 
+begin
+CREATE (m:Machine {id: 16, name: "Droid Razr M", type: "phone"})
+WITH m
+MATCH (c:Company), (os:OperatingSystem)
+WHERE c.name = "Motorola" AND os.name = "Android"
+CREATE UNIQUE (m)<-[:MAKES]-(c)
+CREATE UNIQUE (m)-[:RUNS {version: 4.1}]->(os);
+commit
+ 
+begin
+CREATE (m:Machine {id: 17, name: "iPhone 4S", type: "phone"})
+WITH m
+MATCH (c:Company), (os:OperatingSystem)
+WHERE c.name = "Apple" AND os.name = "iOS"
+CREATE UNIQUE (m)<-[:MAKES]-(c)
+CREATE UNIQUE (m)-[:RUNS {version: 6.77}]->(os);
+commit
+ 
+begin
+CREATE (m:Machine {id: 18, name: "Fitbit Flex", type: "wearable"})
 WITH m
 MATCH (c:Company)
 WHERE c.name = "Fitbit"
@@ -426,79 +532,7 @@ CREATE UNIQUE (m)<-[:MAKES]-(c);
 commit
  
 begin
-MERGE (m:Machine {id: 9, name: "iPhone 4", type: "phone"})
-WITH m
-MATCH (c:Company)
-WHERE c.name = "Apple"
-CREATE UNIQUE (m)<-[:MAKES]-(c);
-commit
- 
-begin
-MERGE (m:Machine {id: 10, name: "iPhone 4", type: "phone"})
-WITH m
-MATCH (c:Company)
-WHERE c.name = "Apple"
-CREATE UNIQUE (m)<-[:MAKES]-(c);
-commit
- 
-begin
-MERGE (m:Machine {id: 11, name: "Fitbit Flex", type: "wearable"})
-WITH m
-MATCH (c:Company)
-WHERE c.name = "Fitbit"
-CREATE UNIQUE (m)<-[:MAKES]-(c);
-commit
- 
-begin
-MERGE (m:Machine {id: 12, name: "Fitbit One", type: "wearable"})
-WITH m
-MATCH (c:Company)
-WHERE c.name = "Fitbit"
-CREATE UNIQUE (m)<-[:MAKES]-(c);
-commit
- 
-begin
-MERGE (m:Machine {id: 13, name: "Samsung Galaxy S 4", type: "phone"})
-WITH m
-MATCH (c:Company)
-WHERE c.name = "Samsung"
-CREATE UNIQUE (m)<-[:MAKES]-(c);
-commit
- 
-begin
-MERGE (m:Machine {id: 14, name: "Samsung Galaxy S 4", type: "phone"})
-WITH m
-MATCH (c:Company)
-WHERE c.name = "Samsung"
-CREATE UNIQUE (m)<-[:MAKES]-(c);
-commit
- 
-begin
-MERGE (m:Machine {id: 15, name: "Fitbit One", type: "wearable"})
-WITH m
-MATCH (c:Company)
-WHERE c.name = "Fitbit"
-CREATE UNIQUE (m)<-[:MAKES]-(c);
-commit
- 
-begin
-MERGE (m:Machine {id: 16, name: "iPhone 4S", type: "phone"})
-WITH m
-MATCH (c:Company)
-WHERE c.name = "Apple"
-CREATE UNIQUE (m)<-[:MAKES]-(c);
-commit
- 
-begin
-MERGE (m:Machine {id: 17, name: "iPhone 4", type: "phone"})
-WITH m
-MATCH (c:Company)
-WHERE c.name = "Apple"
-CREATE UNIQUE (m)<-[:MAKES]-(c);
-commit
- 
-begin
-MERGE (m:Machine {id: 18, name: "Google Glass", type: "wearable"})
+CREATE (m:Machine {id: 19, name: "Google Glass", type: "wearable"})
 WITH m
 MATCH (c:Company)
 WHERE c.name = "Google"
@@ -506,31 +540,25 @@ CREATE UNIQUE (m)<-[:MAKES]-(c);
 commit
  
 begin
-MERGE (m:Machine {id: 19, name: "iPhone 4S", type: "phone"})
+CREATE (m:Machine {id: 20, name: "iPhone 4S", type: "phone"})
 WITH m
-MATCH (c:Company)
-WHERE c.name = "Apple"
-CREATE UNIQUE (m)<-[:MAKES]-(c);
+MATCH (c:Company), (os:OperatingSystem)
+WHERE c.name = "Apple" AND os.name = "iOS"
+CREATE UNIQUE (m)<-[:MAKES]-(c)
+CREATE UNIQUE (m)-[:RUNS {version: 6.08}]->(os);
 commit
  
 begin
-MERGE (m:Machine {id: 20, name: "iPhone 4", type: "phone"})
+CREATE (m:Machine {id: 21, name: "iPhone 4", type: "phone"})
 WITH m
-MATCH (c:Company)
-WHERE c.name = "Apple"
-CREATE UNIQUE (m)<-[:MAKES]-(c);
+MATCH (c:Company), (os:OperatingSystem)
+WHERE c.name = "Apple" AND os.name = "iOS"
+CREATE UNIQUE (m)<-[:MAKES]-(c)
+CREATE UNIQUE (m)-[:RUNS {version: 5.44}]->(os);
 commit
  
 begin
-MERGE (m:Machine {id: 21, name: "iPhone 4", type: "phone"})
-WITH m
-MATCH (c:Company)
-WHERE c.name = "Apple"
-CREATE UNIQUE (m)<-[:MAKES]-(c);
-commit
- 
-begin
-MERGE (m:Machine {id: 22, name: "Google Glass", type: "wearable"})
+CREATE (m:Machine {id: 22, name: "Google Glass", type: "wearable"})
 WITH m
 MATCH (c:Company)
 WHERE c.name = "Google"
@@ -538,15 +566,32 @@ CREATE UNIQUE (m)<-[:MAKES]-(c);
 commit
  
 begin
-MERGE (m:Machine {id: 23, name: "Samsung Galaxy S 4", type: "phone"})
+CREATE (m:Machine {id: 23, name: "Nike Fuelband SE", type: "wearable"})
 WITH m
 MATCH (c:Company)
-WHERE c.name = "Samsung"
+WHERE c.name = "Nike"
 CREATE UNIQUE (m)<-[:MAKES]-(c);
 commit
  
 begin
-MERGE (m:Machine {id: 24, name: "Fitbit Flex", type: "wearable"})
+CREATE (m:Machine {id: 24, name: "Nike Fuelband SE", type: "wearable"})
+WITH m
+MATCH (c:Company)
+WHERE c.name = "Nike"
+CREATE UNIQUE (m)<-[:MAKES]-(c);
+commit
+ 
+begin
+CREATE (m:Machine {id: 25, name: "iPhone 4S", type: "phone"})
+WITH m
+MATCH (c:Company), (os:OperatingSystem)
+WHERE c.name = "Apple" AND os.name = "iOS"
+CREATE UNIQUE (m)<-[:MAKES]-(c)
+CREATE UNIQUE (m)-[:RUNS {version: 5.97}]->(os);
+commit
+ 
+begin
+CREATE (m:Machine {id: 26, name: "Fitbit One", type: "wearable"})
 WITH m
 MATCH (c:Company)
 WHERE c.name = "Fitbit"
@@ -554,7 +599,329 @@ CREATE UNIQUE (m)<-[:MAKES]-(c);
 commit
  
 begin
-MERGE (m:Machine {id: 25, name: "Google Glass", type: "wearable"})
+CREATE (m:Machine {id: 27, name: "iPhone 4", type: "phone"})
+WITH m
+MATCH (c:Company), (os:OperatingSystem)
+WHERE c.name = "Apple" AND os.name = "iOS"
+CREATE UNIQUE (m)<-[:MAKES]-(c)
+CREATE UNIQUE (m)-[:RUNS {version: 6.07}]->(os);
+commit
+ 
+begin
+CREATE (m:Machine {id: 28, name: "Nike Fuelband SE", type: "wearable"})
+WITH m
+MATCH (c:Company)
+WHERE c.name = "Nike"
+CREATE UNIQUE (m)<-[:MAKES]-(c);
+commit
+ 
+begin
+CREATE (m:Machine {id: 29, name: "Fitbit Flex", type: "wearable"})
+WITH m
+MATCH (c:Company)
+WHERE c.name = "Fitbit"
+CREATE UNIQUE (m)<-[:MAKES]-(c);
+commit
+ 
+begin
+CREATE (m:Machine {id: 30, name: "Samsung Galaxy S 4", type: "phone"})
+WITH m
+MATCH (c:Company), (os:OperatingSystem)
+WHERE c.name = "Samsung" AND os.name = "Android"
+CREATE UNIQUE (m)<-[:MAKES]-(c)
+CREATE UNIQUE (m)-[:RUNS {version: 4.2}]->(os);
+commit
+ 
+begin
+CREATE (m:Machine {id: 31, name: "Droid Razr M", type: "phone"})
+WITH m
+MATCH (c:Company), (os:OperatingSystem)
+WHERE c.name = "Motorola" AND os.name = "Android"
+CREATE UNIQUE (m)<-[:MAKES]-(c)
+CREATE UNIQUE (m)-[:RUNS {version: 4.0}]->(os);
+commit
+ 
+begin
+CREATE (m:Machine {id: 32, name: "Samsung Galaxy S 4", type: "phone"})
+WITH m
+MATCH (c:Company), (os:OperatingSystem)
+WHERE c.name = "Samsung" AND os.name = "Android"
+CREATE UNIQUE (m)<-[:MAKES]-(c)
+CREATE UNIQUE (m)-[:RUNS {version: 4.2}]->(os);
+commit
+ 
+begin
+CREATE (m:Machine {id: 33, name: "iPhone 4S", type: "phone"})
+WITH m
+MATCH (c:Company), (os:OperatingSystem)
+WHERE c.name = "Apple" AND os.name = "iOS"
+CREATE UNIQUE (m)<-[:MAKES]-(c)
+CREATE UNIQUE (m)-[:RUNS {version: 5.21}]->(os);
+commit
+ 
+begin
+CREATE (m:Machine {id: 34, name: "Fitbit One", type: "wearable"})
+WITH m
+MATCH (c:Company)
+WHERE c.name = "Fitbit"
+CREATE UNIQUE (m)<-[:MAKES]-(c);
+commit
+ 
+begin
+CREATE (m:Machine {id: 35, name: "Fitbit Flex", type: "wearable"})
+WITH m
+MATCH (c:Company)
+WHERE c.name = "Fitbit"
+CREATE UNIQUE (m)<-[:MAKES]-(c);
+commit
+ 
+begin
+CREATE (m:Machine {id: 36, name: "Samsung Galaxy S 4", type: "phone"})
+WITH m
+MATCH (c:Company), (os:OperatingSystem)
+WHERE c.name = "Samsung" AND os.name = "Android"
+CREATE UNIQUE (m)<-[:MAKES]-(c)
+CREATE UNIQUE (m)-[:RUNS {version: 4.2}]->(os);
+commit
+ 
+begin
+CREATE (m:Machine {id: 37, name: "Nike Fuelband", type: "wearable"})
+WITH m
+MATCH (c:Company)
+WHERE c.name = "Nike"
+CREATE UNIQUE (m)<-[:MAKES]-(c);
+commit
+ 
+begin
+CREATE (m:Machine {id: 38, name: "Droid Razr M", type: "phone"})
+WITH m
+MATCH (c:Company), (os:OperatingSystem)
+WHERE c.name = "Motorola" AND os.name = "Android"
+CREATE UNIQUE (m)<-[:MAKES]-(c)
+CREATE UNIQUE (m)-[:RUNS {version: 4.1}]->(os);
+commit
+ 
+begin
+CREATE (m:Machine {id: 39, name: "Fitbit Flex", type: "wearable"})
+WITH m
+MATCH (c:Company)
+WHERE c.name = "Fitbit"
+CREATE UNIQUE (m)<-[:MAKES]-(c);
+commit
+ 
+begin
+CREATE (m:Machine {id: 40, name: "Droid Razr M", type: "phone"})
+WITH m
+MATCH (c:Company), (os:OperatingSystem)
+WHERE c.name = "Motorola" AND os.name = "Android"
+CREATE UNIQUE (m)<-[:MAKES]-(c)
+CREATE UNIQUE (m)-[:RUNS {version: 4.1}]->(os);
+commit
+ 
+begin
+CREATE (m:Machine {id: 41, name: "Samsung Galaxy S 4", type: "phone"})
+WITH m
+MATCH (c:Company), (os:OperatingSystem)
+WHERE c.name = "Samsung" AND os.name = "Android"
+CREATE UNIQUE (m)<-[:MAKES]-(c)
+CREATE UNIQUE (m)-[:RUNS {version: 4.2}]->(os);
+commit
+ 
+begin
+CREATE (m:Machine {id: 42, name: "iPhone 4", type: "phone"})
+WITH m
+MATCH (c:Company), (os:OperatingSystem)
+WHERE c.name = "Apple" AND os.name = "iOS"
+CREATE UNIQUE (m)<-[:MAKES]-(c)
+CREATE UNIQUE (m)-[:RUNS {version: 6.11}]->(os);
+commit
+ 
+begin
+CREATE (m:Machine {id: 43, name: "Fitbit Flex", type: "wearable"})
+WITH m
+MATCH (c:Company)
+WHERE c.name = "Fitbit"
+CREATE UNIQUE (m)<-[:MAKES]-(c);
+commit
+ 
+begin
+CREATE (m:Machine {id: 44, name: "Nike Fuelband SE", type: "wearable"})
+WITH m
+MATCH (c:Company)
+WHERE c.name = "Nike"
+CREATE UNIQUE (m)<-[:MAKES]-(c);
+commit
+ 
+begin
+CREATE (m:Machine {id: 45, name: "Droid Razr M", type: "phone"})
+WITH m
+MATCH (c:Company), (os:OperatingSystem)
+WHERE c.name = "Motorola" AND os.name = "Android"
+CREATE UNIQUE (m)<-[:MAKES]-(c)
+CREATE UNIQUE (m)-[:RUNS {version: 4.1}]->(os);
+commit
+ 
+begin
+CREATE (m:Machine {id: 46, name: "Droid Razr M", type: "phone"})
+WITH m
+MATCH (c:Company), (os:OperatingSystem)
+WHERE c.name = "Motorola" AND os.name = "Android"
+CREATE UNIQUE (m)<-[:MAKES]-(c)
+CREATE UNIQUE (m)-[:RUNS {version: 4.1}]->(os);
+commit
+ 
+begin
+CREATE (m:Machine {id: 47, name: "iPhone 4", type: "phone"})
+WITH m
+MATCH (c:Company), (os:OperatingSystem)
+WHERE c.name = "Apple" AND os.name = "iOS"
+CREATE UNIQUE (m)<-[:MAKES]-(c)
+CREATE UNIQUE (m)-[:RUNS {version: 6.58}]->(os);
+commit
+ 
+begin
+CREATE (m:Machine {id: 48, name: "Nike Fuelband", type: "wearable"})
+WITH m
+MATCH (c:Company)
+WHERE c.name = "Nike"
+CREATE UNIQUE (m)<-[:MAKES]-(c);
+commit
+ 
+begin
+CREATE (m:Machine {id: 49, name: "Fitbit One", type: "wearable"})
+WITH m
+MATCH (c:Company)
+WHERE c.name = "Fitbit"
+CREATE UNIQUE (m)<-[:MAKES]-(c);
+commit
+ 
+begin
+CREATE (m:Machine {id: 50, name: "Fitbit One", type: "wearable"})
+WITH m
+MATCH (c:Company)
+WHERE c.name = "Fitbit"
+CREATE UNIQUE (m)<-[:MAKES]-(c);
+commit
+ 
+begin
+CREATE (m:Machine {id: 51, name: "iPhone 4", type: "phone"})
+WITH m
+MATCH (c:Company), (os:OperatingSystem)
+WHERE c.name = "Apple" AND os.name = "iOS"
+CREATE UNIQUE (m)<-[:MAKES]-(c)
+CREATE UNIQUE (m)-[:RUNS {version: 4.12}]->(os);
+commit
+ 
+begin
+CREATE (m:Machine {id: 52, name: "Fitbit Flex", type: "wearable"})
+WITH m
+MATCH (c:Company)
+WHERE c.name = "Fitbit"
+CREATE UNIQUE (m)<-[:MAKES]-(c);
+commit
+ 
+begin
+CREATE (m:Machine {id: 53, name: "Fitbit Flex", type: "wearable"})
+WITH m
+MATCH (c:Company)
+WHERE c.name = "Fitbit"
+CREATE UNIQUE (m)<-[:MAKES]-(c);
+commit
+ 
+begin
+CREATE (m:Machine {id: 54, name: "Fitbit One", type: "wearable"})
+WITH m
+MATCH (c:Company)
+WHERE c.name = "Fitbit"
+CREATE UNIQUE (m)<-[:MAKES]-(c);
+commit
+ 
+begin
+CREATE (m:Machine {id: 55, name: "Nike Fuelband SE", type: "wearable"})
+WITH m
+MATCH (c:Company)
+WHERE c.name = "Nike"
+CREATE UNIQUE (m)<-[:MAKES]-(c);
+commit
+ 
+begin
+CREATE (m:Machine {id: 56, name: "Nike Fuelband SE", type: "wearable"})
+WITH m
+MATCH (c:Company)
+WHERE c.name = "Nike"
+CREATE UNIQUE (m)<-[:MAKES]-(c);
+commit
+ 
+begin
+CREATE (m:Machine {id: 57, name: "Nike Fuelband", type: "wearable"})
+WITH m
+MATCH (c:Company)
+WHERE c.name = "Nike"
+CREATE UNIQUE (m)<-[:MAKES]-(c);
+commit
+ 
+begin
+CREATE (m:Machine {id: 58, name: "Samsung Galaxy S 4", type: "phone"})
+WITH m
+MATCH (c:Company), (os:OperatingSystem)
+WHERE c.name = "Samsung" AND os.name = "Android"
+CREATE UNIQUE (m)<-[:MAKES]-(c)
+CREATE UNIQUE (m)-[:RUNS {version: 4.2}]->(os);
+commit
+ 
+begin
+CREATE (m:Machine {id: 59, name: "iPhone 4", type: "phone"})
+WITH m
+MATCH (c:Company), (os:OperatingSystem)
+WHERE c.name = "Apple" AND os.name = "iOS"
+CREATE UNIQUE (m)<-[:MAKES]-(c)
+CREATE UNIQUE (m)-[:RUNS {version: 7.04}]->(os);
+commit
+ 
+begin
+CREATE (m:Machine {id: 60, name: "Samsung Galaxy S 4", type: "phone"})
+WITH m
+MATCH (c:Company), (os:OperatingSystem)
+WHERE c.name = "Samsung" AND os.name = "Android"
+CREATE UNIQUE (m)<-[:MAKES]-(c)
+CREATE UNIQUE (m)-[:RUNS {version: 4.2}]->(os);
+commit
+ 
+begin
+CREATE (m:Machine {id: 61, name: "Nike Fuelband", type: "wearable"})
+WITH m
+MATCH (c:Company)
+WHERE c.name = "Nike"
+CREATE UNIQUE (m)<-[:MAKES]-(c);
+commit
+ 
+begin
+CREATE (m:Machine {id: 62, name: "Fitbit Flex", type: "wearable"})
+WITH m
+MATCH (c:Company)
+WHERE c.name = "Fitbit"
+CREATE UNIQUE (m)<-[:MAKES]-(c);
+commit
+ 
+begin
+CREATE (m:Machine {id: 63, name: "Droid Razr M", type: "phone"})
+WITH m
+MATCH (c:Company), (os:OperatingSystem)
+WHERE c.name = "Motorola" AND os.name = "Android"
+CREATE UNIQUE (m)<-[:MAKES]-(c)
+CREATE UNIQUE (m)-[:RUNS {version: 4.0}]->(os);
+commit
+ 
+begin
+CREATE (m:Machine {id: 64, name: "Fitbit One", type: "wearable"})
+WITH m
+MATCH (c:Company)
+WHERE c.name = "Fitbit"
+CREATE UNIQUE (m)<-[:MAKES]-(c);
+commit
+ 
+begin
+CREATE (m:Machine {id: 65, name: "Google Glass", type: "wearable"})
 WITH m
 MATCH (c:Company)
 WHERE c.name = "Google"
@@ -562,103 +929,7 @@ CREATE UNIQUE (m)<-[:MAKES]-(c);
 commit
  
 begin
-MERGE (m:Machine {id: 26, name: "Fitbit One", type: "wearable"})
-WITH m
-MATCH (c:Company)
-WHERE c.name = "Fitbit"
-CREATE UNIQUE (m)<-[:MAKES]-(c);
-commit
- 
-begin
-MERGE (m:Machine {id: 27, name: "Droid Razr M", type: "phone"})
-WITH m
-MATCH (c:Company)
-WHERE c.name = "Motorola"
-CREATE UNIQUE (m)<-[:MAKES]-(c);
-commit
- 
-begin
-MERGE (m:Machine {id: 28, name: "Fitbit One", type: "wearable"})
-WITH m
-MATCH (c:Company)
-WHERE c.name = "Fitbit"
-CREATE UNIQUE (m)<-[:MAKES]-(c);
-commit
- 
-begin
-MERGE (m:Machine {id: 29, name: "Samsung Galaxy S 4", type: "phone"})
-WITH m
-MATCH (c:Company)
-WHERE c.name = "Samsung"
-CREATE UNIQUE (m)<-[:MAKES]-(c);
-commit
- 
-begin
-MERGE (m:Machine {id: 30, name: "Fitbit One", type: "wearable"})
-WITH m
-MATCH (c:Company)
-WHERE c.name = "Fitbit"
-CREATE UNIQUE (m)<-[:MAKES]-(c);
-commit
- 
-begin
-MERGE (m:Machine {id: 31, name: "Droid Razr M", type: "phone"})
-WITH m
-MATCH (c:Company)
-WHERE c.name = "Motorola"
-CREATE UNIQUE (m)<-[:MAKES]-(c);
-commit
- 
-begin
-MERGE (m:Machine {id: 32, name: "iPhone 4", type: "phone"})
-WITH m
-MATCH (c:Company)
-WHERE c.name = "Apple"
-CREATE UNIQUE (m)<-[:MAKES]-(c);
-commit
- 
-begin
-MERGE (m:Machine {id: 33, name: "iPhone 4S", type: "phone"})
-WITH m
-MATCH (c:Company)
-WHERE c.name = "Apple"
-CREATE UNIQUE (m)<-[:MAKES]-(c);
-commit
- 
-begin
-MERGE (m:Machine {id: 34, name: "Fitbit Flex", type: "wearable"})
-WITH m
-MATCH (c:Company)
-WHERE c.name = "Fitbit"
-CREATE UNIQUE (m)<-[:MAKES]-(c);
-commit
- 
-begin
-MERGE (m:Machine {id: 35, name: "iPhone 4", type: "phone"})
-WITH m
-MATCH (c:Company)
-WHERE c.name = "Apple"
-CREATE UNIQUE (m)<-[:MAKES]-(c);
-commit
- 
-begin
-MERGE (m:Machine {id: 36, name: "iPhone 4", type: "phone"})
-WITH m
-MATCH (c:Company)
-WHERE c.name = "Apple"
-CREATE UNIQUE (m)<-[:MAKES]-(c);
-commit
- 
-begin
-MERGE (m:Machine {id: 37, name: "Samsung Galaxy S 4", type: "phone"})
-WITH m
-MATCH (c:Company)
-WHERE c.name = "Samsung"
-CREATE UNIQUE (m)<-[:MAKES]-(c);
-commit
- 
-begin
-MERGE (m:Machine {id: 38, name: "Google Glass", type: "wearable"})
+CREATE (m:Machine {id: 66, name: "Google Glass", type: "wearable"})
 WITH m
 MATCH (c:Company)
 WHERE c.name = "Google"
@@ -666,7 +937,51 @@ CREATE UNIQUE (m)<-[:MAKES]-(c);
 commit
  
 begin
-MERGE (m:Machine {id: 39, name: "Google Glass", type: "wearable"})
+CREATE (m:Machine {id: 67, name: "Droid Razr M", type: "phone"})
+WITH m
+MATCH (c:Company), (os:OperatingSystem)
+WHERE c.name = "Motorola" AND os.name = "Android"
+CREATE UNIQUE (m)<-[:MAKES]-(c)
+CREATE UNIQUE (m)-[:RUNS {version: 4.0}]->(os);
+commit
+ 
+begin
+CREATE (m:Machine {id: 68, name: "Nike Fuelband SE", type: "wearable"})
+WITH m
+MATCH (c:Company)
+WHERE c.name = "Nike"
+CREATE UNIQUE (m)<-[:MAKES]-(c);
+commit
+ 
+begin
+CREATE (m:Machine {id: 69, name: "Samsung Galaxy S 4", type: "phone"})
+WITH m
+MATCH (c:Company), (os:OperatingSystem)
+WHERE c.name = "Samsung" AND os.name = "Android"
+CREATE UNIQUE (m)<-[:MAKES]-(c)
+CREATE UNIQUE (m)-[:RUNS {version: 4.2}]->(os);
+commit
+ 
+begin
+CREATE (m:Machine {id: 70, name: "iPhone 4", type: "phone"})
+WITH m
+MATCH (c:Company), (os:OperatingSystem)
+WHERE c.name = "Apple" AND os.name = "iOS"
+CREATE UNIQUE (m)<-[:MAKES]-(c)
+CREATE UNIQUE (m)-[:RUNS {version: 5.26}]->(os);
+commit
+ 
+begin
+CREATE (m:Machine {id: 71, name: "Droid Razr M", type: "phone"})
+WITH m
+MATCH (c:Company), (os:OperatingSystem)
+WHERE c.name = "Motorola" AND os.name = "Android"
+CREATE UNIQUE (m)<-[:MAKES]-(c)
+CREATE UNIQUE (m)-[:RUNS {version: 4.0}]->(os);
+commit
+ 
+begin
+CREATE (m:Machine {id: 72, name: "Google Glass", type: "wearable"})
 WITH m
 MATCH (c:Company)
 WHERE c.name = "Google"
@@ -674,79 +989,59 @@ CREATE UNIQUE (m)<-[:MAKES]-(c);
 commit
  
 begin
-MERGE (m:Machine {id: 40, name: "iPhone 4", type: "phone"})
+CREATE (m:Machine {id: 73, name: "Samsung Galaxy S 4", type: "phone"})
+WITH m
+MATCH (c:Company), (os:OperatingSystem)
+WHERE c.name = "Samsung" AND os.name = "Android"
+CREATE UNIQUE (m)<-[:MAKES]-(c)
+CREATE UNIQUE (m)-[:RUNS {version: 4.2}]->(os);
+commit
+ 
+begin
+CREATE (m:Machine {id: 74, name: "iPhone 4", type: "phone"})
+WITH m
+MATCH (c:Company), (os:OperatingSystem)
+WHERE c.name = "Apple" AND os.name = "iOS"
+CREATE UNIQUE (m)<-[:MAKES]-(c)
+CREATE UNIQUE (m)-[:RUNS {version: 5.2}]->(os);
+commit
+ 
+begin
+CREATE (m:Machine {id: 75, name: "Nike Fuelband SE", type: "wearable"})
 WITH m
 MATCH (c:Company)
-WHERE c.name = "Apple"
+WHERE c.name = "Nike"
 CREATE UNIQUE (m)<-[:MAKES]-(c);
 commit
  
 begin
-MERGE (m:Machine {id: 41, name: "iPhone 4S", type: "phone"})
+CREATE (m:Machine {id: 76, name: "Samsung Galaxy S 4", type: "phone"})
+WITH m
+MATCH (c:Company), (os:OperatingSystem)
+WHERE c.name = "Samsung" AND os.name = "Android"
+CREATE UNIQUE (m)<-[:MAKES]-(c)
+CREATE UNIQUE (m)-[:RUNS {version: 4.2}]->(os);
+commit
+ 
+begin
+CREATE (m:Machine {id: 77, name: "iPhone 4", type: "phone"})
+WITH m
+MATCH (c:Company), (os:OperatingSystem)
+WHERE c.name = "Apple" AND os.name = "iOS"
+CREATE UNIQUE (m)<-[:MAKES]-(c)
+CREATE UNIQUE (m)-[:RUNS {version: 4.89}]->(os);
+commit
+ 
+begin
+CREATE (m:Machine {id: 78, name: "Nike Fuelband SE", type: "wearable"})
 WITH m
 MATCH (c:Company)
-WHERE c.name = "Apple"
+WHERE c.name = "Nike"
 CREATE UNIQUE (m)<-[:MAKES]-(c);
 commit
  
 begin
-MERGE (m:Machine {id: 42, name: "Fitbit One", type: "wearable"})
-WITH m
-MATCH (c:Company)
-WHERE c.name = "Fitbit"
-CREATE UNIQUE (m)<-[:MAKES]-(c);
-commit
- 
-begin
-MERGE (m:Machine {id: 43, name: "Fitbit One", type: "wearable"})
-WITH m
-MATCH (c:Company)
-WHERE c.name = "Fitbit"
-CREATE UNIQUE (m)<-[:MAKES]-(c);
-commit
- 
-begin
-MERGE (m:Machine {id: 44, name: "Samsung Galaxy S 4", type: "phone"})
-WITH m
-MATCH (c:Company)
-WHERE c.name = "Samsung"
-CREATE UNIQUE (m)<-[:MAKES]-(c);
-commit
- 
-begin
-MERGE (m:Machine {id: 45, name: "iPhone 4S", type: "phone"})
-WITH m
-MATCH (c:Company)
-WHERE c.name = "Apple"
-CREATE UNIQUE (m)<-[:MAKES]-(c);
-commit
- 
-begin
-MERGE (m:Machine {id: 46, name: "iPhone 4", type: "phone"})
-WITH m
-MATCH (c:Company)
-WHERE c.name = "Apple"
-CREATE UNIQUE (m)<-[:MAKES]-(c);
-commit
- 
-begin
-MERGE (m:Machine {id: 47, name: "iPhone 4", type: "phone"})
-WITH m
-MATCH (c:Company)
-WHERE c.name = "Apple"
-CREATE UNIQUE (m)<-[:MAKES]-(c);
-commit
- 
-begin
-MERGE (m:Machine {id: 48, name: "Samsung Galaxy S 4", type: "phone"})
-WITH m
-MATCH (c:Company)
-WHERE c.name = "Samsung"
-CREATE UNIQUE (m)<-[:MAKES]-(c);
-commit
- 
-begin
-MERGE (m:Machine {id: 49, name: "Fitbit Flex", type: "wearable"})
+CREATE (m:Machine {id: 79, name: "Fitbit One", type: "wearable"})
 WITH m
 MATCH (c:Company)
 WHERE c.name = "Fitbit"
@@ -754,23 +1049,108 @@ CREATE UNIQUE (m)<-[:MAKES]-(c);
 commit
  
 begin
-MERGE (m:Machine {id: 50, name: "Samsung Galaxy S 4", type: "phone"})
+CREATE (m:Machine {id: 80, name: "Fitbit Flex", type: "wearable"})
 WITH m
 MATCH (c:Company)
-WHERE c.name = "Samsung"
+WHERE c.name = "Fitbit"
 CREATE UNIQUE (m)<-[:MAKES]-(c);
 commit
  
 begin
-MERGE (m:Machine {id: 51, name: "Droid Razr M", type: "phone"})
+CREATE (m:Machine {id: 81, name: "Nike Fuelband SE", type: "wearable"})
 WITH m
 MATCH (c:Company)
-WHERE c.name = "Motorola"
+WHERE c.name = "Nike"
 CREATE UNIQUE (m)<-[:MAKES]-(c);
 commit
  
 begin
-MERGE (m:Machine {id: 52, name: "Google Glass", type: "wearable"})
+CREATE (m:Machine {id: 82, name: "Nike Fuelband SE", type: "wearable"})
+WITH m
+MATCH (c:Company)
+WHERE c.name = "Nike"
+CREATE UNIQUE (m)<-[:MAKES]-(c);
+commit
+ 
+begin
+CREATE (m:Machine {id: 83, name: "Nike Fuelband SE", type: "wearable"})
+WITH m
+MATCH (c:Company)
+WHERE c.name = "Nike"
+CREATE UNIQUE (m)<-[:MAKES]-(c);
+commit
+ 
+begin
+CREATE (m:Machine {id: 84, name: "Droid Razr M", type: "phone"})
+WITH m
+MATCH (c:Company), (os:OperatingSystem)
+WHERE c.name = "Motorola" AND os.name = "Android"
+CREATE UNIQUE (m)<-[:MAKES]-(c)
+CREATE UNIQUE (m)-[:RUNS {version: 4.1}]->(os);
+commit
+ 
+begin
+CREATE (m:Machine {id: 85, name: "iPhone 4S", type: "phone"})
+WITH m
+MATCH (c:Company), (os:OperatingSystem)
+WHERE c.name = "Apple" AND os.name = "iOS"
+CREATE UNIQUE (m)<-[:MAKES]-(c)
+CREATE UNIQUE (m)-[:RUNS {version: 6.54}]->(os);
+commit
+ 
+begin
+CREATE (m:Machine {id: 86, name: "Fitbit One", type: "wearable"})
+WITH m
+MATCH (c:Company)
+WHERE c.name = "Fitbit"
+CREATE UNIQUE (m)<-[:MAKES]-(c);
+commit
+ 
+begin
+CREATE (m:Machine {id: 87, name: "Nike Fuelband", type: "wearable"})
+WITH m
+MATCH (c:Company)
+WHERE c.name = "Nike"
+CREATE UNIQUE (m)<-[:MAKES]-(c);
+commit
+ 
+begin
+CREATE (m:Machine {id: 88, name: "iPhone 4S", type: "phone"})
+WITH m
+MATCH (c:Company), (os:OperatingSystem)
+WHERE c.name = "Apple" AND os.name = "iOS"
+CREATE UNIQUE (m)<-[:MAKES]-(c)
+CREATE UNIQUE (m)-[:RUNS {version: 5.96}]->(os);
+commit
+ 
+begin
+CREATE (m:Machine {id: 89, name: "iPhone 4", type: "phone"})
+WITH m
+MATCH (c:Company), (os:OperatingSystem)
+WHERE c.name = "Apple" AND os.name = "iOS"
+CREATE UNIQUE (m)<-[:MAKES]-(c)
+CREATE UNIQUE (m)-[:RUNS {version: 6.86}]->(os);
+commit
+ 
+begin
+CREATE (m:Machine {id: 90, name: "Fitbit One", type: "wearable"})
+WITH m
+MATCH (c:Company)
+WHERE c.name = "Fitbit"
+CREATE UNIQUE (m)<-[:MAKES]-(c);
+commit
+ 
+begin
+CREATE (m:Machine {id: 91, name: "Samsung Galaxy S 4", type: "phone"})
+WITH m
+MATCH (c:Company), (os:OperatingSystem)
+WHERE c.name = "Samsung" AND os.name = "Android"
+CREATE UNIQUE (m)<-[:MAKES]-(c)
+CREATE UNIQUE (m)-[:RUNS {version: 4.2}]->(os);
+commit
+ 
+begin
+CREATE (m:Machine {id: 92, name: "Google Glass", type: "wearable"})
 WITH m
 MATCH (c:Company)
 WHERE c.name = "Google"
@@ -778,23 +1158,7 @@ CREATE UNIQUE (m)<-[:MAKES]-(c);
 commit
  
 begin
-MERGE (m:Machine {id: 53, name: "iPhone 4", type: "phone"})
-WITH m
-MATCH (c:Company)
-WHERE c.name = "Apple"
-CREATE UNIQUE (m)<-[:MAKES]-(c);
-commit
- 
-begin
-MERGE (m:Machine {id: 54, name: "iPhone 4", type: "phone"})
-WITH m
-MATCH (c:Company)
-WHERE c.name = "Apple"
-CREATE UNIQUE (m)<-[:MAKES]-(c);
-commit
- 
-begin
-MERGE (m:Machine {id: 55, name: "Fitbit One", type: "wearable"})
+CREATE (m:Machine {id: 93, name: "Fitbit Flex", type: "wearable"})
 WITH m
 MATCH (c:Company)
 WHERE c.name = "Fitbit"
@@ -802,7 +1166,16 @@ CREATE UNIQUE (m)<-[:MAKES]-(c);
 commit
  
 begin
-MERGE (m:Machine {id: 56, name: "Fitbit One", type: "wearable"})
+CREATE (m:Machine {id: 94, name: "iPhone 4S", type: "phone"})
+WITH m
+MATCH (c:Company), (os:OperatingSystem)
+WHERE c.name = "Apple" AND os.name = "iOS"
+CREATE UNIQUE (m)<-[:MAKES]-(c)
+CREATE UNIQUE (m)-[:RUNS {version: 5.31}]->(os);
+commit
+ 
+begin
+CREATE (m:Machine {id: 95, name: "Fitbit Flex", type: "wearable"})
 WITH m
 MATCH (c:Company)
 WHERE c.name = "Fitbit"
@@ -810,23 +1183,15 @@ CREATE UNIQUE (m)<-[:MAKES]-(c);
 commit
  
 begin
-MERGE (m:Machine {id: 57, name: "iPhone 4", type: "phone"})
+CREATE (m:Machine {id: 96, name: "Nike Fuelband SE", type: "wearable"})
 WITH m
 MATCH (c:Company)
-WHERE c.name = "Apple"
+WHERE c.name = "Nike"
 CREATE UNIQUE (m)<-[:MAKES]-(c);
 commit
  
 begin
-MERGE (m:Machine {id: 58, name: "iPhone 4S", type: "phone"})
-WITH m
-MATCH (c:Company)
-WHERE c.name = "Apple"
-CREATE UNIQUE (m)<-[:MAKES]-(c);
-commit
- 
-begin
-MERGE (m:Machine {id: 59, name: "Google Glass", type: "wearable"})
+CREATE (m:Machine {id: 97, name: "Google Glass", type: "wearable"})
 WITH m
 MATCH (c:Company)
 WHERE c.name = "Google"
@@ -834,7 +1199,15 @@ CREATE UNIQUE (m)<-[:MAKES]-(c);
 commit
  
 begin
-MERGE (m:Machine {id: 60, name: "Fitbit Flex", type: "wearable"})
+CREATE (m:Machine {id: 98, name: "Nike Fuelband", type: "wearable"})
+WITH m
+MATCH (c:Company)
+WHERE c.name = "Nike"
+CREATE UNIQUE (m)<-[:MAKES]-(c);
+commit
+ 
+begin
+CREATE (m:Machine {id: 99, name: "Fitbit One", type: "wearable"})
 WITH m
 MATCH (c:Company)
 WHERE c.name = "Fitbit"
@@ -842,47 +1215,32 @@ CREATE UNIQUE (m)<-[:MAKES]-(c);
 commit
  
 begin
-MERGE (m:Machine {id: 61, name: "Samsung Galaxy S 4", type: "phone"})
+CREATE (m:Machine {id: 100, name: "Nike Fuelband SE", type: "wearable"})
 WITH m
 MATCH (c:Company)
-WHERE c.name = "Samsung"
+WHERE c.name = "Nike"
 CREATE UNIQUE (m)<-[:MAKES]-(c);
 commit
  
 begin
-MERGE (m:Machine {id: 62, name: "Droid Razr M", type: "phone"})
+CREATE (m:Machine {id: 101, name: "iPhone 4S", type: "phone"})
+WITH m
+MATCH (c:Company), (os:OperatingSystem)
+WHERE c.name = "Apple" AND os.name = "iOS"
+CREATE UNIQUE (m)<-[:MAKES]-(c)
+CREATE UNIQUE (m)-[:RUNS {version: 6.52}]->(os);
+commit
+ 
+begin
+CREATE (m:Machine {id: 102, name: "Nike Fuelband SE", type: "wearable"})
 WITH m
 MATCH (c:Company)
-WHERE c.name = "Motorola"
+WHERE c.name = "Nike"
 CREATE UNIQUE (m)<-[:MAKES]-(c);
 commit
  
 begin
-MERGE (m:Machine {id: 63, name: "Samsung Galaxy S 4", type: "phone"})
-WITH m
-MATCH (c:Company)
-WHERE c.name = "Samsung"
-CREATE UNIQUE (m)<-[:MAKES]-(c);
-commit
- 
-begin
-MERGE (m:Machine {id: 64, name: "iPhone 4S", type: "phone"})
-WITH m
-MATCH (c:Company)
-WHERE c.name = "Apple"
-CREATE UNIQUE (m)<-[:MAKES]-(c);
-commit
- 
-begin
-MERGE (m:Machine {id: 65, name: "iPhone 4", type: "phone"})
-WITH m
-MATCH (c:Company)
-WHERE c.name = "Apple"
-CREATE UNIQUE (m)<-[:MAKES]-(c);
-commit
- 
-begin
-MERGE (m:Machine {id: 66, name: "Fitbit Flex", type: "wearable"})
+CREATE (m:Machine {id: 103, name: "Fitbit Flex", type: "wearable"})
 WITH m
 MATCH (c:Company)
 WHERE c.name = "Fitbit"
@@ -890,23 +1248,60 @@ CREATE UNIQUE (m)<-[:MAKES]-(c);
 commit
  
 begin
-MERGE (m:Machine {id: 67, name: "Droid Razr M", type: "phone"})
+CREATE (m:Machine {id: 104, name: "Droid Razr M", type: "phone"})
+WITH m
+MATCH (c:Company), (os:OperatingSystem)
+WHERE c.name = "Motorola" AND os.name = "Android"
+CREATE UNIQUE (m)<-[:MAKES]-(c)
+CREATE UNIQUE (m)-[:RUNS {version: 4.0}]->(os);
+commit
+ 
+begin
+CREATE (m:Machine {id: 105, name: "iPhone 4", type: "phone"})
+WITH m
+MATCH (c:Company), (os:OperatingSystem)
+WHERE c.name = "Apple" AND os.name = "iOS"
+CREATE UNIQUE (m)<-[:MAKES]-(c)
+CREATE UNIQUE (m)-[:RUNS {version: 5.79}]->(os);
+commit
+ 
+begin
+CREATE (m:Machine {id: 106, name: "Samsung Galaxy S 4", type: "phone"})
+WITH m
+MATCH (c:Company), (os:OperatingSystem)
+WHERE c.name = "Samsung" AND os.name = "Android"
+CREATE UNIQUE (m)<-[:MAKES]-(c)
+CREATE UNIQUE (m)-[:RUNS {version: 4.2}]->(os);
+commit
+ 
+begin
+CREATE (m:Machine {id: 107, name: "Samsung Galaxy S 4", type: "phone"})
+WITH m
+MATCH (c:Company), (os:OperatingSystem)
+WHERE c.name = "Samsung" AND os.name = "Android"
+CREATE UNIQUE (m)<-[:MAKES]-(c)
+CREATE UNIQUE (m)-[:RUNS {version: 4.2}]->(os);
+commit
+ 
+begin
+CREATE (m:Machine {id: 108, name: "iPhone 4", type: "phone"})
+WITH m
+MATCH (c:Company), (os:OperatingSystem)
+WHERE c.name = "Apple" AND os.name = "iOS"
+CREATE UNIQUE (m)<-[:MAKES]-(c)
+CREATE UNIQUE (m)-[:RUNS {version: 7.07}]->(os);
+commit
+ 
+begin
+CREATE (m:Machine {id: 109, name: "Nike Fuelband", type: "wearable"})
 WITH m
 MATCH (c:Company)
-WHERE c.name = "Motorola"
+WHERE c.name = "Nike"
 CREATE UNIQUE (m)<-[:MAKES]-(c);
 commit
  
 begin
-MERGE (m:Machine {id: 68, name: "Samsung Galaxy S 4", type: "phone"})
-WITH m
-MATCH (c:Company)
-WHERE c.name = "Samsung"
-CREATE UNIQUE (m)<-[:MAKES]-(c);
-commit
- 
-begin
-MERGE (m:Machine {id: 69, name: "Fitbit Flex", type: "wearable"})
+CREATE (m:Machine {id: 110, name: "Fitbit Flex", type: "wearable"})
 WITH m
 MATCH (c:Company)
 WHERE c.name = "Fitbit"
@@ -914,15 +1309,15 @@ CREATE UNIQUE (m)<-[:MAKES]-(c);
 commit
  
 begin
-MERGE (m:Machine {id: 70, name: "Google Glass", type: "wearable"})
+CREATE (m:Machine {id: 111, name: "Nike Fuelband", type: "wearable"})
 WITH m
 MATCH (c:Company)
-WHERE c.name = "Google"
+WHERE c.name = "Nike"
 CREATE UNIQUE (m)<-[:MAKES]-(c);
 commit
  
 begin
-MERGE (m:Machine {id: 71, name: "Fitbit Flex", type: "wearable"})
+CREATE (m:Machine {id: 112, name: "Fitbit One", type: "wearable"})
 WITH m
 MATCH (c:Company)
 WHERE c.name = "Fitbit"
@@ -930,79 +1325,25 @@ CREATE UNIQUE (m)<-[:MAKES]-(c);
 commit
  
 begin
-MERGE (m:Machine {id: 72, name: "iPhone 4S", type: "phone"})
+CREATE (m:Machine {id: 113, name: "iPhone 4S", type: "phone"})
 WITH m
-MATCH (c:Company)
-WHERE c.name = "Apple"
-CREATE UNIQUE (m)<-[:MAKES]-(c);
+MATCH (c:Company), (os:OperatingSystem)
+WHERE c.name = "Apple" AND os.name = "iOS"
+CREATE UNIQUE (m)<-[:MAKES]-(c)
+CREATE UNIQUE (m)-[:RUNS {version: 5.47}]->(os);
 commit
  
 begin
-MERGE (m:Machine {id: 73, name: "Droid Razr M", type: "phone"})
+CREATE (m:Machine {id: 114, name: "iPhone 4S", type: "phone"})
 WITH m
-MATCH (c:Company)
-WHERE c.name = "Motorola"
-CREATE UNIQUE (m)<-[:MAKES]-(c);
+MATCH (c:Company), (os:OperatingSystem)
+WHERE c.name = "Apple" AND os.name = "iOS"
+CREATE UNIQUE (m)<-[:MAKES]-(c)
+CREATE UNIQUE (m)-[:RUNS {version: 5.68}]->(os);
 commit
  
 begin
-MERGE (m:Machine {id: 74, name: "Google Glass", type: "wearable"})
-WITH m
-MATCH (c:Company)
-WHERE c.name = "Google"
-CREATE UNIQUE (m)<-[:MAKES]-(c);
-commit
- 
-begin
-MERGE (m:Machine {id: 75, name: "Samsung Galaxy S 4", type: "phone"})
-WITH m
-MATCH (c:Company)
-WHERE c.name = "Samsung"
-CREATE UNIQUE (m)<-[:MAKES]-(c);
-commit
- 
-begin
-MERGE (m:Machine {id: 76, name: "Droid Razr M", type: "phone"})
-WITH m
-MATCH (c:Company)
-WHERE c.name = "Motorola"
-CREATE UNIQUE (m)<-[:MAKES]-(c);
-commit
- 
-begin
-MERGE (m:Machine {id: 77, name: "iPhone 4S", type: "phone"})
-WITH m
-MATCH (c:Company)
-WHERE c.name = "Apple"
-CREATE UNIQUE (m)<-[:MAKES]-(c);
-commit
- 
-begin
-MERGE (m:Machine {id: 78, name: "Google Glass", type: "wearable"})
-WITH m
-MATCH (c:Company)
-WHERE c.name = "Google"
-CREATE UNIQUE (m)<-[:MAKES]-(c);
-commit
- 
-begin
-MERGE (m:Machine {id: 79, name: "iPhone 4", type: "phone"})
-WITH m
-MATCH (c:Company)
-WHERE c.name = "Apple"
-CREATE UNIQUE (m)<-[:MAKES]-(c);
-commit
- 
-begin
-MERGE (m:Machine {id: 80, name: "Samsung Galaxy S 4", type: "phone"})
-WITH m
-MATCH (c:Company)
-WHERE c.name = "Samsung"
-CREATE UNIQUE (m)<-[:MAKES]-(c);
-commit
- 
-begin
-MERGE (m:Machine {id: 81, name: "Fitbit Flex", type: "wearable"})
+CREATE (m:Machine {id: 115, name: "Fitbit Flex", type: "wearable"})
 WITH m
 MATCH (c:Company)
 WHERE c.name = "Fitbit"
@@ -1010,7 +1351,7 @@ CREATE UNIQUE (m)<-[:MAKES]-(c);
 commit
  
 begin
-MERGE (m:Machine {id: 82, name: "Fitbit Flex", type: "wearable"})
+CREATE (m:Machine {id: 116, name: "Fitbit One", type: "wearable"})
 WITH m
 MATCH (c:Company)
 WHERE c.name = "Fitbit"
@@ -1018,315 +1359,47 @@ CREATE UNIQUE (m)<-[:MAKES]-(c);
 commit
  
 begin
-MERGE (m:Machine {id: 83, name: "Droid Razr M", type: "phone"})
+CREATE (m:Machine {id: 117, name: "Droid Razr M", type: "phone"})
 WITH m
-MATCH (c:Company)
-WHERE c.name = "Motorola"
-CREATE UNIQUE (m)<-[:MAKES]-(c);
+MATCH (c:Company), (os:OperatingSystem)
+WHERE c.name = "Motorola" AND os.name = "Android"
+CREATE UNIQUE (m)<-[:MAKES]-(c)
+CREATE UNIQUE (m)-[:RUNS {version: 4.1}]->(os);
 commit
  
 begin
-MERGE (m:Machine {id: 84, name: "iPhone 4", type: "phone"})
+CREATE (m:Machine {id: 118, name: "iPhone 4", type: "phone"})
 WITH m
-MATCH (c:Company)
-WHERE c.name = "Apple"
-CREATE UNIQUE (m)<-[:MAKES]-(c);
+MATCH (c:Company), (os:OperatingSystem)
+WHERE c.name = "Apple" AND os.name = "iOS"
+CREATE UNIQUE (m)<-[:MAKES]-(c)
+CREATE UNIQUE (m)-[:RUNS {version: 6.02}]->(os);
 commit
  
 begin
-MERGE (m:Machine {id: 85, name: "Google Glass", type: "wearable"})
+CREATE (m:Machine {id: 119, name: "iPhone 4S", type: "phone"})
 WITH m
-MATCH (c:Company)
-WHERE c.name = "Google"
-CREATE UNIQUE (m)<-[:MAKES]-(c);
+MATCH (c:Company), (os:OperatingSystem)
+WHERE c.name = "Apple" AND os.name = "iOS"
+CREATE UNIQUE (m)<-[:MAKES]-(c)
+CREATE UNIQUE (m)-[:RUNS {version: 5.24}]->(os);
 commit
  
 begin
-MERGE (m:Machine {id: 86, name: "Fitbit One", type: "wearable"})
+CREATE (m:Machine {id: 120, name: "Droid Razr M", type: "phone"})
 WITH m
-MATCH (c:Company)
-WHERE c.name = "Fitbit"
-CREATE UNIQUE (m)<-[:MAKES]-(c);
-commit
- 
-begin
-MERGE (m:Machine {id: 87, name: "Samsung Galaxy S 4", type: "phone"})
-WITH m
-MATCH (c:Company)
-WHERE c.name = "Samsung"
-CREATE UNIQUE (m)<-[:MAKES]-(c);
-commit
- 
-begin
-MERGE (m:Machine {id: 88, name: "Google Glass", type: "wearable"})
-WITH m
-MATCH (c:Company)
-WHERE c.name = "Google"
-CREATE UNIQUE (m)<-[:MAKES]-(c);
-commit
- 
-begin
-MERGE (m:Machine {id: 89, name: "iPhone 4", type: "phone"})
-WITH m
-MATCH (c:Company)
-WHERE c.name = "Apple"
-CREATE UNIQUE (m)<-[:MAKES]-(c);
-commit
- 
-begin
-MERGE (m:Machine {id: 90, name: "iPhone 4", type: "phone"})
-WITH m
-MATCH (c:Company)
-WHERE c.name = "Apple"
-CREATE UNIQUE (m)<-[:MAKES]-(c);
-commit
- 
-begin
-MERGE (m:Machine {id: 91, name: "iPhone 4", type: "phone"})
-WITH m
-MATCH (c:Company)
-WHERE c.name = "Apple"
-CREATE UNIQUE (m)<-[:MAKES]-(c);
-commit
- 
-begin
-MERGE (m:Machine {id: 92, name: "Samsung Galaxy S 4", type: "phone"})
-WITH m
-MATCH (c:Company)
-WHERE c.name = "Samsung"
-CREATE UNIQUE (m)<-[:MAKES]-(c);
-commit
- 
-begin
-MERGE (m:Machine {id: 93, name: "Fitbit One", type: "wearable"})
-WITH m
-MATCH (c:Company)
-WHERE c.name = "Fitbit"
-CREATE UNIQUE (m)<-[:MAKES]-(c);
-commit
- 
-begin
-MERGE (m:Machine {id: 94, name: "Google Glass", type: "wearable"})
-WITH m
-MATCH (c:Company)
-WHERE c.name = "Google"
-CREATE UNIQUE (m)<-[:MAKES]-(c);
-commit
- 
-begin
-MERGE (m:Machine {id: 95, name: "Fitbit One", type: "wearable"})
-WITH m
-MATCH (c:Company)
-WHERE c.name = "Fitbit"
-CREATE UNIQUE (m)<-[:MAKES]-(c);
-commit
- 
-begin
-MERGE (m:Machine {id: 96, name: "Google Glass", type: "wearable"})
-WITH m
-MATCH (c:Company)
-WHERE c.name = "Google"
-CREATE UNIQUE (m)<-[:MAKES]-(c);
-commit
- 
-begin
-MERGE (m:Machine {id: 97, name: "iPhone 4S", type: "phone"})
-WITH m
-MATCH (c:Company)
-WHERE c.name = "Apple"
-CREATE UNIQUE (m)<-[:MAKES]-(c);
-commit
- 
-begin
-MERGE (m:Machine {id: 98, name: "Fitbit Flex", type: "wearable"})
-WITH m
-MATCH (c:Company)
-WHERE c.name = "Fitbit"
-CREATE UNIQUE (m)<-[:MAKES]-(c);
-commit
- 
-begin
-MERGE (m:Machine {id: 99, name: "Droid Razr M", type: "phone"})
-WITH m
-MATCH (c:Company)
-WHERE c.name = "Motorola"
-CREATE UNIQUE (m)<-[:MAKES]-(c);
-commit
- 
-begin
-MERGE (m:Machine {id: 100, name: "Fitbit Flex", type: "wearable"})
-WITH m
-MATCH (c:Company)
-WHERE c.name = "Fitbit"
-CREATE UNIQUE (m)<-[:MAKES]-(c);
-commit
- 
-begin
-MERGE (m:Machine {id: 101, name: "iPhone 4", type: "phone"})
-WITH m
-MATCH (c:Company)
-WHERE c.name = "Apple"
-CREATE UNIQUE (m)<-[:MAKES]-(c);
-commit
- 
-begin
-MERGE (m:Machine {id: 102, name: "iPhone 4S", type: "phone"})
-WITH m
-MATCH (c:Company)
-WHERE c.name = "Apple"
-CREATE UNIQUE (m)<-[:MAKES]-(c);
-commit
- 
-begin
-MERGE (m:Machine {id: 103, name: "Google Glass", type: "wearable"})
-WITH m
-MATCH (c:Company)
-WHERE c.name = "Google"
-CREATE UNIQUE (m)<-[:MAKES]-(c);
-commit
- 
-begin
-MERGE (m:Machine {id: 104, name: "Droid Razr M", type: "phone"})
-WITH m
-MATCH (c:Company)
-WHERE c.name = "Motorola"
-CREATE UNIQUE (m)<-[:MAKES]-(c);
-commit
- 
-begin
-MERGE (m:Machine {id: 105, name: "iPhone 4", type: "phone"})
-WITH m
-MATCH (c:Company)
-WHERE c.name = "Apple"
-CREATE UNIQUE (m)<-[:MAKES]-(c);
-commit
- 
-begin
-MERGE (m:Machine {id: 106, name: "Fitbit One", type: "wearable"})
-WITH m
-MATCH (c:Company)
-WHERE c.name = "Fitbit"
-CREATE UNIQUE (m)<-[:MAKES]-(c);
-commit
- 
-begin
-MERGE (m:Machine {id: 107, name: "Fitbit Flex", type: "wearable"})
-WITH m
-MATCH (c:Company)
-WHERE c.name = "Fitbit"
-CREATE UNIQUE (m)<-[:MAKES]-(c);
-commit
- 
-begin
-MERGE (m:Machine {id: 108, name: "Fitbit Flex", type: "wearable"})
-WITH m
-MATCH (c:Company)
-WHERE c.name = "Fitbit"
-CREATE UNIQUE (m)<-[:MAKES]-(c);
-commit
- 
-begin
-MERGE (m:Machine {id: 109, name: "Droid Razr M", type: "phone"})
-WITH m
-MATCH (c:Company)
-WHERE c.name = "Motorola"
-CREATE UNIQUE (m)<-[:MAKES]-(c);
-commit
- 
-begin
-MERGE (m:Machine {id: 110, name: "Fitbit Flex", type: "wearable"})
-WITH m
-MATCH (c:Company)
-WHERE c.name = "Fitbit"
-CREATE UNIQUE (m)<-[:MAKES]-(c);
-commit
- 
-begin
-MERGE (m:Machine {id: 111, name: "Fitbit One", type: "wearable"})
-WITH m
-MATCH (c:Company)
-WHERE c.name = "Fitbit"
-CREATE UNIQUE (m)<-[:MAKES]-(c);
-commit
- 
-begin
-MERGE (m:Machine {id: 112, name: "Fitbit One", type: "wearable"})
-WITH m
-MATCH (c:Company)
-WHERE c.name = "Fitbit"
-CREATE UNIQUE (m)<-[:MAKES]-(c);
-commit
- 
-begin
-MERGE (m:Machine {id: 113, name: "Google Glass", type: "wearable"})
-WITH m
-MATCH (c:Company)
-WHERE c.name = "Google"
-CREATE UNIQUE (m)<-[:MAKES]-(c);
-commit
- 
-begin
-MERGE (m:Machine {id: 114, name: "iPhone 4S", type: "phone"})
-WITH m
-MATCH (c:Company)
-WHERE c.name = "Apple"
-CREATE UNIQUE (m)<-[:MAKES]-(c);
-commit
- 
-begin
-MERGE (m:Machine {id: 115, name: "Fitbit One", type: "wearable"})
-WITH m
-MATCH (c:Company)
-WHERE c.name = "Fitbit"
-CREATE UNIQUE (m)<-[:MAKES]-(c);
-commit
- 
-begin
-MERGE (m:Machine {id: 116, name: "Google Glass", type: "wearable"})
-WITH m
-MATCH (c:Company)
-WHERE c.name = "Google"
-CREATE UNIQUE (m)<-[:MAKES]-(c);
-commit
- 
-begin
-MERGE (m:Machine {id: 117, name: "Fitbit Flex", type: "wearable"})
-WITH m
-MATCH (c:Company)
-WHERE c.name = "Fitbit"
-CREATE UNIQUE (m)<-[:MAKES]-(c);
-commit
- 
-begin
-MERGE (m:Machine {id: 118, name: "iPhone 4", type: "phone"})
-WITH m
-MATCH (c:Company)
-WHERE c.name = "Apple"
-CREATE UNIQUE (m)<-[:MAKES]-(c);
-commit
- 
-begin
-MERGE (m:Machine {id: 119, name: "Droid Razr M", type: "phone"})
-WITH m
-MATCH (c:Company)
-WHERE c.name = "Motorola"
-CREATE UNIQUE (m)<-[:MAKES]-(c);
-commit
- 
-begin
-MERGE (m:Machine {id: 120, name: "Samsung Galaxy S 4", type: "phone"})
-WITH m
-MATCH (c:Company)
-WHERE c.name = "Samsung"
-CREATE UNIQUE (m)<-[:MAKES]-(c);
+MATCH (c:Company), (os:OperatingSystem)
+WHERE c.name = "Motorola" AND os.name = "Android"
+CREATE UNIQUE (m)<-[:MAKES]-(c)
+CREATE UNIQUE (m)-[:RUNS {version: 4.1}]->(os);
 commit
 
 
     begin
-    MERGE (:Human:User { 
-           firstname: "Blake", lastname: "Nelson",
-           fullname: "Blake Nelson", id: 0, 
-           gender: "female", age: 23});
+    CREATE (:Human:User { 
+           firstname: "Kamryn", lastname: "Reyes",
+           fullname: "Kamryn Reyes", id: 0, 
+           gender: "male", age: 32});
     commit
 
 begin
@@ -1338,7 +1411,28 @@ commit
 
 begin
 MATCH (h:User), (i:Interest)
-WHERE h.id = 0 AND i.name = "Basketball"
+WHERE h.id = 0 AND i.name = "Volleyball"
+CREATE UNIQUE (h)-[:HAS]->(i);
+commit
+
+
+begin
+MATCH (h:User), (i:Interest)
+WHERE h.id = 0 AND i.name = "Photography"
+CREATE UNIQUE (h)-[:HAS]->(i);
+commit
+
+
+begin
+MATCH (h:User), (i:Interest)
+WHERE h.id = 0 AND i.name = "Golf"
+CREATE UNIQUE (h)-[:HAS]->(i);
+commit
+
+
+begin
+MATCH (h:User), (i:Interest)
+WHERE h.id = 0 AND i.name = "Scuba_Diving"
 CREATE UNIQUE (h)-[:HAS]->(i);
 commit
 
@@ -1352,137 +1446,109 @@ commit
 
 begin
 MATCH (h:User), (i:Interest)
-WHERE h.id = 0 AND i.name = "Scuba_Diving"
+WHERE h.id = 0 AND i.name = "Basketball"
+CREATE UNIQUE (h)-[:HAS]->(i);
+commit
+
+
+begin
+MATCH (h:User), (i:Interest)
+WHERE h.id = 0 AND i.name = "Bungee_Jumping"
 CREATE UNIQUE (h)-[:HAS]->(i);
 commit
 
 begin
 MATCH (h:Human), (d:Machine)
-WHERE h.id = 0 AND d.id = 52
+WHERE h.id = 0 AND d.id = 62
 CREATE UNIQUE (h)-[:USES]->(d);
 commit
 
     begin
     MATCH (h:Human)-[:USES]->(m:Machine), (l:Location)
+    WHERE m.type = "phone" AND h.id = 0 AND l.name = "Besaws"
+    CREATE UNIQUE (m)-[:LOCATED {type: "yelp_review", time: "20140504"}]->(l);  
+    commit
+
+
+    begin
+    MATCH (h:Human)-[:USES]->(m:Machine), (l:Location)
+    WHERE m.type = "phone" AND h.id = 0 AND l.name = "Nordstroms"
+    CREATE UNIQUE (m)-[:LOCATED {type: "facebook_checkin", time: "20140505"}]->(l);  
+    commit
+
+
+    begin
+    MATCH (h:Human)-[:USES]->(m:Machine), (l:Location)
+    WHERE m.type = "phone" AND h.id = 0 AND l.name = "McMenamins"
+    CREATE UNIQUE (m)-[:LOCATED {type: "yelp_review", time: "20140504"}]->(l);  
+    commit
+
+
+    begin
+    MATCH (h:Human)-[:USES]->(m:Machine), (l:Location)
     WHERE m.type = "phone" AND h.id = 0 AND l.name = "Caffe Umbria"
+    CREATE UNIQUE (m)-[:LOCATED {type: "facebook_checkin", time: "20140502"}]->(l);  
+    commit
+
+    begin
+    CREATE (:Human:User { 
+           firstname: "Kai", lastname: "James",
+           fullname: "Kai James", id: 1, 
+           gender: "male", age: 18});
+    commit
+
+begin
+MATCH (h:User), (i:Interest)
+WHERE h.id = 1 AND i.name = "Swimming"
+CREATE UNIQUE (h)-[:HAS]->(i);
+commit
+
+
+begin
+MATCH (h:User), (i:Interest)
+WHERE h.id = 1 AND i.name = "Fishing"
+CREATE UNIQUE (h)-[:HAS]->(i);
+commit
+
+begin
+MATCH (h:Human), (d:Machine)
+WHERE h.id = 1 AND d.id = 61
+CREATE UNIQUE (h)-[:USES]->(d);
+commit
+
+    begin
+    MATCH (h:Human)-[:USES]->(m:Machine), (l:Location)
+    WHERE m.type = "phone" AND h.id = 1 AND l.name = "Nike"
+    CREATE UNIQUE (m)-[:LOCATED {type: "facebook_checkin", time: "20140503"}]->(l);  
+    commit
+
+
+    begin
+    MATCH (h:Human)-[:USES]->(m:Machine), (l:Location)
+    WHERE m.type = "phone" AND h.id = 1 AND l.name = "Robo Taco"
+    CREATE UNIQUE (m)-[:LOCATED {type: "facebook_checkin", time: "20140504"}]->(l);  
+    commit
+
+
+    begin
+    MATCH (h:Human)-[:USES]->(m:Machine), (l:Location)
+    WHERE m.type = "phone" AND h.id = 1 AND l.name = "Starbucks"
     CREATE UNIQUE (m)-[:LOCATED {type: "photo_tag", time: "20140501"}]->(l);  
     commit
 
 
     begin
     MATCH (h:Human)-[:USES]->(m:Machine), (l:Location)
-    WHERE m.type = "phone" AND h.id = 0 AND l.name = "Hollywood Theatre"
-    CREATE UNIQUE (m)-[:LOCATED {type: "yelp_review", time: "20140505"}]->(l);  
+    WHERE m.type = "phone" AND h.id = 1 AND l.name = "The Fray"
+    CREATE UNIQUE (m)-[:LOCATED {type: "facebook_checkin", time: "20140503"}]->(l);  
     commit
 
     begin
-    MERGE (:Human:User { 
-           firstname: "Kamryn", lastname: "Chowdhury",
-           fullname: "Kamryn Chowdhury", id: 1, 
-           gender: "male", age: 35});
+    CREATE (:Human:User { 
+           firstname: "Blake", lastname: "Russell",
+           fullname: "Blake Russell", id: 2, 
+           gender: "male", age: 31});
     commit
-
-begin
-MATCH (h:User), (i:Interest)
-WHERE h.id = 1 AND i.name = "Golf"
-CREATE UNIQUE (h)-[:HAS]->(i);
-commit
-
-
-begin
-MATCH (h:User), (i:Interest)
-WHERE h.id = 1 AND i.name = "Walking"
-CREATE UNIQUE (h)-[:HAS]->(i);
-commit
-
-
-begin
-MATCH (h:User), (i:Interest)
-WHERE h.id = 1 AND i.name = "Baseball"
-CREATE UNIQUE (h)-[:HAS]->(i);
-commit
-
-
-begin
-MATCH (h:User), (i:Interest)
-WHERE h.id = 1 AND i.name = "Basketball"
-CREATE UNIQUE (h)-[:HAS]->(i);
-commit
-
-
-begin
-MATCH (h:User), (i:Interest)
-WHERE h.id = 1 AND i.name = "Surfing"
-CREATE UNIQUE (h)-[:HAS]->(i);
-commit
-
-
-begin
-MATCH (h:User), (i:Interest)
-WHERE h.id = 1 AND i.name = "Horse_Riding"
-CREATE UNIQUE (h)-[:HAS]->(i);
-commit
-
-
-begin
-MATCH (h:User), (i:Interest)
-WHERE h.id = 1 AND i.name = "Rock_Climbing"
-CREATE UNIQUE (h)-[:HAS]->(i);
-commit
-
-begin
-MATCH (h:Human), (d:Machine)
-WHERE h.id = 1 AND d.id = 2
-CREATE UNIQUE (h)-[:USES]->(d);
-commit
-
-
-begin
-MATCH (h:Human), (d:Machine)
-WHERE h.id = 1 AND d.id = 88
-CREATE UNIQUE (h)-[:USES]->(d);
-commit
-
-
-begin
-MATCH (h:Human), (d:Machine)
-WHERE h.id = 1 AND d.id = 109
-CREATE UNIQUE (h)-[:USES]->(d);
-commit
-
-    begin
-    MATCH (h:Human)-[:USES]->(m:Machine), (l:Location)
-    WHERE m.type = "phone" AND h.id = 1 AND l.name = "Foster The People"
-    CREATE UNIQUE (m)-[:LOCATED {type: "photo_tag", time: "20140501"}]->(l);  
-    commit
-
-
-    begin
-    MATCH (h:Human)-[:USES]->(m:Machine), (l:Location)
-    WHERE m.type = "phone" AND h.id = 1 AND l.name = "Eastburn"
-    CREATE UNIQUE (m)-[:LOCATED {type: "yelp_review", time: "20140502"}]->(l);  
-    commit
-
-    begin
-    MERGE (:Human:User { 
-           firstname: "Justice", lastname: "González",
-           fullname: "Justice González", id: 2, 
-           gender: "male", age: 26});
-    commit
-
-begin
-MATCH (h:User), (i:Interest)
-WHERE h.id = 2 AND i.name = "Walking"
-CREATE UNIQUE (h)-[:HAS]->(i);
-commit
-
-
-begin
-MATCH (h:User), (i:Interest)
-WHERE h.id = 2 AND i.name = "Basketball"
-CREATE UNIQUE (h)-[:HAS]->(i);
-commit
-
 
 begin
 MATCH (h:User), (i:Interest)
@@ -1493,247 +1559,275 @@ commit
 
 begin
 MATCH (h:User), (i:Interest)
-WHERE h.id = 2 AND i.name = "Baseball"
+WHERE h.id = 2 AND i.name = "River_Rafting"
 CREATE UNIQUE (h)-[:HAS]->(i);
 commit
 
 
 begin
 MATCH (h:User), (i:Interest)
-WHERE h.id = 2 AND i.name = "Bungee_Jumping"
+WHERE h.id = 2 AND i.name = "Boating"
 CREATE UNIQUE (h)-[:HAS]->(i);
 commit
 
 
 begin
 MATCH (h:User), (i:Interest)
-WHERE h.id = 2 AND i.name = "Photography"
+WHERE h.id = 2 AND i.name = "Hiking"
+CREATE UNIQUE (h)-[:HAS]->(i);
+commit
+
+
+begin
+MATCH (h:User), (i:Interest)
+WHERE h.id = 2 AND i.name = "Fishing"
 CREATE UNIQUE (h)-[:HAS]->(i);
 commit
 
 begin
 MATCH (h:Human), (d:Machine)
-WHERE h.id = 2 AND d.id = 48
-CREATE UNIQUE (h)-[:USES]->(d);
-commit
-
-    begin
-    MATCH (h:Human)-[:USES]->(m:Machine), (l:Location)
-    WHERE m.type = "phone" AND h.id = 2 AND l.name = "Besaws"
-    CREATE UNIQUE (m)-[:LOCATED {type: "photo_tag", time: "20140504"}]->(l);  
-    commit
-
-
-    begin
-    MATCH (h:Human)-[:USES]->(m:Machine), (l:Location)
-    WHERE m.type = "phone" AND h.id = 2 AND l.name = "Foster The People"
-    CREATE UNIQUE (m)-[:LOCATED {type: "facebook_checkin", time: "20140503"}]->(l);  
-    commit
-
-    begin
-    MERGE (:Human:User { 
-           firstname: "Ariel", lastname: "Cox",
-           fullname: "Ariel Cox", id: 3, 
-           gender: "female", age: 31});
-    commit
-
-begin
-MATCH (h:User), (i:Interest)
-WHERE h.id = 3 AND i.name = "Baseball"
-CREATE UNIQUE (h)-[:HAS]->(i);
-commit
-
-
-begin
-MATCH (h:User), (i:Interest)
-WHERE h.id = 3 AND i.name = "River_Rafting"
-CREATE UNIQUE (h)-[:HAS]->(i);
-commit
-
-begin
-MATCH (h:Human), (d:Machine)
-WHERE h.id = 3 AND d.id = 92
-CREATE UNIQUE (h)-[:USES]->(d);
-commit
-
-    begin
-    MATCH (h:Human)-[:USES]->(m:Machine), (l:Location)
-    WHERE m.type = "phone" AND h.id = 3 AND l.name = "Caffe Umbria"
-    CREATE UNIQUE (m)-[:LOCATED {type: "yelp_review", time: "20140503"}]->(l);  
-    commit
-
-
-    begin
-    MATCH (h:Human)-[:USES]->(m:Machine), (l:Location)
-    WHERE m.type = "phone" AND h.id = 3 AND l.name = "Foster The People"
-    CREATE UNIQUE (m)-[:LOCATED {type: "yelp_review", time: "20140505"}]->(l);  
-    commit
-
-    begin
-    MERGE (:Human:User { 
-           firstname: "Micah", lastname: "Myers",
-           fullname: "Micah Myers", id: 4, 
-           gender: "male", age: 32});
-    commit
-
-begin
-MATCH (h:User), (i:Interest)
-WHERE h.id = 4 AND i.name = "Baseball"
-CREATE UNIQUE (h)-[:HAS]->(i);
-commit
-
-begin
-MATCH (h:Human), (d:Machine)
-WHERE h.id = 4 AND d.id = 115
+WHERE h.id = 2 AND d.id = 24
 CREATE UNIQUE (h)-[:USES]->(d);
 commit
 
 
 begin
 MATCH (h:Human), (d:Machine)
-WHERE h.id = 4 AND d.id = 91
-CREATE UNIQUE (h)-[:USES]->(d);
-commit
-
-
-begin
-MATCH (h:Human), (d:Machine)
-WHERE h.id = 4 AND d.id = 5
+WHERE h.id = 2 AND d.id = 7
 CREATE UNIQUE (h)-[:USES]->(d);
 commit
 
     begin
     MATCH (h:Human)-[:USES]->(m:Machine), (l:Location)
-    WHERE m.type = "phone" AND h.id = 4 AND l.name = "Eastburn"
-    CREATE UNIQUE (m)-[:LOCATED {type: "facebook_checkin", time: "20140505"}]->(l);  
-    commit
-
-    begin
-    MERGE (:Human:User { 
-           firstname: "Landry", lastname: "Ward",
-           fullname: "Landry Ward", id: 5, 
-           gender: "male", age: 24});
-    commit
-
-begin
-MATCH (h:User), (i:Interest)
-WHERE h.id = 5 AND i.name = "Swimming"
-CREATE UNIQUE (h)-[:HAS]->(i);
-commit
-
-
-begin
-MATCH (h:User), (i:Interest)
-WHERE h.id = 5 AND i.name = "Golf"
-CREATE UNIQUE (h)-[:HAS]->(i);
-commit
-
-
-begin
-MATCH (h:User), (i:Interest)
-WHERE h.id = 5 AND i.name = "Bungee_Jumping"
-CREATE UNIQUE (h)-[:HAS]->(i);
-commit
-
-
-begin
-MATCH (h:User), (i:Interest)
-WHERE h.id = 5 AND i.name = "Fishing"
-CREATE UNIQUE (h)-[:HAS]->(i);
-commit
-
-begin
-MATCH (h:Human), (d:Machine)
-WHERE h.id = 5 AND d.id = 82
-CREATE UNIQUE (h)-[:USES]->(d);
-commit
-
-
-begin
-MATCH (h:Human), (d:Machine)
-WHERE h.id = 5 AND d.id = 70
-CREATE UNIQUE (h)-[:USES]->(d);
-commit
-
-    begin
-    MATCH (h:Human)-[:USES]->(m:Machine), (l:Location)
-    WHERE m.type = "phone" AND h.id = 5 AND l.name = "Hollywood Theatre"
-    CREATE UNIQUE (m)-[:LOCATED {type: "photo_tag", time: "20140503"}]->(l);  
-    commit
-
-
-    begin
-    MATCH (h:Human)-[:USES]->(m:Machine), (l:Location)
-    WHERE m.type = "phone" AND h.id = 5 AND l.name = "Warpaint"
-    CREATE UNIQUE (m)-[:LOCATED {type: "photo_tag", time: "20140505"}]->(l);  
-    commit
-
-
-    begin
-    MATCH (h:Human)-[:USES]->(m:Machine), (l:Location)
-    WHERE m.type = "phone" AND h.id = 5 AND l.name = "Christina Perri"
-    CREATE UNIQUE (m)-[:LOCATED {type: "yelp_review", time: "20140501"}]->(l);  
-    commit
-
-
-    begin
-    MATCH (h:Human)-[:USES]->(m:Machine), (l:Location)
-    WHERE m.type = "phone" AND h.id = 5 AND l.name = "Nordstroms"
+    WHERE m.type = "phone" AND h.id = 2 AND l.name = "Nike"
     CREATE UNIQUE (m)-[:LOCATED {type: "yelp_review", time: "20140502"}]->(l);  
     commit
 
 
     begin
     MATCH (h:Human)-[:USES]->(m:Machine), (l:Location)
-    WHERE m.type = "phone" AND h.id = 5 AND l.name = "Foster The People"
+    WHERE m.type = "phone" AND h.id = 2 AND l.name = "Robo Taco"
     CREATE UNIQUE (m)-[:LOCATED {type: "photo_tag", time: "20140505"}]->(l);  
     commit
 
+
     begin
-    MERGE (:Human:User { 
-           firstname: "London", lastname: "Campbell",
-           fullname: "London Campbell", id: 6, 
-           gender: "female", age: 25});
+    MATCH (h:Human)-[:USES]->(m:Machine), (l:Location)
+    WHERE m.type = "phone" AND h.id = 2 AND l.name = "Foster The People"
+    CREATE UNIQUE (m)-[:LOCATED {type: "yelp_review", time: "20140503"}]->(l);  
+    commit
+
+
+    begin
+    MATCH (h:Human)-[:USES]->(m:Machine), (l:Location)
+    WHERE m.type = "phone" AND h.id = 2 AND l.name = "Starbucks"
+    CREATE UNIQUE (m)-[:LOCATED {type: "yelp_review", time: "20140504"}]->(l);  
+    commit
+
+
+    begin
+    MATCH (h:Human)-[:USES]->(m:Machine), (l:Location)
+    WHERE m.type = "phone" AND h.id = 2 AND l.name = "Warpaint"
+    CREATE UNIQUE (m)-[:LOCATED {type: "facebook_checkin", time: "20140503"}]->(l);  
+    commit
+
+    begin
+    CREATE (:Human:User { 
+           firstname: "Avery", lastname: "White",
+           fullname: "Avery White", id: 3, 
+           gender: "male", age: 18});
     commit
 
 begin
 MATCH (h:User), (i:Interest)
-WHERE h.id = 6 AND i.name = "Bungee_Jumping"
+WHERE h.id = 3 AND i.name = "Basketball"
 CREATE UNIQUE (h)-[:HAS]->(i);
 commit
 
 
 begin
 MATCH (h:User), (i:Interest)
-WHERE h.id = 6 AND i.name = "Swimming"
+WHERE h.id = 3 AND i.name = "Scuba_Diving"
 CREATE UNIQUE (h)-[:HAS]->(i);
 commit
 
 
 begin
 MATCH (h:User), (i:Interest)
-WHERE h.id = 6 AND i.name = "Walking"
+WHERE h.id = 3 AND i.name = "Horse_Riding"
+CREATE UNIQUE (h)-[:HAS]->(i);
+commit
+
+begin
+MATCH (h:Human), (d:Machine)
+WHERE h.id = 3 AND d.id = 32
+CREATE UNIQUE (h)-[:USES]->(d);
+commit
+
+    begin
+    MATCH (h:Human)-[:USES]->(m:Machine), (l:Location)
+    WHERE m.type = "phone" AND h.id = 3 AND l.name = "Foster The People"
+    CREATE UNIQUE (m)-[:LOCATED {type: "yelp_review", time: "20140503"}]->(l);  
+    commit
+
+
+    begin
+    MATCH (h:Human)-[:USES]->(m:Machine), (l:Location)
+    WHERE m.type = "phone" AND h.id = 3 AND l.name = "McMenamins"
+    CREATE UNIQUE (m)-[:LOCATED {type: "photo_tag", time: "20140502"}]->(l);  
+    commit
+
+
+    begin
+    MATCH (h:Human)-[:USES]->(m:Machine), (l:Location)
+    WHERE m.type = "phone" AND h.id = 3 AND l.name = "Nordstroms"
+    CREATE UNIQUE (m)-[:LOCATED {type: "photo_tag", time: "20140503"}]->(l);  
+    commit
+
+
+    begin
+    MATCH (h:Human)-[:USES]->(m:Machine), (l:Location)
+    WHERE m.type = "phone" AND h.id = 3 AND l.name = "Caffe Umbria"
+    CREATE UNIQUE (m)-[:LOCATED {type: "photo_tag", time: "20140502"}]->(l);  
+    commit
+
+    begin
+    CREATE (:Human:User { 
+           firstname: "Landry", lastname: "Ross",
+           fullname: "Landry Ross", id: 4, 
+           gender: "female", age: 24});
+    commit
+
+begin
+MATCH (h:User), (i:Interest)
+WHERE h.id = 4 AND i.name = "River_Rafting"
 CREATE UNIQUE (h)-[:HAS]->(i);
 commit
 
 
 begin
 MATCH (h:User), (i:Interest)
-WHERE h.id = 6 AND i.name = "Fishing"
+WHERE h.id = 4 AND i.name = "Cycling"
+CREATE UNIQUE (h)-[:HAS]->(i);
+commit
+
+begin
+MATCH (h:Human), (d:Machine)
+WHERE h.id = 4 AND d.id = 54
+CREATE UNIQUE (h)-[:USES]->(d);
+commit
+
+
+begin
+MATCH (h:Human), (d:Machine)
+WHERE h.id = 4 AND d.id = 42
+CREATE UNIQUE (h)-[:USES]->(d);
+commit
+
+    begin
+    MATCH (h:Human)-[:USES]->(m:Machine), (l:Location)
+    WHERE m.type = "phone" AND h.id = 4 AND l.name = "Nordstroms"
+    CREATE UNIQUE (m)-[:LOCATED {type: "facebook_checkin", time: "20140504"}]->(l);  
+    commit
+
+
+    begin
+    MATCH (h:Human)-[:USES]->(m:Machine), (l:Location)
+    WHERE m.type = "phone" AND h.id = 4 AND l.name = "The Fray"
+    CREATE UNIQUE (m)-[:LOCATED {type: "yelp_review", time: "20140505"}]->(l);  
+    commit
+
+    begin
+    CREATE (:Human:User { 
+           firstname: "Armani", lastname: "Roberts",
+           fullname: "Armani Roberts", id: 5, 
+           gender: "female", age: 30});
+    commit
+
+begin
+MATCH (h:User), (i:Interest)
+WHERE h.id = 5 AND i.name = "Walking"
 CREATE UNIQUE (h)-[:HAS]->(i);
 commit
 
 
 begin
 MATCH (h:User), (i:Interest)
-WHERE h.id = 6 AND i.name = "Hiking"
+WHERE h.id = 5 AND i.name = "Photography"
 CREATE UNIQUE (h)-[:HAS]->(i);
 commit
 
 
 begin
 MATCH (h:User), (i:Interest)
-WHERE h.id = 6 AND i.name = "Horse_Riding"
+WHERE h.id = 5 AND i.name = "Horse_Riding"
+CREATE UNIQUE (h)-[:HAS]->(i);
+commit
+
+
+begin
+MATCH (h:User), (i:Interest)
+WHERE h.id = 5 AND i.name = "Basketball"
+CREATE UNIQUE (h)-[:HAS]->(i);
+commit
+
+
+begin
+MATCH (h:User), (i:Interest)
+WHERE h.id = 5 AND i.name = "Boating"
+CREATE UNIQUE (h)-[:HAS]->(i);
+commit
+
+begin
+MATCH (h:Human), (d:Machine)
+WHERE h.id = 5 AND d.id = 37
+CREATE UNIQUE (h)-[:USES]->(d);
+commit
+
+
+begin
+MATCH (h:Human), (d:Machine)
+WHERE h.id = 5 AND d.id = 14
+CREATE UNIQUE (h)-[:USES]->(d);
+commit
+
+
+begin
+MATCH (h:Human), (d:Machine)
+WHERE h.id = 5 AND d.id = 36
+CREATE UNIQUE (h)-[:USES]->(d);
+commit
+
+    begin
+    MATCH (h:Human)-[:USES]->(m:Machine), (l:Location)
+    WHERE m.type = "phone" AND h.id = 5 AND l.name = "The Fray"
+    CREATE UNIQUE (m)-[:LOCATED {type: "yelp_review", time: "20140504"}]->(l);  
+    commit
+
+
+    begin
+    MATCH (h:Human)-[:USES]->(m:Machine), (l:Location)
+    WHERE m.type = "phone" AND h.id = 5 AND l.name = "Robo Taco"
+    CREATE UNIQUE (m)-[:LOCATED {type: "facebook_checkin", time: "20140502"}]->(l);  
+    commit
+
+    begin
+    CREATE (:Human:User { 
+           firstname: "Rylee", lastname: "Nguyen",
+           fullname: "Rylee Nguyen", id: 6, 
+           gender: "male", age: 32});
+    commit
+
+begin
+MATCH (h:User), (i:Interest)
+WHERE h.id = 6 AND i.name = "Basketball"
+CREATE UNIQUE (h)-[:HAS]->(i);
+commit
+
+
+begin
+MATCH (h:User), (i:Interest)
+WHERE h.id = 6 AND i.name = "Cycling"
 CREATE UNIQUE (h)-[:HAS]->(i);
 commit
 
@@ -1747,74 +1841,88 @@ commit
 
 begin
 MATCH (h:User), (i:Interest)
-WHERE h.id = 6 AND i.name = "Golf"
+WHERE h.id = 6 AND i.name = "Boating"
 CREATE UNIQUE (h)-[:HAS]->(i);
 commit
 
 
 begin
 MATCH (h:User), (i:Interest)
-WHERE h.id = 6 AND i.name = "Photography"
+WHERE h.id = 6 AND i.name = "Fishing"
 CREATE UNIQUE (h)-[:HAS]->(i);
 commit
 
 
 begin
 MATCH (h:User), (i:Interest)
-WHERE h.id = 6 AND i.name = "Scuba_Diving"
+WHERE h.id = 6 AND i.name = "Swimming"
 CREATE UNIQUE (h)-[:HAS]->(i);
 commit
 
 begin
 MATCH (h:Human), (d:Machine)
-WHERE h.id = 6 AND d.id = 120
+WHERE h.id = 6 AND d.id = 92
 CREATE UNIQUE (h)-[:USES]->(d);
 commit
 
 
 begin
 MATCH (h:Human), (d:Machine)
-WHERE h.id = 6 AND d.id = 98
+WHERE h.id = 6 AND d.id = 52
 CREATE UNIQUE (h)-[:USES]->(d);
 commit
 
 
 begin
 MATCH (h:Human), (d:Machine)
-WHERE h.id = 6 AND d.id = 87
+WHERE h.id = 6 AND d.id = 90
 CREATE UNIQUE (h)-[:USES]->(d);
 commit
 
     begin
     MATCH (h:Human)-[:USES]->(m:Machine), (l:Location)
-    WHERE m.type = "phone" AND h.id = 6 AND l.name = "Foster The People"
-    CREATE UNIQUE (m)-[:LOCATED {type: "photo_tag", time: "20140504"}]->(l);  
+    WHERE m.type = "phone" AND h.id = 6 AND l.name = "Nordstroms"
+    CREATE UNIQUE (m)-[:LOCATED {type: "photo_tag", time: "20140505"}]->(l);  
     commit
 
 
     begin
     MATCH (h:Human)-[:USES]->(m:Machine), (l:Location)
-    WHERE m.type = "phone" AND h.id = 6 AND l.name = "Starbucks"
-    CREATE UNIQUE (m)-[:LOCATED {type: "facebook_checkin", time: "20140505"}]->(l);  
+    WHERE m.type = "phone" AND h.id = 6 AND l.name = "Besaws"
+    CREATE UNIQUE (m)-[:LOCATED {type: "facebook_checkin", time: "20140504"}]->(l);  
     commit
 
     begin
-    MERGE (:Human:User { 
-           firstname: "Quinn", lastname: "Jackson",
-           fullname: "Quinn Jackson", id: 7, 
-           gender: "female", age: 19});
+    CREATE (:Human:User { 
+           firstname: "Hayden", lastname: "Brown",
+           fullname: "Hayden Brown", id: 7, 
+           gender: "male", age: 27});
     commit
 
 begin
 MATCH (h:User), (i:Interest)
-WHERE h.id = 7 AND i.name = "Surfing"
+WHERE h.id = 7 AND i.name = "Basketball"
 CREATE UNIQUE (h)-[:HAS]->(i);
 commit
 
 
 begin
 MATCH (h:User), (i:Interest)
-WHERE h.id = 7 AND i.name = "Golf"
+WHERE h.id = 7 AND i.name = "Scuba_Diving"
+CREATE UNIQUE (h)-[:HAS]->(i);
+commit
+
+
+begin
+MATCH (h:User), (i:Interest)
+WHERE h.id = 7 AND i.name = "Swimming"
+CREATE UNIQUE (h)-[:HAS]->(i);
+commit
+
+
+begin
+MATCH (h:User), (i:Interest)
+WHERE h.id = 7 AND i.name = "Volleyball"
 CREATE UNIQUE (h)-[:HAS]->(i);
 commit
 
@@ -1828,56 +1936,77 @@ commit
 
 begin
 MATCH (h:User), (i:Interest)
-WHERE h.id = 7 AND i.name = "Swimming"
+WHERE h.id = 7 AND i.name = "Horse_Riding"
+CREATE UNIQUE (h)-[:HAS]->(i);
+commit
+
+
+begin
+MATCH (h:User), (i:Interest)
+WHERE h.id = 7 AND i.name = "Surfing"
+CREATE UNIQUE (h)-[:HAS]->(i);
+commit
+
+
+begin
+MATCH (h:User), (i:Interest)
+WHERE h.id = 7 AND i.name = "Cycling"
+CREATE UNIQUE (h)-[:HAS]->(i);
+commit
+
+
+begin
+MATCH (h:User), (i:Interest)
+WHERE h.id = 7 AND i.name = "Boating"
 CREATE UNIQUE (h)-[:HAS]->(i);
 commit
 
 begin
 MATCH (h:Human), (d:Machine)
-WHERE h.id = 7 AND d.id = 29
+WHERE h.id = 7 AND d.id = 103
 CREATE UNIQUE (h)-[:USES]->(d);
 commit
 
     begin
     MATCH (h:Human)-[:USES]->(m:Machine), (l:Location)
-    WHERE m.type = "phone" AND h.id = 7 AND l.name = "Besaws"
-    CREATE UNIQUE (m)-[:LOCATED {type: "photo_tag", time: "20140504"}]->(l);  
-    commit
-
-
-    begin
-    MATCH (h:Human)-[:USES]->(m:Machine), (l:Location)
-    WHERE m.type = "phone" AND h.id = 7 AND l.name = "Caffe Umbria"
-    CREATE UNIQUE (m)-[:LOCATED {type: "yelp_review", time: "20140501"}]->(l);  
+    WHERE m.type = "phone" AND h.id = 7 AND l.name = "Nordstroms"
+    CREATE UNIQUE (m)-[:LOCATED {type: "facebook_checkin", time: "20140502"}]->(l);  
     commit
 
 
     begin
     MATCH (h:Human)-[:USES]->(m:Machine), (l:Location)
     WHERE m.type = "phone" AND h.id = 7 AND l.name = "Nike"
-    CREATE UNIQUE (m)-[:LOCATED {type: "facebook_checkin", time: "20140504"}]->(l);  
+    CREATE UNIQUE (m)-[:LOCATED {type: "yelp_review", time: "20140504"}]->(l);  
     commit
 
 
     begin
     MATCH (h:Human)-[:USES]->(m:Machine), (l:Location)
-    WHERE m.type = "phone" AND h.id = 7 AND l.name = "Starbucks"
-    CREATE UNIQUE (m)-[:LOCATED {type: "yelp_review", time: "20140502"}]->(l);  
+    WHERE m.type = "phone" AND h.id = 7 AND l.name = "Hollywood Theatre"
+    CREATE UNIQUE (m)-[:LOCATED {type: "photo_tag", time: "20140502"}]->(l);  
     commit
 
 
     begin
     MATCH (h:Human)-[:USES]->(m:Machine), (l:Location)
-    WHERE m.type = "phone" AND h.id = 7 AND l.name = "Warpaint"
-    CREATE UNIQUE (m)-[:LOCATED {type: "facebook_checkin", time: "20140501"}]->(l);  
+    WHERE m.type = "phone" AND h.id = 7 AND l.name = "The Fray"
+    CREATE UNIQUE (m)-[:LOCATED {type: "photo_tag", time: "20140505"}]->(l);  
     commit
 
     begin
-    MERGE (:Human:User { 
-           firstname: "Emery", lastname: "Sullivan",
-           fullname: "Emery Sullivan", id: 8, 
-           gender: "male", age: 23});
+    CREATE (:Human:User { 
+           firstname: "Jessie", lastname: "Richardson",
+           fullname: "Jessie Richardson", id: 8, 
+           gender: "male", age: 21});
     commit
+
+begin
+MATCH (h:User), (i:Interest)
+WHERE h.id = 8 AND i.name = "Baseball"
+CREATE UNIQUE (h)-[:HAS]->(i);
+commit
+
 
 begin
 MATCH (h:User), (i:Interest)
@@ -1888,148 +2017,127 @@ commit
 
 begin
 MATCH (h:User), (i:Interest)
-WHERE h.id = 8 AND i.name = "Walking"
+WHERE h.id = 8 AND i.name = "Scuba_Diving"
+CREATE UNIQUE (h)-[:HAS]->(i);
+commit
+
+begin
+MATCH (h:Human), (d:Machine)
+WHERE h.id = 8 AND d.id = 100
+CREATE UNIQUE (h)-[:USES]->(d);
+commit
+
+    begin
+    MATCH (h:Human)-[:USES]->(m:Machine), (l:Location)
+    WHERE m.type = "phone" AND h.id = 8 AND l.name = "Nike"
+    CREATE UNIQUE (m)-[:LOCATED {type: "yelp_review", time: "20140502"}]->(l);  
+    commit
+
+
+    begin
+    MATCH (h:Human)-[:USES]->(m:Machine), (l:Location)
+    WHERE m.type = "phone" AND h.id = 8 AND l.name = "Robo Taco"
+    CREATE UNIQUE (m)-[:LOCATED {type: "facebook_checkin", time: "20140503"}]->(l);  
+    commit
+
+
+    begin
+    MATCH (h:Human)-[:USES]->(m:Machine), (l:Location)
+    WHERE m.type = "phone" AND h.id = 8 AND l.name = "Nordstroms"
+    CREATE UNIQUE (m)-[:LOCATED {type: "facebook_checkin", time: "20140504"}]->(l);  
+    commit
+
+    begin
+    CREATE (:Human:User { 
+           firstname: "Finley", lastname: "Long",
+           fullname: "Finley Long", id: 9, 
+           gender: "female", age: 34});
+    commit
+
+begin
+MATCH (h:User), (i:Interest)
+WHERE h.id = 9 AND i.name = "Volleyball"
 CREATE UNIQUE (h)-[:HAS]->(i);
 commit
 
 
 begin
 MATCH (h:User), (i:Interest)
-WHERE h.id = 8 AND i.name = "Surfing"
+WHERE h.id = 9 AND i.name = "Baseball"
+CREATE UNIQUE (h)-[:HAS]->(i);
+commit
+
+
+begin
+MATCH (h:User), (i:Interest)
+WHERE h.id = 9 AND i.name = "Horse_Riding"
 CREATE UNIQUE (h)-[:HAS]->(i);
 commit
 
 begin
 MATCH (h:Human), (d:Machine)
-WHERE h.id = 8 AND d.id = 58
+WHERE h.id = 9 AND d.id = 22
+CREATE UNIQUE (h)-[:USES]->(d);
+commit
+
+
+begin
+MATCH (h:Human), (d:Machine)
+WHERE h.id = 9 AND d.id = 109
 CREATE UNIQUE (h)-[:USES]->(d);
 commit
 
     begin
     MATCH (h:Human)-[:USES]->(m:Machine), (l:Location)
-    WHERE m.type = "phone" AND h.id = 8 AND l.name = "Caffe Umbria"
+    WHERE m.type = "phone" AND h.id = 9 AND l.name = "Starbucks"
+    CREATE UNIQUE (m)-[:LOCATED {type: "photo_tag", time: "20140503"}]->(l);  
+    commit
+
+
+    begin
+    MATCH (h:Human)-[:USES]->(m:Machine), (l:Location)
+    WHERE m.type = "phone" AND h.id = 9 AND l.name = "Foster The People"
+    CREATE UNIQUE (m)-[:LOCATED {type: "yelp_review", time: "20140501"}]->(l);  
+    commit
+
+
+    begin
+    MATCH (h:Human)-[:USES]->(m:Machine), (l:Location)
+    WHERE m.type = "phone" AND h.id = 9 AND l.name = "Robo Taco"
     CREATE UNIQUE (m)-[:LOCATED {type: "yelp_review", time: "20140503"}]->(l);  
     commit
 
 
     begin
     MATCH (h:Human)-[:USES]->(m:Machine), (l:Location)
-    WHERE m.type = "phone" AND h.id = 8 AND l.name = "Christina Perri"
-    CREATE UNIQUE (m)-[:LOCATED {type: "facebook_checkin", time: "20140501"}]->(l);  
-    commit
-
-
-    begin
-    MATCH (h:Human)-[:USES]->(m:Machine), (l:Location)
-    WHERE m.type = "phone" AND h.id = 8 AND l.name = "Warpaint"
-    CREATE UNIQUE (m)-[:LOCATED {type: "yelp_review", time: "20140505"}]->(l);  
-    commit
-
-
-    begin
-    MATCH (h:Human)-[:USES]->(m:Machine), (l:Location)
-    WHERE m.type = "phone" AND h.id = 8 AND l.name = "Robotaco"
-    CREATE UNIQUE (m)-[:LOCATED {type: "facebook_checkin", time: "20140503"}]->(l);  
-    commit
-
-    begin
-    MERGE (:Human:User { 
-           firstname: "Parker", lastname: "Thomas",
-           fullname: "Parker Thomas", id: 9, 
-           gender: "female", age: 24});
-    commit
-
-begin
-MATCH (h:User), (i:Interest)
-WHERE h.id = 9 AND i.name = "Fishing"
-CREATE UNIQUE (h)-[:HAS]->(i);
-commit
-
-
-begin
-MATCH (h:User), (i:Interest)
-WHERE h.id = 9 AND i.name = "Bungee_Jumping"
-CREATE UNIQUE (h)-[:HAS]->(i);
-commit
-
-
-begin
-MATCH (h:User), (i:Interest)
-WHERE h.id = 9 AND i.name = "Golf"
-CREATE UNIQUE (h)-[:HAS]->(i);
-commit
-
-
-begin
-MATCH (h:User), (i:Interest)
-WHERE h.id = 9 AND i.name = "Rock_Climbing"
-CREATE UNIQUE (h)-[:HAS]->(i);
-commit
-
-begin
-MATCH (h:Human), (d:Machine)
-WHERE h.id = 9 AND d.id = 66
-CREATE UNIQUE (h)-[:USES]->(d);
-commit
-
-
-begin
-MATCH (h:Human), (d:Machine)
-WHERE h.id = 9 AND d.id = 71
-CREATE UNIQUE (h)-[:USES]->(d);
-commit
-
-
-begin
-MATCH (h:Human), (d:Machine)
-WHERE h.id = 9 AND d.id = 111
-CREATE UNIQUE (h)-[:USES]->(d);
-commit
-
-    begin
-    MATCH (h:Human)-[:USES]->(m:Machine), (l:Location)
-    WHERE m.type = "phone" AND h.id = 9 AND l.name = "Besaws"
-    CREATE UNIQUE (m)-[:LOCATED {type: "photo_tag", time: "20140504"}]->(l);  
-    commit
-
-
-    begin
-    MATCH (h:Human)-[:USES]->(m:Machine), (l:Location)
-    WHERE m.type = "phone" AND h.id = 9 AND l.name = "Nike"
+    WHERE m.type = "phone" AND h.id = 9 AND l.name = "EastBurn"
     CREATE UNIQUE (m)-[:LOCATED {type: "photo_tag", time: "20140501"}]->(l);  
     commit
 
+
     begin
-    MERGE (:Human:User { 
-           firstname: "Eden", lastname: "Rivera",
-           fullname: "Eden Rivera", id: 10, 
-           gender: "female", age: 35});
+    MATCH (h:Human)-[:USES]->(m:Machine), (l:Location)
+    WHERE m.type = "phone" AND h.id = 9 AND l.name = "Christina Perri"
+    CREATE UNIQUE (m)-[:LOCATED {type: "yelp_review", time: "20140501"}]->(l);  
+    commit
+
+    begin
+    CREATE (:Human:User { 
+           firstname: "Skylar", lastname: "Turner",
+           fullname: "Skylar Turner", id: 10, 
+           gender: "male", age: 22});
     commit
 
 begin
 MATCH (h:User), (i:Interest)
-WHERE h.id = 10 AND i.name = "Volleyball"
+WHERE h.id = 10 AND i.name = "Fishing"
 CREATE UNIQUE (h)-[:HAS]->(i);
 commit
 
 
 begin
 MATCH (h:User), (i:Interest)
-WHERE h.id = 10 AND i.name = "Boating"
-CREATE UNIQUE (h)-[:HAS]->(i);
-commit
-
-
-begin
-MATCH (h:User), (i:Interest)
-WHERE h.id = 10 AND i.name = "Walking"
-CREATE UNIQUE (h)-[:HAS]->(i);
-commit
-
-
-begin
-MATCH (h:User), (i:Interest)
-WHERE h.id = 10 AND i.name = "Basketball"
+WHERE h.id = 10 AND i.name = "Hiking"
 CREATE UNIQUE (h)-[:HAS]->(i);
 commit
 
@@ -2043,76 +2151,97 @@ commit
 
 begin
 MATCH (h:User), (i:Interest)
-WHERE h.id = 10 AND i.name = "Rock_Climbing"
+WHERE h.id = 10 AND i.name = "Golf"
 CREATE UNIQUE (h)-[:HAS]->(i);
 commit
 
 
 begin
 MATCH (h:User), (i:Interest)
-WHERE h.id = 10 AND i.name = "Photography"
+WHERE h.id = 10 AND i.name = "River_Rafting"
 CREATE UNIQUE (h)-[:HAS]->(i);
 commit
 
 
 begin
 MATCH (h:User), (i:Interest)
-WHERE h.id = 10 AND i.name = "Fishing"
+WHERE h.id = 10 AND i.name = "Cycling"
+CREATE UNIQUE (h)-[:HAS]->(i);
+commit
+
+
+begin
+MATCH (h:User), (i:Interest)
+WHERE h.id = 10 AND i.name = "Horse_Riding"
+CREATE UNIQUE (h)-[:HAS]->(i);
+commit
+
+
+begin
+MATCH (h:User), (i:Interest)
+WHERE h.id = 10 AND i.name = "Scuba_Diving"
+CREATE UNIQUE (h)-[:HAS]->(i);
+commit
+
+
+begin
+MATCH (h:User), (i:Interest)
+WHERE h.id = 10 AND i.name = "Walking"
+CREATE UNIQUE (h)-[:HAS]->(i);
+commit
+
+
+begin
+MATCH (h:User), (i:Interest)
+WHERE h.id = 10 AND i.name = "Baseball"
 CREATE UNIQUE (h)-[:HAS]->(i);
 commit
 
 begin
 MATCH (h:Human), (d:Machine)
-WHERE h.id = 10 AND d.id = 22
-CREATE UNIQUE (h)-[:USES]->(d);
-commit
-
-
-begin
-MATCH (h:Human), (d:Machine)
-WHERE h.id = 10 AND d.id = 35
-CREATE UNIQUE (h)-[:USES]->(d);
-commit
-
-
-begin
-MATCH (h:Human), (d:Machine)
-WHERE h.id = 10 AND d.id = 41
+WHERE h.id = 10 AND d.id = 74
 CREATE UNIQUE (h)-[:USES]->(d);
 commit
 
     begin
     MATCH (h:Human)-[:USES]->(m:Machine), (l:Location)
-    WHERE m.type = "phone" AND h.id = 10 AND l.name = "The Fray"
-    CREATE UNIQUE (m)-[:LOCATED {type: "facebook_checkin", time: "20140502"}]->(l);  
-    commit
-
-
-    begin
-    MATCH (h:Human)-[:USES]->(m:Machine), (l:Location)
-    WHERE m.type = "phone" AND h.id = 10 AND l.name = "Eastburn"
-    CREATE UNIQUE (m)-[:LOCATED {type: "photo_tag", time: "20140502"}]->(l);  
+    WHERE m.type = "phone" AND h.id = 10 AND l.name = "Caffe Umbria"
+    CREATE UNIQUE (m)-[:LOCATED {type: "photo_tag", time: "20140501"}]->(l);  
     commit
 
 
     begin
     MATCH (h:Human)-[:USES]->(m:Machine), (l:Location)
     WHERE m.type = "phone" AND h.id = 10 AND l.name = "Nordstroms"
-    CREATE UNIQUE (m)-[:LOCATED {type: "facebook_checkin", time: "20140503"}]->(l);  
+    CREATE UNIQUE (m)-[:LOCATED {type: "yelp_review", time: "20140503"}]->(l);  
     commit
 
 
     begin
     MATCH (h:Human)-[:USES]->(m:Machine), (l:Location)
-    WHERE m.type = "phone" AND h.id = 10 AND l.name = "Robotaco"
-    CREATE UNIQUE (m)-[:LOCATED {type: "facebook_checkin", time: "20140502"}]->(l);  
+    WHERE m.type = "phone" AND h.id = 10 AND l.name = "Christina Perri"
+    CREATE UNIQUE (m)-[:LOCATED {type: "photo_tag", time: "20140505"}]->(l);  
+    commit
+
+
+    begin
+    MATCH (h:Human)-[:USES]->(m:Machine), (l:Location)
+    WHERE m.type = "phone" AND h.id = 10 AND l.name = "The Fray"
+    CREATE UNIQUE (m)-[:LOCATED {type: "yelp_review", time: "20140503"}]->(l);  
+    commit
+
+
+    begin
+    MATCH (h:Human)-[:USES]->(m:Machine), (l:Location)
+    WHERE m.type = "phone" AND h.id = 10 AND l.name = "McMenamins"
+    CREATE UNIQUE (m)-[:LOCATED {type: "facebook_checkin", time: "20140504"}]->(l);  
     commit
 
     begin
-    MERGE (:Human:User { 
-           firstname: "Amari", lastname: "Wong",
-           fullname: "Amari Wong", id: 11, 
-           gender: "female", age: 23});
+    CREATE (:Human:User { 
+           firstname: "Avery", lastname: "Wright",
+           fullname: "Avery Wright", id: 11, 
+           gender: "male", age: 23});
     commit
 
 begin
@@ -2121,33 +2250,26 @@ WHERE h.id = 11 AND f.id = 0
 CREATE UNIQUE (h)-[:FRIEND]-(f);
 commit
 
-
 begin
-MATCH (h:User), (f:User)
-WHERE h.id = 11 AND f.id = 4
-CREATE UNIQUE (h)-[:FRIEND]-(f);
+MATCH (h:User), (i:Interest)
+WHERE h.id = 11 AND i.name = "Basketball"
+CREATE UNIQUE (h)-[:HAS]->(i);
 commit
 
 
 begin
-MATCH (h:User), (f:User)
-WHERE h.id = 11 AND f.id = 2
-CREATE UNIQUE (h)-[:FRIEND]-(f);
+MATCH (h:User), (i:Interest)
+WHERE h.id = 11 AND i.name = "Scuba_Diving"
+CREATE UNIQUE (h)-[:HAS]->(i);
 commit
 
 
 begin
-MATCH (h:User), (f:User)
-WHERE h.id = 11 AND f.id = 5
-CREATE UNIQUE (h)-[:FRIEND]-(f);
+MATCH (h:User), (i:Interest)
+WHERE h.id = 11 AND i.name = "Horse_Riding"
+CREATE UNIQUE (h)-[:HAS]->(i);
 commit
 
-
-begin
-MATCH (h:User), (f:User)
-WHERE h.id = 11 AND f.id = 10
-CREATE UNIQUE (h)-[:FRIEND]-(f);
-commit
 
 begin
 MATCH (h:User), (i:Interest)
@@ -2165,20 +2287,6 @@ commit
 
 begin
 MATCH (h:User), (i:Interest)
-WHERE h.id = 11 AND i.name = "Bungee_Jumping"
-CREATE UNIQUE (h)-[:HAS]->(i);
-commit
-
-
-begin
-MATCH (h:User), (i:Interest)
-WHERE h.id = 11 AND i.name = "Hiking"
-CREATE UNIQUE (h)-[:HAS]->(i);
-commit
-
-
-begin
-MATCH (h:User), (i:Interest)
 WHERE h.id = 11 AND i.name = "Baseball"
 CREATE UNIQUE (h)-[:HAS]->(i);
 commit
@@ -2186,67 +2294,53 @@ commit
 
 begin
 MATCH (h:User), (i:Interest)
-WHERE h.id = 11 AND i.name = "Scuba_Diving"
-CREATE UNIQUE (h)-[:HAS]->(i);
-commit
-
-
-begin
-MATCH (h:User), (i:Interest)
-WHERE h.id = 11 AND i.name = "Golf"
-CREATE UNIQUE (h)-[:HAS]->(i);
-commit
-
-
-begin
-MATCH (h:User), (i:Interest)
-WHERE h.id = 11 AND i.name = "Walking"
-CREATE UNIQUE (h)-[:HAS]->(i);
-commit
-
-
-begin
-MATCH (h:User), (i:Interest)
-WHERE h.id = 11 AND i.name = "Rock_Climbing"
+WHERE h.id = 11 AND i.name = "Bungee_Jumping"
 CREATE UNIQUE (h)-[:HAS]->(i);
 commit
 
 begin
 MATCH (h:Human), (d:Machine)
-WHERE h.id = 11 AND d.id = 4
+WHERE h.id = 11 AND d.id = 29
 CREATE UNIQUE (h)-[:USES]->(d);
 commit
 
     begin
     MATCH (h:Human)-[:USES]->(m:Machine), (l:Location)
-    WHERE m.type = "phone" AND h.id = 11 AND l.name = "Besaws"
-    CREATE UNIQUE (m)-[:LOCATED {type: "photo_tag", time: "20140502"}]->(l);  
+    WHERE m.type = "phone" AND h.id = 11 AND l.name = "Robo Taco"
+    CREATE UNIQUE (m)-[:LOCATED {type: "yelp_review", time: "20140501"}]->(l);  
     commit
 
 
     begin
     MATCH (h:Human)-[:USES]->(m:Machine), (l:Location)
-    WHERE m.type = "phone" AND h.id = 11 AND l.name = "Eastburn"
-    CREATE UNIQUE (m)-[:LOCATED {type: "facebook_checkin", time: "20140501"}]->(l);  
-    commit
-
-
-    begin
-    MATCH (h:Human)-[:USES]->(m:Machine), (l:Location)
-    WHERE m.type = "phone" AND h.id = 11 AND l.name = "The Fray"
+    WHERE m.type = "phone" AND h.id = 11 AND l.name = "Hollywood Theatre"
     CREATE UNIQUE (m)-[:LOCATED {type: "photo_tag", time: "20140501"}]->(l);  
     commit
 
+
     begin
-    MERGE (:Human:User { 
-           firstname: "Avery", lastname: "Williams",
-           fullname: "Avery Williams", id: 12, 
-           gender: "male", age: 26});
+    MATCH (h:Human)-[:USES]->(m:Machine), (l:Location)
+    WHERE m.type = "phone" AND h.id = 11 AND l.name = "Nordstroms"
+    CREATE UNIQUE (m)-[:LOCATED {type: "facebook_checkin", time: "20140502"}]->(l);  
+    commit
+
+
+    begin
+    MATCH (h:Human)-[:USES]->(m:Machine), (l:Location)
+    WHERE m.type = "phone" AND h.id = 11 AND l.name = "Warpaint"
+    CREATE UNIQUE (m)-[:LOCATED {type: "facebook_checkin", time: "20140502"}]->(l);  
+    commit
+
+    begin
+    CREATE (:Human:User { 
+           firstname: "Rowan", lastname: "Long",
+           fullname: "Rowan Long", id: 12, 
+           gender: "female", age: 34});
     commit
 
 begin
 MATCH (h:User), (f:User)
-WHERE h.id = 12 AND f.id = 2
+WHERE h.id = 12 AND f.id = 5
 CREATE UNIQUE (h)-[:FRIEND]-(f);
 commit
 
@@ -2260,16 +2354,37 @@ commit
 
 begin
 MATCH (h:User), (f:User)
-WHERE h.id = 12 AND f.id = 5
+WHERE h.id = 12 AND f.id = 11
 CREATE UNIQUE (h)-[:FRIEND]-(f);
 commit
 
 
 begin
 MATCH (h:User), (f:User)
-WHERE h.id = 12 AND f.id = 6
+WHERE h.id = 12 AND f.id = 0
 CREATE UNIQUE (h)-[:FRIEND]-(f);
 commit
+
+
+begin
+MATCH (h:User), (f:User)
+WHERE h.id = 12 AND f.id = 10
+CREATE UNIQUE (h)-[:FRIEND]-(f);
+commit
+
+begin
+MATCH (h:User), (i:Interest)
+WHERE h.id = 12 AND i.name = "Surfing"
+CREATE UNIQUE (h)-[:HAS]->(i);
+commit
+
+
+begin
+MATCH (h:User), (i:Interest)
+WHERE h.id = 12 AND i.name = "Baseball"
+CREATE UNIQUE (h)-[:HAS]->(i);
+commit
+
 
 begin
 MATCH (h:User), (i:Interest)
@@ -2277,34 +2392,118 @@ WHERE h.id = 12 AND i.name = "Golf"
 CREATE UNIQUE (h)-[:HAS]->(i);
 commit
 
+
+begin
+MATCH (h:User), (i:Interest)
+WHERE h.id = 12 AND i.name = "Hiking"
+CREATE UNIQUE (h)-[:HAS]->(i);
+commit
+
+
+begin
+MATCH (h:User), (i:Interest)
+WHERE h.id = 12 AND i.name = "Walking"
+CREATE UNIQUE (h)-[:HAS]->(i);
+commit
+
+
+begin
+MATCH (h:User), (i:Interest)
+WHERE h.id = 12 AND i.name = "Basketball"
+CREATE UNIQUE (h)-[:HAS]->(i);
+commit
+
+
+begin
+MATCH (h:User), (i:Interest)
+WHERE h.id = 12 AND i.name = "Rock_Climbing"
+CREATE UNIQUE (h)-[:HAS]->(i);
+commit
+
+
+begin
+MATCH (h:User), (i:Interest)
+WHERE h.id = 12 AND i.name = "Fishing"
+CREATE UNIQUE (h)-[:HAS]->(i);
+commit
+
 begin
 MATCH (h:Human), (d:Machine)
-WHERE h.id = 12 AND d.id = 46
+WHERE h.id = 12 AND d.id = 71
 CREATE UNIQUE (h)-[:USES]->(d);
 commit
 
     begin
     MATCH (h:Human)-[:USES]->(m:Machine), (l:Location)
-    WHERE m.type = "phone" AND h.id = 12 AND l.name = "The Fray"
-    CREATE UNIQUE (m)-[:LOCATED {type: "facebook_checkin", time: "20140504"}]->(l);  
+    WHERE m.type = "phone" AND h.id = 12 AND l.name = "Hollywood Theatre"
+    CREATE UNIQUE (m)-[:LOCATED {type: "yelp_review", time: "20140501"}]->(l);  
+    commit
+
+
+    begin
+    MATCH (h:Human)-[:USES]->(m:Machine), (l:Location)
+    WHERE m.type = "phone" AND h.id = 12 AND l.name = "Warpaint"
+    CREATE UNIQUE (m)-[:LOCATED {type: "photo_tag", time: "20140503"}]->(l);  
+    commit
+
+
+    begin
+    MATCH (h:Human)-[:USES]->(m:Machine), (l:Location)
+    WHERE m.type = "phone" AND h.id = 12 AND l.name = "McMenamins"
+    CREATE UNIQUE (m)-[:LOCATED {type: "photo_tag", time: "20140505"}]->(l);  
     commit
 
     begin
-    MERGE (:Human:User { 
-           firstname: "Ariel", lastname: "Cook",
-           fullname: "Ariel Cook", id: 13, 
-           gender: "female", age: 21});
+    CREATE (:Human:User { 
+           firstname: "Sidney", lastname: "Gómez",
+           fullname: "Sidney Gómez", id: 13, 
+           gender: "female", age: 18});
     commit
 
 begin
 MATCH (h:User), (f:User)
-WHERE h.id = 13 AND f.id = 2
+WHERE h.id = 13 AND f.id = 11
+CREATE UNIQUE (h)-[:FRIEND]-(f);
+commit
+
+
+begin
+MATCH (h:User), (f:User)
+WHERE h.id = 13 AND f.id = 3
+CREATE UNIQUE (h)-[:FRIEND]-(f);
+commit
+
+
+begin
+MATCH (h:User), (f:User)
+WHERE h.id = 13 AND f.id = 5
+CREATE UNIQUE (h)-[:FRIEND]-(f);
+commit
+
+
+begin
+MATCH (h:User), (f:User)
+WHERE h.id = 13 AND f.id = 1
 CREATE UNIQUE (h)-[:FRIEND]-(f);
 commit
 
 begin
 MATCH (h:User), (i:Interest)
-WHERE h.id = 13 AND i.name = "Cycling"
+WHERE h.id = 13 AND i.name = "Baseball"
+CREATE UNIQUE (h)-[:HAS]->(i);
+commit
+
+
+begin
+MATCH (h:User), (i:Interest)
+WHERE h.id = 13 AND i.name = "Scuba_Diving"
+CREATE UNIQUE (h)-[:HAS]->(i);
+commit
+
+
+begin
+MATCH (h:User), (i:Interest)
+WHERE h.id = 13 AND i.name = "Rock_Climbing"
 CREATE UNIQUE (h)-[:HAS]->(i);
 commit
 
@@ -2315,45 +2514,80 @@ WHERE h.id = 13 AND i.name = "Swimming"
 CREATE UNIQUE (h)-[:HAS]->(i);
 commit
 
+
 begin
-MATCH (h:Human), (d:Machine)
-WHERE h.id = 13 AND d.id = 116
-CREATE UNIQUE (h)-[:USES]->(d);
+MATCH (h:User), (i:Interest)
+WHERE h.id = 13 AND i.name = "Golf"
+CREATE UNIQUE (h)-[:HAS]->(i);
 commit
 
 
 begin
+MATCH (h:User), (i:Interest)
+WHERE h.id = 13 AND i.name = "Hiking"
+CREATE UNIQUE (h)-[:HAS]->(i);
+commit
+
+
+begin
+MATCH (h:User), (i:Interest)
+WHERE h.id = 13 AND i.name = "Horse_Riding"
+CREATE UNIQUE (h)-[:HAS]->(i);
+commit
+
+
+begin
+MATCH (h:User), (i:Interest)
+WHERE h.id = 13 AND i.name = "Boating"
+CREATE UNIQUE (h)-[:HAS]->(i);
+commit
+
+
+begin
+MATCH (h:User), (i:Interest)
+WHERE h.id = 13 AND i.name = "Fishing"
+CREATE UNIQUE (h)-[:HAS]->(i);
+commit
+
+begin
 MATCH (h:Human), (d:Machine)
-WHERE h.id = 13 AND d.id = 45
+WHERE h.id = 13 AND d.id = 34
 CREATE UNIQUE (h)-[:USES]->(d);
 commit
 
     begin
     MATCH (h:Human)-[:USES]->(m:Machine), (l:Location)
-    WHERE m.type = "phone" AND h.id = 13 AND l.name = "Eastburn"
-    CREATE UNIQUE (m)-[:LOCATED {type: "yelp_review", time: "20140501"}]->(l);  
+    WHERE m.type = "phone" AND h.id = 13 AND l.name = "The Fray"
+    CREATE UNIQUE (m)-[:LOCATED {type: "photo_tag", time: "20140501"}]->(l);  
     commit
 
 
     begin
     MATCH (h:Human)-[:USES]->(m:Machine), (l:Location)
-    WHERE m.type = "phone" AND h.id = 13 AND l.name = "McMenamins"
-    CREATE UNIQUE (m)-[:LOCATED {type: "yelp_review", time: "20140503"}]->(l);  
+    WHERE m.type = "phone" AND h.id = 13 AND l.name = "Nordstroms"
+    CREATE UNIQUE (m)-[:LOCATED {type: "photo_tag", time: "20140501"}]->(l);  
     commit
 
 
     begin
     MATCH (h:Human)-[:USES]->(m:Machine), (l:Location)
-    WHERE m.type = "phone" AND h.id = 13 AND l.name = "Robotaco"
-    CREATE UNIQUE (m)-[:LOCATED {type: "photo_tag", time: "20140502"}]->(l);  
+    WHERE m.type = "phone" AND h.id = 13 AND l.name = "Starbucks"
+    CREATE UNIQUE (m)-[:LOCATED {type: "facebook_checkin", time: "20140503"}]->(l);  
     commit
 
     begin
-    MERGE (:Human:User { 
-           firstname: "Landry", lastname: "Li",
-           fullname: "Landry Li", id: 14, 
-           gender: "male", age: 20});
+    CREATE (:Human:User { 
+           firstname: "Amari", lastname: "Rodríguez",
+           fullname: "Amari Rodríguez", id: 14, 
+           gender: "male", age: 34});
     commit
+
+begin
+MATCH (h:User), (f:User)
+WHERE h.id = 14 AND f.id = 8
+CREATE UNIQUE (h)-[:FRIEND]-(f);
+commit
+
 
 begin
 MATCH (h:User), (f:User)
@@ -2364,93 +2598,121 @@ commit
 
 begin
 MATCH (h:User), (f:User)
-WHERE h.id = 14 AND f.id = 0
+WHERE h.id = 14 AND f.id = 6
+CREATE UNIQUE (h)-[:FRIEND]-(f);
+commit
+
+
+begin
+MATCH (h:User), (f:User)
+WHERE h.id = 14 AND f.id = 7
 CREATE UNIQUE (h)-[:FRIEND]-(f);
 commit
 
 begin
 MATCH (h:User), (i:Interest)
-WHERE h.id = 14 AND i.name = "Horse_Riding"
+WHERE h.id = 14 AND i.name = "Rock_Climbing"
 CREATE UNIQUE (h)-[:HAS]->(i);
 commit
 
 
 begin
 MATCH (h:User), (i:Interest)
-WHERE h.id = 14 AND i.name = "Baseball"
+WHERE h.id = 14 AND i.name = "Boating"
 CREATE UNIQUE (h)-[:HAS]->(i);
 commit
 
 
 begin
 MATCH (h:User), (i:Interest)
-WHERE h.id = 14 AND i.name = "River_Rafting"
+WHERE h.id = 14 AND i.name = "Walking"
+CREATE UNIQUE (h)-[:HAS]->(i);
+commit
+
+
+begin
+MATCH (h:User), (i:Interest)
+WHERE h.id = 14 AND i.name = "Photography"
+CREATE UNIQUE (h)-[:HAS]->(i);
+commit
+
+
+begin
+MATCH (h:User), (i:Interest)
+WHERE h.id = 14 AND i.name = "Swimming"
+CREATE UNIQUE (h)-[:HAS]->(i);
+commit
+
+
+begin
+MATCH (h:User), (i:Interest)
+WHERE h.id = 14 AND i.name = "Hiking"
 CREATE UNIQUE (h)-[:HAS]->(i);
 commit
 
 begin
 MATCH (h:Human), (d:Machine)
-WHERE h.id = 14 AND d.id = 61
+WHERE h.id = 14 AND d.id = 12
+CREATE UNIQUE (h)-[:USES]->(d);
+commit
+
+
+begin
+MATCH (h:Human), (d:Machine)
+WHERE h.id = 14 AND d.id = 28
+CREATE UNIQUE (h)-[:USES]->(d);
+commit
+
+
+begin
+MATCH (h:Human), (d:Machine)
+WHERE h.id = 14 AND d.id = 117
 CREATE UNIQUE (h)-[:USES]->(d);
 commit
 
     begin
     MATCH (h:Human)-[:USES]->(m:Machine), (l:Location)
-    WHERE m.type = "phone" AND h.id = 14 AND l.name = "Starbucks"
-    CREATE UNIQUE (m)-[:LOCATED {type: "photo_tag", time: "20140503"}]->(l);  
+    WHERE m.type = "phone" AND h.id = 14 AND l.name = "Caffe Umbria"
+    CREATE UNIQUE (m)-[:LOCATED {type: "yelp_review", time: "20140502"}]->(l);  
     commit
 
     begin
-    MERGE (:Human:User { 
-           firstname: "Teagan", lastname: "James",
-           fullname: "Teagan James", id: 15, 
-           gender: "female", age: 35});
+    CREATE (:Human:User { 
+           firstname: "Dakota", lastname: "Carter",
+           fullname: "Dakota Carter", id: 15, 
+           gender: "female", age: 34});
     commit
 
 begin
 MATCH (h:User), (f:User)
-WHERE h.id = 15 AND f.id = 1
+WHERE h.id = 15 AND f.id = 7
+CREATE UNIQUE (h)-[:FRIEND]-(f);
+commit
+
+
+begin
+MATCH (h:User), (f:User)
+WHERE h.id = 15 AND f.id = 12
+CREATE UNIQUE (h)-[:FRIEND]-(f);
+commit
+
+
+begin
+MATCH (h:User), (f:User)
+WHERE h.id = 15 AND f.id = 14
+CREATE UNIQUE (h)-[:FRIEND]-(f);
+commit
+
+
+begin
+MATCH (h:User), (f:User)
+WHERE h.id = 15 AND f.id = 5
 CREATE UNIQUE (h)-[:FRIEND]-(f);
 commit
 
 begin
 MATCH (h:User), (i:Interest)
-WHERE h.id = 15 AND i.name = "Baseball"
-CREATE UNIQUE (h)-[:HAS]->(i);
-commit
-
-
-begin
-MATCH (h:User), (i:Interest)
-WHERE h.id = 15 AND i.name = "Surfing"
-CREATE UNIQUE (h)-[:HAS]->(i);
-commit
-
-
-begin
-MATCH (h:User), (i:Interest)
 WHERE h.id = 15 AND i.name = "Boating"
-CREATE UNIQUE (h)-[:HAS]->(i);
-commit
-
-
-begin
-MATCH (h:User), (i:Interest)
-WHERE h.id = 15 AND i.name = "Basketball"
-CREATE UNIQUE (h)-[:HAS]->(i);
-commit
-
-
-begin
-MATCH (h:User), (i:Interest)
-WHERE h.id = 15 AND i.name = "Fishing"
-CREATE UNIQUE (h)-[:HAS]->(i);
-commit
-
-
-begin
-MATCH (h:User), (i:Interest)
-WHERE h.id = 15 AND i.name = "Photography"
 CREATE UNIQUE (h)-[:HAS]->(i);
 commit
 
@@ -2464,111 +2726,139 @@ commit
 
 begin
 MATCH (h:User), (i:Interest)
-WHERE h.id = 15 AND i.name = "Volleyball"
+WHERE h.id = 15 AND i.name = "Bungee_Jumping"
+CREATE UNIQUE (h)-[:HAS]->(i);
+commit
+
+
+begin
+MATCH (h:User), (i:Interest)
+WHERE h.id = 15 AND i.name = "Golf"
+CREATE UNIQUE (h)-[:HAS]->(i);
+commit
+
+
+begin
+MATCH (h:User), (i:Interest)
+WHERE h.id = 15 AND i.name = "Cycling"
+CREATE UNIQUE (h)-[:HAS]->(i);
+commit
+
+
+begin
+MATCH (h:User), (i:Interest)
+WHERE h.id = 15 AND i.name = "Photography"
+CREATE UNIQUE (h)-[:HAS]->(i);
+commit
+
+
+begin
+MATCH (h:User), (i:Interest)
+WHERE h.id = 15 AND i.name = "Fishing"
+CREATE UNIQUE (h)-[:HAS]->(i);
+commit
+
+
+begin
+MATCH (h:User), (i:Interest)
+WHERE h.id = 15 AND i.name = "Scuba_Diving"
+CREATE UNIQUE (h)-[:HAS]->(i);
+commit
+
+
+begin
+MATCH (h:User), (i:Interest)
+WHERE h.id = 15 AND i.name = "Surfing"
+CREATE UNIQUE (h)-[:HAS]->(i);
+commit
+
+
+begin
+MATCH (h:User), (i:Interest)
+WHERE h.id = 15 AND i.name = "Swimming"
 CREATE UNIQUE (h)-[:HAS]->(i);
 commit
 
 begin
 MATCH (h:Human), (d:Machine)
-WHERE h.id = 15 AND d.id = 12
+WHERE h.id = 15 AND d.id = 41
+CREATE UNIQUE (h)-[:USES]->(d);
+commit
+
+
+begin
+MATCH (h:Human), (d:Machine)
+WHERE h.id = 15 AND d.id = 23
 CREATE UNIQUE (h)-[:USES]->(d);
 commit
 
     begin
     MATCH (h:Human)-[:USES]->(m:Machine), (l:Location)
-    WHERE m.type = "phone" AND h.id = 15 AND l.name = "Nike"
-    CREATE UNIQUE (m)-[:LOCATED {type: "photo_tag", time: "20140501"}]->(l);  
+    WHERE m.type = "phone" AND h.id = 15 AND l.name = "Foster The People"
+    CREATE UNIQUE (m)-[:LOCATED {type: "facebook_checkin", time: "20140502"}]->(l);  
+    commit
+
+
+    begin
+    MATCH (h:Human)-[:USES]->(m:Machine), (l:Location)
+    WHERE m.type = "phone" AND h.id = 15 AND l.name = "Starbucks"
+    CREATE UNIQUE (m)-[:LOCATED {type: "photo_tag", time: "20140502"}]->(l);  
     commit
 
 
     begin
     MATCH (h:Human)-[:USES]->(m:Machine), (l:Location)
     WHERE m.type = "phone" AND h.id = 15 AND l.name = "Caffe Umbria"
-    CREATE UNIQUE (m)-[:LOCATED {type: "photo_tag", time: "20140501"}]->(l);  
+    CREATE UNIQUE (m)-[:LOCATED {type: "facebook_checkin", time: "20140504"}]->(l);  
     commit
 
 
     begin
     MATCH (h:Human)-[:USES]->(m:Machine), (l:Location)
     WHERE m.type = "phone" AND h.id = 15 AND l.name = "Besaws"
-    CREATE UNIQUE (m)-[:LOCATED {type: "facebook_checkin", time: "20140502"}]->(l);  
+    CREATE UNIQUE (m)-[:LOCATED {type: "yelp_review", time: "20140504"}]->(l);  
+    commit
+
+
+    begin
+    MATCH (h:Human)-[:USES]->(m:Machine), (l:Location)
+    WHERE m.type = "phone" AND h.id = 15 AND l.name = "Hollywood Theatre"
+    CREATE UNIQUE (m)-[:LOCATED {type: "yelp_review", time: "20140501"}]->(l);  
     commit
 
     begin
-    MERGE (:Human:User { 
-           firstname: "Emory", lastname: "Sato",
-           fullname: "Emory Sato", id: 16, 
-           gender: "male", age: 20});
+    CREATE (:Human:User { 
+           firstname: "Parker", lastname: "Jackson",
+           fullname: "Parker Jackson", id: 16, 
+           gender: "female", age: 28});
     commit
 
 begin
 MATCH (h:User), (f:User)
-WHERE h.id = 16 AND f.id = 2
+WHERE h.id = 16 AND f.id = 13
 CREATE UNIQUE (h)-[:FRIEND]-(f);
 commit
 
 
 begin
 MATCH (h:User), (f:User)
-WHERE h.id = 16 AND f.id = 7
+WHERE h.id = 16 AND f.id = 11
 CREATE UNIQUE (h)-[:FRIEND]-(f);
 commit
 
 
 begin
 MATCH (h:User), (f:User)
-WHERE h.id = 16 AND f.id = 14
+WHERE h.id = 16 AND f.id = 8
 CREATE UNIQUE (h)-[:FRIEND]-(f);
 commit
 
 
 begin
 MATCH (h:User), (f:User)
-WHERE h.id = 16 AND f.id = 5
+WHERE h.id = 16 AND f.id = 3
 CREATE UNIQUE (h)-[:FRIEND]-(f);
 commit
-
-
-begin
-MATCH (h:User), (f:User)
-WHERE h.id = 16 AND f.id = 12
-CREATE UNIQUE (h)-[:FRIEND]-(f);
-commit
-
-begin
-MATCH (h:User), (i:Interest)
-WHERE h.id = 16 AND i.name = "River_Rafting"
-CREATE UNIQUE (h)-[:HAS]->(i);
-commit
-
-
-begin
-MATCH (h:User), (i:Interest)
-WHERE h.id = 16 AND i.name = "Walking"
-CREATE UNIQUE (h)-[:HAS]->(i);
-commit
-
-
-begin
-MATCH (h:User), (i:Interest)
-WHERE h.id = 16 AND i.name = "Golf"
-CREATE UNIQUE (h)-[:HAS]->(i);
-commit
-
-
-begin
-MATCH (h:User), (i:Interest)
-WHERE h.id = 16 AND i.name = "Cycling"
-CREATE UNIQUE (h)-[:HAS]->(i);
-commit
-
-
-begin
-MATCH (h:User), (i:Interest)
-WHERE h.id = 16 AND i.name = "Hiking"
-CREATE UNIQUE (h)-[:HAS]->(i);
-commit
-
 
 begin
 MATCH (h:User), (i:Interest)
@@ -2576,90 +2866,76 @@ WHERE h.id = 16 AND i.name = "Boating"
 CREATE UNIQUE (h)-[:HAS]->(i);
 commit
 
-
 begin
-MATCH (h:User), (i:Interest)
-WHERE h.id = 16 AND i.name = "Bungee_Jumping"
-CREATE UNIQUE (h)-[:HAS]->(i);
+MATCH (h:Human), (d:Machine)
+WHERE h.id = 16 AND d.id = 82
+CREATE UNIQUE (h)-[:USES]->(d);
 commit
 
-
-begin
-MATCH (h:User), (i:Interest)
-WHERE h.id = 16 AND i.name = "Baseball"
-CREATE UNIQUE (h)-[:HAS]->(i);
-commit
-
-
-begin
-MATCH (h:User), (i:Interest)
-WHERE h.id = 16 AND i.name = "Fishing"
-CREATE UNIQUE (h)-[:HAS]->(i);
-commit
-
-
-begin
-MATCH (h:User), (i:Interest)
-WHERE h.id = 16 AND i.name = "Volleyball"
-CREATE UNIQUE (h)-[:HAS]->(i);
-commit
 
 begin
 MATCH (h:Human), (d:Machine)
-WHERE h.id = 16 AND d.id = 24
+WHERE h.id = 16 AND d.id = 75
 CREATE UNIQUE (h)-[:USES]->(d);
 commit
 
     begin
     MATCH (h:Human)-[:USES]->(m:Machine), (l:Location)
-    WHERE m.type = "phone" AND h.id = 16 AND l.name = "Hollywood Theatre"
+    WHERE m.type = "phone" AND h.id = 16 AND l.name = "The Fray"
+    CREATE UNIQUE (m)-[:LOCATED {type: "photo_tag", time: "20140505"}]->(l);  
+    commit
+
+
+    begin
+    MATCH (h:Human)-[:USES]->(m:Machine), (l:Location)
+    WHERE m.type = "phone" AND h.id = 16 AND l.name = "Warpaint"
     CREATE UNIQUE (m)-[:LOCATED {type: "yelp_review", time: "20140503"}]->(l);  
     commit
 
-
     begin
-    MATCH (h:Human)-[:USES]->(m:Machine), (l:Location)
-    WHERE m.type = "phone" AND h.id = 16 AND l.name = "McMenamins"
-    CREATE UNIQUE (m)-[:LOCATED {type: "photo_tag", time: "20140503"}]->(l);  
-    commit
-
-
-    begin
-    MATCH (h:Human)-[:USES]->(m:Machine), (l:Location)
-    WHERE m.type = "phone" AND h.id = 16 AND l.name = "The Fray"
-    CREATE UNIQUE (m)-[:LOCATED {type: "yelp_review", time: "20140504"}]->(l);  
-    commit
-
-
-    begin
-    MATCH (h:Human)-[:USES]->(m:Machine), (l:Location)
-    WHERE m.type = "phone" AND h.id = 16 AND l.name = "Eastburn"
-    CREATE UNIQUE (m)-[:LOCATED {type: "facebook_checkin", time: "20140502"}]->(l);  
-    commit
-
-    begin
-    MERGE (:Human:User { 
-           firstname: "Cameron", lastname: "Ward",
-           fullname: "Cameron Ward", id: 17, 
-           gender: "female", age: 32});
+    CREATE (:Human:User { 
+           firstname: "Emery", lastname: "Hall",
+           fullname: "Emery Hall", id: 17, 
+           gender: "female", age: 30});
     commit
 
 begin
 MATCH (h:User), (f:User)
-WHERE h.id = 17 AND f.id = 14
+WHERE h.id = 17 AND f.id = 2
 CREATE UNIQUE (h)-[:FRIEND]-(f);
 commit
 
 
 begin
 MATCH (h:User), (f:User)
-WHERE h.id = 17 AND f.id = 12
+WHERE h.id = 17 AND f.id = 13
+CREATE UNIQUE (h)-[:FRIEND]-(f);
+commit
+
+
+begin
+MATCH (h:User), (f:User)
+WHERE h.id = 17 AND f.id = 1
+CREATE UNIQUE (h)-[:FRIEND]-(f);
+commit
+
+
+begin
+MATCH (h:User), (f:User)
+WHERE h.id = 17 AND f.id = 4
 CREATE UNIQUE (h)-[:FRIEND]-(f);
 commit
 
 begin
 MATCH (h:User), (i:Interest)
-WHERE h.id = 17 AND i.name = "Swimming"
+WHERE h.id = 17 AND i.name = "River_Rafting"
+CREATE UNIQUE (h)-[:HAS]->(i);
+commit
+
+
+begin
+MATCH (h:User), (i:Interest)
+WHERE h.id = 17 AND i.name = "Baseball"
 CREATE UNIQUE (h)-[:HAS]->(i);
 commit
 
@@ -2673,6 +2949,27 @@ commit
 
 begin
 MATCH (h:User), (i:Interest)
+WHERE h.id = 17 AND i.name = "Bungee_Jumping"
+CREATE UNIQUE (h)-[:HAS]->(i);
+commit
+
+
+begin
+MATCH (h:User), (i:Interest)
+WHERE h.id = 17 AND i.name = "Walking"
+CREATE UNIQUE (h)-[:HAS]->(i);
+commit
+
+
+begin
+MATCH (h:User), (i:Interest)
+WHERE h.id = 17 AND i.name = "Basketball"
+CREATE UNIQUE (h)-[:HAS]->(i);
+commit
+
+
+begin
+MATCH (h:User), (i:Interest)
 WHERE h.id = 17 AND i.name = "Scuba_Diving"
 CREATE UNIQUE (h)-[:HAS]->(i);
 commit
@@ -2680,74 +2977,46 @@ commit
 
 begin
 MATCH (h:User), (i:Interest)
-WHERE h.id = 17 AND i.name = "River_Rafting"
-CREATE UNIQUE (h)-[:HAS]->(i);
-commit
-
-
-begin
-MATCH (h:User), (i:Interest)
-WHERE h.id = 17 AND i.name = "Golf"
+WHERE h.id = 17 AND i.name = "Photography"
 CREATE UNIQUE (h)-[:HAS]->(i);
 commit
 
 begin
 MATCH (h:Human), (d:Machine)
-WHERE h.id = 17 AND d.id = 77
+WHERE h.id = 17 AND d.id = 89
 CREATE UNIQUE (h)-[:USES]->(d);
 commit
 
 
 begin
 MATCH (h:Human), (d:Machine)
-WHERE h.id = 17 AND d.id = 107
+WHERE h.id = 17 AND d.id = 49
 CREATE UNIQUE (h)-[:USES]->(d);
 commit
 
 
 begin
 MATCH (h:Human), (d:Machine)
-WHERE h.id = 17 AND d.id = 110
+WHERE h.id = 17 AND d.id = 15
 CREATE UNIQUE (h)-[:USES]->(d);
 commit
 
     begin
     MATCH (h:Human)-[:USES]->(m:Machine), (l:Location)
-    WHERE m.type = "phone" AND h.id = 17 AND l.name = "Hollywood Theatre"
+    WHERE m.type = "phone" AND h.id = 17 AND l.name = "McMenamins"
     CREATE UNIQUE (m)-[:LOCATED {type: "yelp_review", time: "20140502"}]->(l);  
     commit
 
-
     begin
-    MATCH (h:Human)-[:USES]->(m:Machine), (l:Location)
-    WHERE m.type = "phone" AND h.id = 17 AND l.name = "Christina Perri"
-    CREATE UNIQUE (m)-[:LOCATED {type: "yelp_review", time: "20140504"}]->(l);  
-    commit
-
-
-    begin
-    MATCH (h:Human)-[:USES]->(m:Machine), (l:Location)
-    WHERE m.type = "phone" AND h.id = 17 AND l.name = "Starbucks"
-    CREATE UNIQUE (m)-[:LOCATED {type: "photo_tag", time: "20140503"}]->(l);  
-    commit
-
-
-    begin
-    MATCH (h:Human)-[:USES]->(m:Machine), (l:Location)
-    WHERE m.type = "phone" AND h.id = 17 AND l.name = "Besaws"
-    CREATE UNIQUE (m)-[:LOCATED {type: "photo_tag", time: "20140502"}]->(l);  
-    commit
-
-    begin
-    MERGE (:Human:User { 
-           firstname: "Landry", lastname: "King",
-           fullname: "Landry King", id: 18, 
-           gender: "male", age: 32});
+    CREATE (:Human:User { 
+           firstname: "Logan", lastname: "Gómez",
+           fullname: "Logan Gómez", id: 18, 
+           gender: "male", age: 18});
     commit
 
 begin
 MATCH (h:User), (f:User)
-WHERE h.id = 18 AND f.id = 15
+WHERE h.id = 18 AND f.id = 14
 CREATE UNIQUE (h)-[:FRIEND]-(f);
 commit
 
@@ -2760,7 +3029,7 @@ commit
 
 begin
 MATCH (h:User), (i:Interest)
-WHERE h.id = 18 AND i.name = "Scuba_Diving"
+WHERE h.id = 18 AND i.name = "Cycling"
 CREATE UNIQUE (h)-[:HAS]->(i);
 commit
 
@@ -2774,53 +3043,95 @@ commit
 
 begin
 MATCH (h:User), (i:Interest)
-WHERE h.id = 18 AND i.name = "Boating"
+WHERE h.id = 18 AND i.name = "Basketball"
+CREATE UNIQUE (h)-[:HAS]->(i);
+commit
+
+
+begin
+MATCH (h:User), (i:Interest)
+WHERE h.id = 18 AND i.name = "Volleyball"
+CREATE UNIQUE (h)-[:HAS]->(i);
+commit
+
+
+begin
+MATCH (h:User), (i:Interest)
+WHERE h.id = 18 AND i.name = "Surfing"
+CREATE UNIQUE (h)-[:HAS]->(i);
+commit
+
+
+begin
+MATCH (h:User), (i:Interest)
+WHERE h.id = 18 AND i.name = "Horse_Riding"
+CREATE UNIQUE (h)-[:HAS]->(i);
+commit
+
+
+begin
+MATCH (h:User), (i:Interest)
+WHERE h.id = 18 AND i.name = "Swimming"
+CREATE UNIQUE (h)-[:HAS]->(i);
+commit
+
+
+begin
+MATCH (h:User), (i:Interest)
+WHERE h.id = 18 AND i.name = "Scuba_Diving"
+CREATE UNIQUE (h)-[:HAS]->(i);
+commit
+
+
+begin
+MATCH (h:User), (i:Interest)
+WHERE h.id = 18 AND i.name = "Hiking"
+CREATE UNIQUE (h)-[:HAS]->(i);
+commit
+
+
+begin
+MATCH (h:User), (i:Interest)
+WHERE h.id = 18 AND i.name = "River_Rafting"
 CREATE UNIQUE (h)-[:HAS]->(i);
 commit
 
 begin
 MATCH (h:Human), (d:Machine)
-WHERE h.id = 18 AND d.id = 17
-CREATE UNIQUE (h)-[:USES]->(d);
-commit
-
-
-begin
-MATCH (h:Human), (d:Machine)
-WHERE h.id = 18 AND d.id = 8
+WHERE h.id = 18 AND d.id = 68
 CREATE UNIQUE (h)-[:USES]->(d);
 commit
 
     begin
     MATCH (h:Human)-[:USES]->(m:Machine), (l:Location)
-    WHERE m.type = "phone" AND h.id = 18 AND l.name = "Christina Perri"
-    CREATE UNIQUE (m)-[:LOCATED {type: "yelp_review", time: "20140505"}]->(l);  
-    commit
-
-
-    begin
-    MATCH (h:Human)-[:USES]->(m:Machine), (l:Location)
-    WHERE m.type = "phone" AND h.id = 18 AND l.name = "Eastburn"
-    CREATE UNIQUE (m)-[:LOCATED {type: "photo_tag", time: "20140505"}]->(l);  
-    commit
-
-
-    begin
-    MATCH (h:Human)-[:USES]->(m:Machine), (l:Location)
-    WHERE m.type = "phone" AND h.id = 18 AND l.name = "Foster The People"
-    CREATE UNIQUE (m)-[:LOCATED {type: "yelp_review", time: "20140505"}]->(l);  
+    WHERE m.type = "phone" AND h.id = 18 AND l.name = "Hollywood Theatre"
+    CREATE UNIQUE (m)-[:LOCATED {type: "facebook_checkin", time: "20140501"}]->(l);  
     commit
 
     begin
-    MERGE (:Human:User { 
-           firstname: "Kendall", lastname: "Collins",
-           fullname: "Kendall Collins", id: 19, 
-           gender: "female", age: 23});
+    CREATE (:Human:User { 
+           firstname: "River", lastname: "White",
+           fullname: "River White", id: 19, 
+           gender: "male", age: 33});
     commit
 
 begin
 MATCH (h:User), (f:User)
-WHERE h.id = 19 AND f.id = 14
+WHERE h.id = 19 AND f.id = 8
+CREATE UNIQUE (h)-[:FRIEND]-(f);
+commit
+
+
+begin
+MATCH (h:User), (f:User)
+WHERE h.id = 19 AND f.id = 11
+CREATE UNIQUE (h)-[:FRIEND]-(f);
+commit
+
+
+begin
+MATCH (h:User), (f:User)
+WHERE h.id = 19 AND f.id = 13
 CREATE UNIQUE (h)-[:FRIEND]-(f);
 commit
 
@@ -2834,9 +3145,16 @@ commit
 
 begin
 MATCH (h:User), (f:User)
-WHERE h.id = 19 AND f.id = 15
+WHERE h.id = 19 AND f.id = 16
 CREATE UNIQUE (h)-[:FRIEND]-(f);
 commit
+
+begin
+MATCH (h:User), (i:Interest)
+WHERE h.id = 19 AND i.name = "Fishing"
+CREATE UNIQUE (h)-[:HAS]->(i);
+commit
+
 
 begin
 MATCH (h:User), (i:Interest)
@@ -2844,18 +3162,39 @@ WHERE h.id = 19 AND i.name = "Bungee_Jumping"
 CREATE UNIQUE (h)-[:HAS]->(i);
 commit
 
+
+begin
+MATCH (h:User), (i:Interest)
+WHERE h.id = 19 AND i.name = "Volleyball"
+CREATE UNIQUE (h)-[:HAS]->(i);
+commit
+
+
+begin
+MATCH (h:User), (i:Interest)
+WHERE h.id = 19 AND i.name = "Cycling"
+CREATE UNIQUE (h)-[:HAS]->(i);
+commit
+
+
+begin
+MATCH (h:User), (i:Interest)
+WHERE h.id = 19 AND i.name = "Baseball"
+CREATE UNIQUE (h)-[:HAS]->(i);
+commit
+
 begin
 MATCH (h:Human), (d:Machine)
-WHERE h.id = 19 AND d.id = 16
+WHERE h.id = 19 AND d.id = 19
 CREATE UNIQUE (h)-[:USES]->(d);
 commit
 
-    begin
-    MATCH (h:Human)-[:USES]->(m:Machine), (l:Location)
-    WHERE m.type = "phone" AND h.id = 19 AND l.name = "The Fray"
-    CREATE UNIQUE (m)-[:LOCATED {type: "facebook_checkin", time: "20140501"}]->(l);  
-    commit
 
+begin
+MATCH (h:Human), (d:Machine)
+WHERE h.id = 19 AND d.id = 46
+CREATE UNIQUE (h)-[:USES]->(d);
+commit
 
     begin
     MATCH (h:Human)-[:USES]->(m:Machine), (l:Location)
@@ -2864,15 +3203,22 @@ commit
     commit
 
     begin
-    MERGE (:Human:User { 
-           firstname: "Teagan", lastname: "Cook",
-           fullname: "Teagan Cook", id: 20, 
-           gender: "male", age: 27});
+    CREATE (:Human:User { 
+           firstname: "Ryan", lastname: "Brooks",
+           fullname: "Ryan Brooks", id: 20, 
+           gender: "female", age: 31});
     commit
 
 begin
 MATCH (h:User), (f:User)
-WHERE h.id = 20 AND f.id = 17
+WHERE h.id = 20 AND f.id = 14
+CREATE UNIQUE (h)-[:FRIEND]-(f);
+commit
+
+
+begin
+MATCH (h:User), (f:User)
+WHERE h.id = 20 AND f.id = 3
 CREATE UNIQUE (h)-[:FRIEND]-(f);
 commit
 
@@ -2883,37 +3229,9 @@ WHERE h.id = 20 AND f.id = 13
 CREATE UNIQUE (h)-[:FRIEND]-(f);
 commit
 
-
-begin
-MATCH (h:User), (f:User)
-WHERE h.id = 20 AND f.id = 0
-CREATE UNIQUE (h)-[:FRIEND]-(f);
-commit
-
-
-begin
-MATCH (h:User), (f:User)
-WHERE h.id = 20 AND f.id = 12
-CREATE UNIQUE (h)-[:FRIEND]-(f);
-commit
-
 begin
 MATCH (h:User), (i:Interest)
-WHERE h.id = 20 AND i.name = "Fishing"
-CREATE UNIQUE (h)-[:HAS]->(i);
-commit
-
-
-begin
-MATCH (h:User), (i:Interest)
-WHERE h.id = 20 AND i.name = "Horse_Riding"
-CREATE UNIQUE (h)-[:HAS]->(i);
-commit
-
-
-begin
-MATCH (h:User), (i:Interest)
-WHERE h.id = 20 AND i.name = "Scuba_Diving"
+WHERE h.id = 20 AND i.name = "Cycling"
 CREATE UNIQUE (h)-[:HAS]->(i);
 commit
 
@@ -2924,56 +3242,84 @@ WHERE h.id = 20 AND i.name = "Golf"
 CREATE UNIQUE (h)-[:HAS]->(i);
 commit
 
+
+begin
+MATCH (h:User), (i:Interest)
+WHERE h.id = 20 AND i.name = "Bungee_Jumping"
+CREATE UNIQUE (h)-[:HAS]->(i);
+commit
+
+
+begin
+MATCH (h:User), (i:Interest)
+WHERE h.id = 20 AND i.name = "Walking"
+CREATE UNIQUE (h)-[:HAS]->(i);
+commit
+
+
+begin
+MATCH (h:User), (i:Interest)
+WHERE h.id = 20 AND i.name = "Volleyball"
+CREATE UNIQUE (h)-[:HAS]->(i);
+commit
+
+
+begin
+MATCH (h:User), (i:Interest)
+WHERE h.id = 20 AND i.name = "Rock_Climbing"
+CREATE UNIQUE (h)-[:HAS]->(i);
+commit
+
+
+begin
+MATCH (h:User), (i:Interest)
+WHERE h.id = 20 AND i.name = "Boating"
+CREATE UNIQUE (h)-[:HAS]->(i);
+commit
+
+
+begin
+MATCH (h:User), (i:Interest)
+WHERE h.id = 20 AND i.name = "Horse_Riding"
+CREATE UNIQUE (h)-[:HAS]->(i);
+commit
+
 begin
 MATCH (h:Human), (d:Machine)
-WHERE h.id = 20 AND d.id = 93
+WHERE h.id = 20 AND d.id = 45
 CREATE UNIQUE (h)-[:USES]->(d);
 commit
 
     begin
     MATCH (h:Human)-[:USES]->(m:Machine), (l:Location)
-    WHERE m.type = "phone" AND h.id = 20 AND l.name = "Robotaco"
-    CREATE UNIQUE (m)-[:LOCATED {type: "facebook_checkin", time: "20140505"}]->(l);  
-    commit
-
-
-    begin
-    MATCH (h:Human)-[:USES]->(m:Machine), (l:Location)
-    WHERE m.type = "phone" AND h.id = 20 AND l.name = "Hollywood Theatre"
-    CREATE UNIQUE (m)-[:LOCATED {type: "facebook_checkin", time: "20140505"}]->(l);  
-    commit
-
-
-    begin
-    MATCH (h:Human)-[:USES]->(m:Machine), (l:Location)
-    WHERE m.type = "phone" AND h.id = 20 AND l.name = "McMenamins"
+    WHERE m.type = "phone" AND h.id = 20 AND l.name = "Nordstroms"
     CREATE UNIQUE (m)-[:LOCATED {type: "yelp_review", time: "20140504"}]->(l);  
     commit
 
+
     begin
-    MERGE (:Human:User { 
-           firstname: "Dallas", lastname: "Reed",
-           fullname: "Dallas Reed", id: 21, 
-           gender: "female", age: 32});
+    MATCH (h:Human)-[:USES]->(m:Machine), (l:Location)
+    WHERE m.type = "phone" AND h.id = 20 AND l.name = "Warpaint"
+    CREATE UNIQUE (m)-[:LOCATED {type: "facebook_checkin", time: "20140504"}]->(l);  
+    commit
+
+
+    begin
+    MATCH (h:Human)-[:USES]->(m:Machine), (l:Location)
+    WHERE m.type = "phone" AND h.id = 20 AND l.name = "Nike"
+    CREATE UNIQUE (m)-[:LOCATED {type: "yelp_review", time: "20140503"}]->(l);  
+    commit
+
+    begin
+    CREATE (:Human:User { 
+           firstname: "London", lastname: "Moore",
+           fullname: "London Moore", id: 21, 
+           gender: "male", age: 33});
     commit
 
 begin
 MATCH (h:User), (f:User)
-WHERE h.id = 21 AND f.id = 12
-CREATE UNIQUE (h)-[:FRIEND]-(f);
-commit
-
-
-begin
-MATCH (h:User), (f:User)
-WHERE h.id = 21 AND f.id = 18
-CREATE UNIQUE (h)-[:FRIEND]-(f);
-commit
-
-
-begin
-MATCH (h:User), (f:User)
-WHERE h.id = 21 AND f.id = 7
+WHERE h.id = 21 AND f.id = 11
 CREATE UNIQUE (h)-[:FRIEND]-(f);
 commit
 
@@ -2984,12 +3330,26 @@ WHERE h.id = 21 AND f.id = 20
 CREATE UNIQUE (h)-[:FRIEND]-(f);
 commit
 
+
 begin
-MATCH (h:User), (i:Interest)
-WHERE h.id = 21 AND i.name = "Walking"
-CREATE UNIQUE (h)-[:HAS]->(i);
+MATCH (h:User), (f:User)
+WHERE h.id = 21 AND f.id = 2
+CREATE UNIQUE (h)-[:FRIEND]-(f);
 commit
 
+
+begin
+MATCH (h:User), (f:User)
+WHERE h.id = 21 AND f.id = 10
+CREATE UNIQUE (h)-[:FRIEND]-(f);
+commit
+
+
+begin
+MATCH (h:User), (f:User)
+WHERE h.id = 21 AND f.id = 5
+CREATE UNIQUE (h)-[:FRIEND]-(f);
+commit
 
 begin
 MATCH (h:User), (i:Interest)
@@ -3000,7 +3360,42 @@ commit
 
 begin
 MATCH (h:User), (i:Interest)
-WHERE h.id = 21 AND i.name = "Bungee_Jumping"
+WHERE h.id = 21 AND i.name = "Boating"
+CREATE UNIQUE (h)-[:HAS]->(i);
+commit
+
+
+begin
+MATCH (h:User), (i:Interest)
+WHERE h.id = 21 AND i.name = "Baseball"
+CREATE UNIQUE (h)-[:HAS]->(i);
+commit
+
+
+begin
+MATCH (h:User), (i:Interest)
+WHERE h.id = 21 AND i.name = "Basketball"
+CREATE UNIQUE (h)-[:HAS]->(i);
+commit
+
+
+begin
+MATCH (h:User), (i:Interest)
+WHERE h.id = 21 AND i.name = "Hiking"
+CREATE UNIQUE (h)-[:HAS]->(i);
+commit
+
+
+begin
+MATCH (h:User), (i:Interest)
+WHERE h.id = 21 AND i.name = "Surfing"
+CREATE UNIQUE (h)-[:HAS]->(i);
+commit
+
+
+begin
+MATCH (h:User), (i:Interest)
+WHERE h.id = 21 AND i.name = "Scuba_Diving"
 CREATE UNIQUE (h)-[:HAS]->(i);
 commit
 
@@ -3011,72 +3406,79 @@ WHERE h.id = 21 AND i.name = "River_Rafting"
 CREATE UNIQUE (h)-[:HAS]->(i);
 commit
 
+
+begin
+MATCH (h:User), (i:Interest)
+WHERE h.id = 21 AND i.name = "Swimming"
+CREATE UNIQUE (h)-[:HAS]->(i);
+commit
+
+
+begin
+MATCH (h:User), (i:Interest)
+WHERE h.id = 21 AND i.name = "Walking"
+CREATE UNIQUE (h)-[:HAS]->(i);
+commit
+
 begin
 MATCH (h:Human), (d:Machine)
-WHERE h.id = 21 AND d.id = 30
+WHERE h.id = 21 AND d.id = 101
+CREATE UNIQUE (h)-[:USES]->(d);
+commit
+
+
+begin
+MATCH (h:Human), (d:Machine)
+WHERE h.id = 21 AND d.id = 39
+CREATE UNIQUE (h)-[:USES]->(d);
+commit
+
+
+begin
+MATCH (h:Human), (d:Machine)
+WHERE h.id = 21 AND d.id = 59
 CREATE UNIQUE (h)-[:USES]->(d);
 commit
 
     begin
     MATCH (h:Human)-[:USES]->(m:Machine), (l:Location)
-    WHERE m.type = "phone" AND h.id = 21 AND l.name = "Eastburn"
+    WHERE m.type = "phone" AND h.id = 21 AND l.name = "The Fray"
     CREATE UNIQUE (m)-[:LOCATED {type: "photo_tag", time: "20140504"}]->(l);  
     commit
 
 
     begin
     MATCH (h:Human)-[:USES]->(m:Machine), (l:Location)
-    WHERE m.type = "phone" AND h.id = 21 AND l.name = "McMenamins"
-    CREATE UNIQUE (m)-[:LOCATED {type: "yelp_review", time: "20140504"}]->(l);  
+    WHERE m.type = "phone" AND h.id = 21 AND l.name = "Foster The People"
+    CREATE UNIQUE (m)-[:LOCATED {type: "yelp_review", time: "20140503"}]->(l);  
     commit
 
     begin
-    MERGE (:Human:User { 
-           firstname: "Landry", lastname: "Wood",
-           fullname: "Landry Wood", id: 22, 
-           gender: "male", age: 23});
+    CREATE (:Human:User { 
+           firstname: "Skylar", lastname: "Roberts",
+           fullname: "Skylar Roberts", id: 22, 
+           gender: "male", age: 33});
     commit
 
 begin
 MATCH (h:User), (f:User)
-WHERE h.id = 22 AND f.id = 1
+WHERE h.id = 22 AND f.id = 12
 CREATE UNIQUE (h)-[:FRIEND]-(f);
 commit
 
 
 begin
 MATCH (h:User), (f:User)
-WHERE h.id = 22 AND f.id = 20
+WHERE h.id = 22 AND f.id = 14
 CREATE UNIQUE (h)-[:FRIEND]-(f);
 commit
 
 
 begin
 MATCH (h:User), (f:User)
-WHERE h.id = 22 AND f.id = 11
+WHERE h.id = 22 AND f.id = 5
 CREATE UNIQUE (h)-[:FRIEND]-(f);
 commit
-
-begin
-MATCH (h:User), (i:Interest)
-WHERE h.id = 22 AND i.name = "Bungee_Jumping"
-CREATE UNIQUE (h)-[:HAS]->(i);
-commit
-
-
-begin
-MATCH (h:User), (i:Interest)
-WHERE h.id = 22 AND i.name = "Basketball"
-CREATE UNIQUE (h)-[:HAS]->(i);
-commit
-
-
-begin
-MATCH (h:User), (i:Interest)
-WHERE h.id = 22 AND i.name = "Scuba_Diving"
-CREATE UNIQUE (h)-[:HAS]->(i);
-commit
-
 
 begin
 MATCH (h:User), (i:Interest)
@@ -3084,69 +3486,62 @@ WHERE h.id = 22 AND i.name = "Photography"
 CREATE UNIQUE (h)-[:HAS]->(i);
 commit
 
-
-begin
-MATCH (h:User), (i:Interest)
-WHERE h.id = 22 AND i.name = "Golf"
-CREATE UNIQUE (h)-[:HAS]->(i);
-commit
-
 begin
 MATCH (h:Human), (d:Machine)
-WHERE h.id = 22 AND d.id = 73
+WHERE h.id = 22 AND d.id = 78
 CREATE UNIQUE (h)-[:USES]->(d);
 commit
 
     begin
     MATCH (h:Human)-[:USES]->(m:Machine), (l:Location)
     WHERE m.type = "phone" AND h.id = 22 AND l.name = "Caffe Umbria"
-    CREATE UNIQUE (m)-[:LOCATED {type: "photo_tag", time: "20140505"}]->(l);  
+    CREATE UNIQUE (m)-[:LOCATED {type: "photo_tag", time: "20140503"}]->(l);  
+    commit
+
+
+    begin
+    MATCH (h:Human)-[:USES]->(m:Machine), (l:Location)
+    WHERE m.type = "phone" AND h.id = 22 AND l.name = "Nike"
+    CREATE UNIQUE (m)-[:LOCATED {type: "photo_tag", time: "20140504"}]->(l);  
     commit
 
     begin
-    MERGE (:Human:User { 
-           firstname: "Harper", lastname: "Moore",
-           fullname: "Harper Moore", id: 23, 
-           gender: "female", age: 34});
+    CREATE (:Human:User { 
+           firstname: "Lyric", lastname: "Sanders",
+           fullname: "Lyric Sanders", id: 23, 
+           gender: "male", age: 34});
     commit
 
 begin
 MATCH (h:User), (f:User)
-WHERE h.id = 23 AND f.id = 17
-CREATE UNIQUE (h)-[:FRIEND]-(f);
-commit
-
-
-begin
-MATCH (h:User), (f:User)
-WHERE h.id = 23 AND f.id = 16
-CREATE UNIQUE (h)-[:FRIEND]-(f);
-commit
-
-
-begin
-MATCH (h:User), (f:User)
-WHERE h.id = 23 AND f.id = 9
-CREATE UNIQUE (h)-[:FRIEND]-(f);
-commit
-
-
-begin
-MATCH (h:User), (f:User)
-WHERE h.id = 23 AND f.id = 7
+WHERE h.id = 23 AND f.id = 11
 CREATE UNIQUE (h)-[:FRIEND]-(f);
 commit
 
 begin
 MATCH (h:User), (i:Interest)
-WHERE h.id = 23 AND i.name = "Rock_Climbing"
+WHERE h.id = 23 AND i.name = "Surfing"
 CREATE UNIQUE (h)-[:HAS]->(i);
 commit
 
 
 begin
 MATCH (h:User), (i:Interest)
-WHERE h.id = 23 AND i.name = "Walking"
+WHERE h.id = 23 AND i.name = "Horse_Riding"
+CREATE UNIQUE (h)-[:HAS]->(i);
+commit
+
+
+begin
+MATCH (h:User), (i:Interest)
+WHERE h.id = 23 AND i.name = "Basketball"
+CREATE UNIQUE (h)-[:HAS]->(i);
+commit
+
+
+begin
+MATCH (h:User), (i:Interest)
+WHERE h.id = 23 AND i.name = "Golf"
 CREATE UNIQUE (h)-[:HAS]->(i);
 commit
 
@@ -3167,162 +3562,134 @@ commit
 
 begin
 MATCH (h:User), (i:Interest)
-WHERE h.id = 23 AND i.name = "Boating"
-CREATE UNIQUE (h)-[:HAS]->(i);
-commit
-
-
-begin
-MATCH (h:User), (i:Interest)
-WHERE h.id = 23 AND i.name = "Hiking"
-CREATE UNIQUE (h)-[:HAS]->(i);
-commit
-
-
-begin
-MATCH (h:User), (i:Interest)
 WHERE h.id = 23 AND i.name = "Photography"
 CREATE UNIQUE (h)-[:HAS]->(i);
 commit
 
-
-begin
-MATCH (h:User), (i:Interest)
-WHERE h.id = 23 AND i.name = "Baseball"
-CREATE UNIQUE (h)-[:HAS]->(i);
-commit
-
-
-begin
-MATCH (h:User), (i:Interest)
-WHERE h.id = 23 AND i.name = "Scuba_Diving"
-CREATE UNIQUE (h)-[:HAS]->(i);
-commit
-
 begin
 MATCH (h:Human), (d:Machine)
-WHERE h.id = 23 AND d.id = 33
-CREATE UNIQUE (h)-[:USES]->(d);
-commit
-
-
-begin
-MATCH (h:Human), (d:Machine)
-WHERE h.id = 23 AND d.id = 96
-CREATE UNIQUE (h)-[:USES]->(d);
-commit
-
-
-begin
-MATCH (h:Human), (d:Machine)
-WHERE h.id = 23 AND d.id = 53
+WHERE h.id = 23 AND d.id = 120
 CREATE UNIQUE (h)-[:USES]->(d);
 commit
 
     begin
     MATCH (h:Human)-[:USES]->(m:Machine), (l:Location)
-    WHERE m.type = "phone" AND h.id = 23 AND l.name = "Robotaco"
-    CREATE UNIQUE (m)-[:LOCATED {type: "facebook_checkin", time: "20140502"}]->(l);  
+    WHERE m.type = "phone" AND h.id = 23 AND l.name = "Hollywood Theatre"
+    CREATE UNIQUE (m)-[:LOCATED {type: "yelp_review", time: "20140501"}]->(l);  
     commit
 
 
     begin
     MATCH (h:Human)-[:USES]->(m:Machine), (l:Location)
-    WHERE m.type = "phone" AND h.id = 23 AND l.name = "Eastburn"
+    WHERE m.type = "phone" AND h.id = 23 AND l.name = "Robo Taco"
+    CREATE UNIQUE (m)-[:LOCATED {type: "photo_tag", time: "20140501"}]->(l);  
+    commit
+
+
+    begin
+    MATCH (h:Human)-[:USES]->(m:Machine), (l:Location)
+    WHERE m.type = "phone" AND h.id = 23 AND l.name = "EastBurn"
     CREATE UNIQUE (m)-[:LOCATED {type: "yelp_review", time: "20140505"}]->(l);  
     commit
 
     begin
-    MERGE (:Human:User { 
-           firstname: "Kai", lastname: "Price",
-           fullname: "Kai Price", id: 24, 
-           gender: "female", age: 26});
+    CREATE (:Human:User { 
+           firstname: "Ryan", lastname: "Wong",
+           fullname: "Ryan Wong", id: 24, 
+           gender: "male", age: 34});
     commit
 
 begin
 MATCH (h:User), (f:User)
-WHERE h.id = 24 AND f.id = 14
+WHERE h.id = 24 AND f.id = 16
 CREATE UNIQUE (h)-[:FRIEND]-(f);
 commit
 
 
 begin
 MATCH (h:User), (f:User)
-WHERE h.id = 24 AND f.id = 3
+WHERE h.id = 24 AND f.id = 15
+CREATE UNIQUE (h)-[:FRIEND]-(f);
+commit
+
+
+begin
+MATCH (h:User), (f:User)
+WHERE h.id = 24 AND f.id = 7
+CREATE UNIQUE (h)-[:FRIEND]-(f);
+commit
+
+
+begin
+MATCH (h:User), (f:User)
+WHERE h.id = 24 AND f.id = 12
+CREATE UNIQUE (h)-[:FRIEND]-(f);
+commit
+
+
+begin
+MATCH (h:User), (f:User)
+WHERE h.id = 24 AND f.id = 9
 CREATE UNIQUE (h)-[:FRIEND]-(f);
 commit
 
 begin
 MATCH (h:User), (i:Interest)
-WHERE h.id = 24 AND i.name = "Boating"
+WHERE h.id = 24 AND i.name = "Scuba_Diving"
 CREATE UNIQUE (h)-[:HAS]->(i);
 commit
 
 
 begin
 MATCH (h:User), (i:Interest)
-WHERE h.id = 24 AND i.name = "Basketball"
+WHERE h.id = 24 AND i.name = "Horse_Riding"
 CREATE UNIQUE (h)-[:HAS]->(i);
 commit
 
 
 begin
 MATCH (h:User), (i:Interest)
-WHERE h.id = 24 AND i.name = "Photography"
+WHERE h.id = 24 AND i.name = "Rock_Climbing"
 CREATE UNIQUE (h)-[:HAS]->(i);
 commit
 
 
 begin
 MATCH (h:User), (i:Interest)
-WHERE h.id = 24 AND i.name = "Volleyball"
+WHERE h.id = 24 AND i.name = "Swimming"
 CREATE UNIQUE (h)-[:HAS]->(i);
 commit
 
 
 begin
 MATCH (h:User), (i:Interest)
-WHERE h.id = 24 AND i.name = "Golf"
+WHERE h.id = 24 AND i.name = "Hiking"
 CREATE UNIQUE (h)-[:HAS]->(i);
 commit
 
 
 begin
 MATCH (h:User), (i:Interest)
-WHERE h.id = 24 AND i.name = "Cycling"
+WHERE h.id = 24 AND i.name = "Surfing"
+CREATE UNIQUE (h)-[:HAS]->(i);
+commit
+
+
+begin
+MATCH (h:User), (i:Interest)
+WHERE h.id = 24 AND i.name = "River_Rafting"
 CREATE UNIQUE (h)-[:HAS]->(i);
 commit
 
 begin
 MATCH (h:Human), (d:Machine)
-WHERE h.id = 24 AND d.id = 119
-CREATE UNIQUE (h)-[:USES]->(d);
-commit
-
-
-begin
-MATCH (h:Human), (d:Machine)
-WHERE h.id = 24 AND d.id = 6
+WHERE h.id = 24 AND d.id = 110
 CREATE UNIQUE (h)-[:USES]->(d);
 commit
 
     begin
     MATCH (h:Human)-[:USES]->(m:Machine), (l:Location)
-    WHERE m.type = "phone" AND h.id = 24 AND l.name = "Hollywood Theatre"
-    CREATE UNIQUE (m)-[:LOCATED {type: "photo_tag", time: "20140504"}]->(l);  
-    commit
-
-
-    begin
-    MATCH (h:Human)-[:USES]->(m:Machine), (l:Location)
-    WHERE m.type = "phone" AND h.id = 24 AND l.name = "Nike"
-    CREATE UNIQUE (m)-[:LOCATED {type: "photo_tag", time: "20140504"}]->(l);  
-    commit
-
-
-    begin
-    MATCH (h:Human)-[:USES]->(m:Machine), (l:Location)
-    WHERE m.type = "phone" AND h.id = 24 AND l.name = "Caffe Umbria"
+    WHERE m.type = "phone" AND h.id = 24 AND l.name = "Starbucks"
     CREATE UNIQUE (m)-[:LOCATED {type: "yelp_review", time: "20140504"}]->(l);  
     commit
 
@@ -3330,35 +3697,77 @@ commit
     begin
     MATCH (h:Human)-[:USES]->(m:Machine), (l:Location)
     WHERE m.type = "phone" AND h.id = 24 AND l.name = "McMenamins"
-    CREATE UNIQUE (m)-[:LOCATED {type: "photo_tag", time: "20140505"}]->(l);  
+    CREATE UNIQUE (m)-[:LOCATED {type: "facebook_checkin", time: "20140505"}]->(l);  
     commit
 
 
     begin
     MATCH (h:Human)-[:USES]->(m:Machine), (l:Location)
-    WHERE m.type = "phone" AND h.id = 24 AND l.name = "Nordstroms"
-    CREATE UNIQUE (m)-[:LOCATED {type: "photo_tag", time: "20140503"}]->(l);  
+    WHERE m.type = "phone" AND h.id = 24 AND l.name = "EastBurn"
+    CREATE UNIQUE (m)-[:LOCATED {type: "facebook_checkin", time: "20140501"}]->(l);  
     commit
 
     begin
-    MERGE (:Human:User { 
-           firstname: "Ryan", lastname: "Cox",
-           fullname: "Ryan Cox", id: 25, 
-           gender: "female", age: 29});
+    CREATE (:Human:User { 
+           firstname: "Harley", lastname: "Moore",
+           fullname: "Harley Moore", id: 25, 
+           gender: "male", age: 34});
     commit
 
 begin
 MATCH (h:User), (f:User)
-WHERE h.id = 25 AND f.id = 21
+WHERE h.id = 25 AND f.id = 6
 CREATE UNIQUE (h)-[:FRIEND]-(f);
 commit
 
 
 begin
 MATCH (h:User), (f:User)
-WHERE h.id = 25 AND f.id = 24
+WHERE h.id = 25 AND f.id = 2
 CREATE UNIQUE (h)-[:FRIEND]-(f);
 commit
+
+
+begin
+MATCH (h:User), (f:User)
+WHERE h.id = 25 AND f.id = 15
+CREATE UNIQUE (h)-[:FRIEND]-(f);
+commit
+
+
+begin
+MATCH (h:User), (f:User)
+WHERE h.id = 25 AND f.id = 9
+CREATE UNIQUE (h)-[:FRIEND]-(f);
+commit
+
+
+begin
+MATCH (h:User), (f:User)
+WHERE h.id = 25 AND f.id = 13
+CREATE UNIQUE (h)-[:FRIEND]-(f);
+commit
+
+begin
+MATCH (h:User), (i:Interest)
+WHERE h.id = 25 AND i.name = "Walking"
+CREATE UNIQUE (h)-[:HAS]->(i);
+commit
+
+
+begin
+MATCH (h:User), (i:Interest)
+WHERE h.id = 25 AND i.name = "Surfing"
+CREATE UNIQUE (h)-[:HAS]->(i);
+commit
+
+
+begin
+MATCH (h:User), (i:Interest)
+WHERE h.id = 25 AND i.name = "Boating"
+CREATE UNIQUE (h)-[:HAS]->(i);
+commit
+
 
 begin
 MATCH (h:User), (i:Interest)
@@ -3366,86 +3775,51 @@ WHERE h.id = 25 AND i.name = "Bungee_Jumping"
 CREATE UNIQUE (h)-[:HAS]->(i);
 commit
 
+
+begin
+MATCH (h:User), (i:Interest)
+WHERE h.id = 25 AND i.name = "Baseball"
+CREATE UNIQUE (h)-[:HAS]->(i);
+commit
+
+
+begin
+MATCH (h:User), (i:Interest)
+WHERE h.id = 25 AND i.name = "Scuba_Diving"
+CREATE UNIQUE (h)-[:HAS]->(i);
+commit
+
 begin
 MATCH (h:Human), (d:Machine)
-WHERE h.id = 25 AND d.id = 21
+WHERE h.id = 25 AND d.id = 3
 CREATE UNIQUE (h)-[:USES]->(d);
 commit
 
     begin
     MATCH (h:Human)-[:USES]->(m:Machine), (l:Location)
-    WHERE m.type = "phone" AND h.id = 25 AND l.name = "McMenamins"
-    CREATE UNIQUE (m)-[:LOCATED {type: "yelp_review", time: "20140504"}]->(l);  
-    commit
-
-
-    begin
-    MATCH (h:Human)-[:USES]->(m:Machine), (l:Location)
-    WHERE m.type = "phone" AND h.id = 25 AND l.name = "The Fray"
-    CREATE UNIQUE (m)-[:LOCATED {type: "yelp_review", time: "20140504"}]->(l);  
-    commit
-
-
-    begin
-    MATCH (h:Human)-[:USES]->(m:Machine), (l:Location)
-    WHERE m.type = "phone" AND h.id = 25 AND l.name = "Hollywood Theatre"
-    CREATE UNIQUE (m)-[:LOCATED {type: "photo_tag", time: "20140502"}]->(l);  
-    commit
-
-
-    begin
-    MATCH (h:Human)-[:USES]->(m:Machine), (l:Location)
-    WHERE m.type = "phone" AND h.id = 25 AND l.name = "Nike"
-    CREATE UNIQUE (m)-[:LOCATED {type: "photo_tag", time: "20140505"}]->(l);  
+    WHERE m.type = "phone" AND h.id = 25 AND l.name = "Starbucks"
+    CREATE UNIQUE (m)-[:LOCATED {type: "facebook_checkin", time: "20140502"}]->(l);  
     commit
 
     begin
-    MERGE (:Human:User { 
-           firstname: "Emory", lastname: "King",
-           fullname: "Emory King", id: 26, 
-           gender: "female", age: 18});
+    CREATE (:Human:User { 
+           firstname: "Morgan", lastname: "Foster",
+           fullname: "Morgan Foster", id: 26, 
+           gender: "male", age: 28});
     commit
 
 begin
 MATCH (h:User), (f:User)
-WHERE h.id = 26 AND f.id = 10
+WHERE h.id = 26 AND f.id = 15
 CREATE UNIQUE (h)-[:FRIEND]-(f);
 commit
-
 
 begin
-MATCH (h:User), (f:User)
-WHERE h.id = 26 AND f.id = 24
-CREATE UNIQUE (h)-[:FRIEND]-(f);
+MATCH (h:User), (i:Interest)
+WHERE h.id = 26 AND i.name = "Cycling"
+CREATE UNIQUE (h)-[:HAS]->(i);
 commit
 
-
-begin
-MATCH (h:User), (f:User)
-WHERE h.id = 26 AND f.id = 13
-CREATE UNIQUE (h)-[:FRIEND]-(f);
-commit
-
-
-begin
-MATCH (h:User), (f:User)
-WHERE h.id = 26 AND f.id = 16
-CREATE UNIQUE (h)-[:FRIEND]-(f);
-commit
-
-
-begin
-MATCH (h:User), (f:User)
-WHERE h.id = 26 AND f.id = 12
-CREATE UNIQUE (h)-[:FRIEND]-(f);
-commit
-
-
-begin
-MATCH (h:User), (f:User)
-WHERE h.id = 26 AND f.id = 14
-CREATE UNIQUE (h)-[:FRIEND]-(f);
-commit
 
 begin
 MATCH (h:User), (i:Interest)
@@ -3456,149 +3830,170 @@ commit
 
 begin
 MATCH (h:User), (i:Interest)
-WHERE h.id = 26 AND i.name = "Scuba_Diving"
+WHERE h.id = 26 AND i.name = "Swimming"
+CREATE UNIQUE (h)-[:HAS]->(i);
+commit
+
+
+begin
+MATCH (h:User), (i:Interest)
+WHERE h.id = 26 AND i.name = "Bungee_Jumping"
 CREATE UNIQUE (h)-[:HAS]->(i);
 commit
 
 begin
 MATCH (h:Human), (d:Machine)
-WHERE h.id = 26 AND d.id = 10
+WHERE h.id = 26 AND d.id = 6
+CREATE UNIQUE (h)-[:USES]->(d);
+commit
+
+
+begin
+MATCH (h:Human), (d:Machine)
+WHERE h.id = 26 AND d.id = 104
+CREATE UNIQUE (h)-[:USES]->(d);
+commit
+
+
+begin
+MATCH (h:Human), (d:Machine)
+WHERE h.id = 26 AND d.id = 111
 CREATE UNIQUE (h)-[:USES]->(d);
 commit
 
     begin
     MATCH (h:Human)-[:USES]->(m:Machine), (l:Location)
-    WHERE m.type = "phone" AND h.id = 26 AND l.name = "Christina Perri"
+    WHERE m.type = "phone" AND h.id = 26 AND l.name = "Foster The People"
     CREATE UNIQUE (m)-[:LOCATED {type: "facebook_checkin", time: "20140503"}]->(l);  
     commit
 
 
     begin
     MATCH (h:Human)-[:USES]->(m:Machine), (l:Location)
-    WHERE m.type = "phone" AND h.id = 26 AND l.name = "Robotaco"
-    CREATE UNIQUE (m)-[:LOCATED {type: "yelp_review", time: "20140503"}]->(l);  
-    commit
-
-
-    begin
-    MATCH (h:Human)-[:USES]->(m:Machine), (l:Location)
-    WHERE m.type = "phone" AND h.id = 26 AND l.name = "Eastburn"
-    CREATE UNIQUE (m)-[:LOCATED {type: "photo_tag", time: "20140502"}]->(l);  
+    WHERE m.type = "phone" AND h.id = 26 AND l.name = "Warpaint"
+    CREATE UNIQUE (m)-[:LOCATED {type: "facebook_checkin", time: "20140502"}]->(l);  
     commit
 
     begin
-    MERGE (:Human:User { 
-           firstname: "Emerson", lastname: "Cohen",
-           fullname: "Emerson Cohen", id: 27, 
-           gender: "female", age: 20});
+    CREATE (:Human:User { 
+           firstname: "Justice", lastname: "Morgan",
+           fullname: "Justice Morgan", id: 27, 
+           gender: "male", age: 30});
     commit
 
 begin
 MATCH (h:User), (f:User)
-WHERE h.id = 27 AND f.id = 11
+WHERE h.id = 27 AND f.id = 1
+CREATE UNIQUE (h)-[:FRIEND]-(f);
+commit
+
+
+begin
+MATCH (h:User), (f:User)
+WHERE h.id = 27 AND f.id = 25
+CREATE UNIQUE (h)-[:FRIEND]-(f);
+commit
+
+
+begin
+MATCH (h:User), (f:User)
+WHERE h.id = 27 AND f.id = 15
+CREATE UNIQUE (h)-[:FRIEND]-(f);
+commit
+
+
+begin
+MATCH (h:User), (f:User)
+WHERE h.id = 27 AND f.id = 4
 CREATE UNIQUE (h)-[:FRIEND]-(f);
 commit
 
 begin
 MATCH (h:User), (i:Interest)
-WHERE h.id = 27 AND i.name = "Volleyball"
+WHERE h.id = 27 AND i.name = "Basketball"
 CREATE UNIQUE (h)-[:HAS]->(i);
 commit
 
 
 begin
 MATCH (h:User), (i:Interest)
-WHERE h.id = 27 AND i.name = "River_Rafting"
+WHERE h.id = 27 AND i.name = "Cycling"
 CREATE UNIQUE (h)-[:HAS]->(i);
 commit
 
 
 begin
 MATCH (h:User), (i:Interest)
-WHERE h.id = 27 AND i.name = "Bungee_Jumping"
-CREATE UNIQUE (h)-[:HAS]->(i);
-commit
-
-
-begin
-MATCH (h:User), (i:Interest)
-WHERE h.id = 27 AND i.name = "Horse_Riding"
-CREATE UNIQUE (h)-[:HAS]->(i);
-commit
-
-
-begin
-MATCH (h:User), (i:Interest)
-WHERE h.id = 27 AND i.name = "Hiking"
-CREATE UNIQUE (h)-[:HAS]->(i);
-commit
-
-
-begin
-MATCH (h:User), (i:Interest)
-WHERE h.id = 27 AND i.name = "Walking"
-CREATE UNIQUE (h)-[:HAS]->(i);
-commit
-
-
-begin
-MATCH (h:User), (i:Interest)
-WHERE h.id = 27 AND i.name = "Baseball"
+WHERE h.id = 27 AND i.name = "Swimming"
 CREATE UNIQUE (h)-[:HAS]->(i);
 commit
 
 begin
 MATCH (h:Human), (d:Machine)
-WHERE h.id = 27 AND d.id = 118
+WHERE h.id = 27 AND d.id = 83
+CREATE UNIQUE (h)-[:USES]->(d);
+commit
+
+
+begin
+MATCH (h:Human), (d:Machine)
+WHERE h.id = 27 AND d.id = 16
 CREATE UNIQUE (h)-[:USES]->(d);
 commit
 
     begin
     MATCH (h:Human)-[:USES]->(m:Machine), (l:Location)
     WHERE m.type = "phone" AND h.id = 27 AND l.name = "Foster The People"
-    CREATE UNIQUE (m)-[:LOCATED {type: "yelp_review", time: "20140503"}]->(l);  
-    commit
-
-
-    begin
-    MATCH (h:Human)-[:USES]->(m:Machine), (l:Location)
-    WHERE m.type = "phone" AND h.id = 27 AND l.name = "McMenamins"
-    CREATE UNIQUE (m)-[:LOCATED {type: "photo_tag", time: "20140501"}]->(l);  
-    commit
-
-
-    begin
-    MATCH (h:Human)-[:USES]->(m:Machine), (l:Location)
-    WHERE m.type = "phone" AND h.id = 27 AND l.name = "Warpaint"
-    CREATE UNIQUE (m)-[:LOCATED {type: "yelp_review", time: "20140503"}]->(l);  
+    CREATE UNIQUE (m)-[:LOCATED {type: "facebook_checkin", time: "20140502"}]->(l);  
     commit
 
     begin
-    MERGE (:Human:User { 
-           firstname: "Cameron", lastname: "Gutiérrez",
-           fullname: "Cameron Gutiérrez", id: 28, 
-           gender: "male", age: 26});
+    CREATE (:Human:User { 
+           firstname: "Casey", lastname: "Wright",
+           fullname: "Casey Wright", id: 28, 
+           gender: "male", age: 28});
     commit
 
 begin
 MATCH (h:User), (f:User)
-WHERE h.id = 28 AND f.id = 2
+WHERE h.id = 28 AND f.id = 20
 CREATE UNIQUE (h)-[:FRIEND]-(f);
 commit
 
+
 begin
-MATCH (h:User), (i:Interest)
-WHERE h.id = 28 AND i.name = "Horse_Riding"
-CREATE UNIQUE (h)-[:HAS]->(i);
+MATCH (h:User), (f:User)
+WHERE h.id = 28 AND f.id = 19
+CREATE UNIQUE (h)-[:FRIEND]-(f);
 commit
 
 
 begin
-MATCH (h:User), (i:Interest)
-WHERE h.id = 28 AND i.name = "River_Rafting"
-CREATE UNIQUE (h)-[:HAS]->(i);
+MATCH (h:User), (f:User)
+WHERE h.id = 28 AND f.id = 10
+CREATE UNIQUE (h)-[:FRIEND]-(f);
 commit
 
+
+begin
+MATCH (h:User), (f:User)
+WHERE h.id = 28 AND f.id = 5
+CREATE UNIQUE (h)-[:FRIEND]-(f);
+commit
+
+
+begin
+MATCH (h:User), (f:User)
+WHERE h.id = 28 AND f.id = 18
+CREATE UNIQUE (h)-[:FRIEND]-(f);
+commit
+
+
+begin
+MATCH (h:User), (f:User)
+WHERE h.id = 28 AND f.id = 8
+CREATE UNIQUE (h)-[:FRIEND]-(f);
+commit
 
 begin
 MATCH (h:User), (i:Interest)
@@ -3616,60 +4011,67 @@ commit
 
 begin
 MATCH (h:User), (i:Interest)
-WHERE h.id = 28 AND i.name = "Boating"
+WHERE h.id = 28 AND i.name = "Fishing"
+CREATE UNIQUE (h)-[:HAS]->(i);
+commit
+
+
+begin
+MATCH (h:User), (i:Interest)
+WHERE h.id = 28 AND i.name = "Rock_Climbing"
 CREATE UNIQUE (h)-[:HAS]->(i);
 commit
 
 begin
 MATCH (h:Human), (d:Machine)
-WHERE h.id = 28 AND d.id = 83
+WHERE h.id = 28 AND d.id = 105
 CREATE UNIQUE (h)-[:USES]->(d);
 commit
 
     begin
     MATCH (h:Human)-[:USES]->(m:Machine), (l:Location)
-    WHERE m.type = "phone" AND h.id = 28 AND l.name = "Nike"
-    CREATE UNIQUE (m)-[:LOCATED {type: "photo_tag", time: "20140502"}]->(l);  
+    WHERE m.type = "phone" AND h.id = 28 AND l.name = "Nordstroms"
+    CREATE UNIQUE (m)-[:LOCATED {type: "yelp_review", time: "20140501"}]->(l);  
     commit
 
 
     begin
     MATCH (h:Human)-[:USES]->(m:Machine), (l:Location)
-    WHERE m.type = "phone" AND h.id = 28 AND l.name = "Caffe Umbria"
-    CREATE UNIQUE (m)-[:LOCATED {type: "photo_tag", time: "20140504"}]->(l);  
-    commit
-
-
-    begin
-    MATCH (h:Human)-[:USES]->(m:Machine), (l:Location)
-    WHERE m.type = "phone" AND h.id = 28 AND l.name = "Eastburn"
+    WHERE m.type = "phone" AND h.id = 28 AND l.name = "Besaws"
     CREATE UNIQUE (m)-[:LOCATED {type: "photo_tag", time: "20140503"}]->(l);  
     commit
 
 
     begin
     MATCH (h:Human)-[:USES]->(m:Machine), (l:Location)
-    WHERE m.type = "phone" AND h.id = 28 AND l.name = "Christina Perri"
-    CREATE UNIQUE (m)-[:LOCATED {type: "facebook_checkin", time: "20140503"}]->(l);  
+    WHERE m.type = "phone" AND h.id = 28 AND l.name = "Hollywood Theatre"
+    CREATE UNIQUE (m)-[:LOCATED {type: "photo_tag", time: "20140501"}]->(l);  
     commit
 
 
     begin
     MATCH (h:Human)-[:USES]->(m:Machine), (l:Location)
-    WHERE m.type = "phone" AND h.id = 28 AND l.name = "Foster The People"
-    CREATE UNIQUE (m)-[:LOCATED {type: "photo_tag", time: "20140503"}]->(l);  
+    WHERE m.type = "phone" AND h.id = 28 AND l.name = "Robo Taco"
+    CREATE UNIQUE (m)-[:LOCATED {type: "yelp_review", time: "20140502"}]->(l);  
     commit
 
     begin
-    MERGE (:Human:User { 
-           firstname: "Dakota", lastname: "Martin",
-           fullname: "Dakota Martin", id: 29, 
-           gender: "female", age: 22});
+    CREATE (:Human:User { 
+           firstname: "Ryan", lastname: "Gray",
+           fullname: "Ryan Gray", id: 29, 
+           gender: "female", age: 21});
     commit
 
 begin
 MATCH (h:User), (f:User)
-WHERE h.id = 29 AND f.id = 22
+WHERE h.id = 29 AND f.id = 9
+CREATE UNIQUE (h)-[:FRIEND]-(f);
+commit
+
+
+begin
+MATCH (h:User), (f:User)
+WHERE h.id = 29 AND f.id = 11
 CREATE UNIQUE (h)-[:FRIEND]-(f);
 commit
 
@@ -3687,16 +4089,30 @@ WHERE h.id = 29 AND f.id = 2
 CREATE UNIQUE (h)-[:FRIEND]-(f);
 commit
 
+
+begin
+MATCH (h:User), (f:User)
+WHERE h.id = 29 AND f.id = 7
+CREATE UNIQUE (h)-[:FRIEND]-(f);
+commit
+
+
+begin
+MATCH (h:User), (f:User)
+WHERE h.id = 29 AND f.id = 20
+CREATE UNIQUE (h)-[:FRIEND]-(f);
+commit
+
 begin
 MATCH (h:User), (i:Interest)
-WHERE h.id = 29 AND i.name = "Boating"
+WHERE h.id = 29 AND i.name = "Volleyball"
 CREATE UNIQUE (h)-[:HAS]->(i);
 commit
 
 
 begin
 MATCH (h:User), (i:Interest)
-WHERE h.id = 29 AND i.name = "Golf"
+WHERE h.id = 29 AND i.name = "Cycling"
 CREATE UNIQUE (h)-[:HAS]->(i);
 commit
 
@@ -3710,6 +4126,13 @@ commit
 
 begin
 MATCH (h:User), (i:Interest)
+WHERE h.id = 29 AND i.name = "Basketball"
+CREATE UNIQUE (h)-[:HAS]->(i);
+commit
+
+
+begin
+MATCH (h:User), (i:Interest)
 WHERE h.id = 29 AND i.name = "Baseball"
 CREATE UNIQUE (h)-[:HAS]->(i);
 commit
@@ -3717,7 +4140,14 @@ commit
 
 begin
 MATCH (h:User), (i:Interest)
-WHERE h.id = 29 AND i.name = "Volleyball"
+WHERE h.id = 29 AND i.name = "Rock_Climbing"
+CREATE UNIQUE (h)-[:HAS]->(i);
+commit
+
+
+begin
+MATCH (h:User), (i:Interest)
+WHERE h.id = 29 AND i.name = "Bungee_Jumping"
 CREATE UNIQUE (h)-[:HAS]->(i);
 commit
 
@@ -3730,43 +4160,57 @@ commit
 
 begin
 MATCH (h:Human), (d:Machine)
-WHERE h.id = 29 AND d.id = 54
+WHERE h.id = 29 AND d.id = 91
 CREATE UNIQUE (h)-[:USES]->(d);
 commit
 
     begin
     MATCH (h:Human)-[:USES]->(m:Machine), (l:Location)
-    WHERE m.type = "phone" AND h.id = 29 AND l.name = "Nordstroms"
-    CREATE UNIQUE (m)-[:LOCATED {type: "yelp_review", time: "20140501"}]->(l);  
-    commit
-
-
-    begin
-    MATCH (h:Human)-[:USES]->(m:Machine), (l:Location)
-    WHERE m.type = "phone" AND h.id = 29 AND l.name = "Warpaint"
-    CREATE UNIQUE (m)-[:LOCATED {type: "facebook_checkin", time: "20140502"}]->(l);  
-    commit
-
-
-    begin
-    MATCH (h:Human)-[:USES]->(m:Machine), (l:Location)
-    WHERE m.type = "phone" AND h.id = 29 AND l.name = "Foster The People"
-    CREATE UNIQUE (m)-[:LOCATED {type: "photo_tag", time: "20140504"}]->(l);  
-    commit
-
-
-    begin
-    MATCH (h:Human)-[:USES]->(m:Machine), (l:Location)
-    WHERE m.type = "phone" AND h.id = 29 AND l.name = "The Fray"
+    WHERE m.type = "phone" AND h.id = 29 AND l.name = "Robo Taco"
     CREATE UNIQUE (m)-[:LOCATED {type: "yelp_review", time: "20140505"}]->(l);  
     commit
 
+
     begin
-    MERGE (:Human:User { 
-           firstname: "Jaylin", lastname: "Foster",
-           fullname: "Jaylin Foster", id: 30, 
-           gender: "female", age: 25});
+    MATCH (h:Human)-[:USES]->(m:Machine), (l:Location)
+    WHERE m.type = "phone" AND h.id = 29 AND l.name = "Starbucks"
+    CREATE UNIQUE (m)-[:LOCATED {type: "photo_tag", time: "20140502"}]->(l);  
     commit
+
+
+    begin
+    MATCH (h:Human)-[:USES]->(m:Machine), (l:Location)
+    WHERE m.type = "phone" AND h.id = 29 AND l.name = "Besaws"
+    CREATE UNIQUE (m)-[:LOCATED {type: "facebook_checkin", time: "20140504"}]->(l);  
+    commit
+
+    begin
+    CREATE (:Human:User { 
+           firstname: "Taylor", lastname: "Stewart",
+           fullname: "Taylor Stewart", id: 30, 
+           gender: "male", age: 33});
+    commit
+
+begin
+MATCH (h:User), (f:User)
+WHERE h.id = 30 AND f.id = 27
+CREATE UNIQUE (h)-[:FRIEND]-(f);
+commit
+
+
+begin
+MATCH (h:User), (f:User)
+WHERE h.id = 30 AND f.id = 5
+CREATE UNIQUE (h)-[:FRIEND]-(f);
+commit
+
+
+begin
+MATCH (h:User), (f:User)
+WHERE h.id = 30 AND f.id = 0
+CREATE UNIQUE (h)-[:FRIEND]-(f);
+commit
+
 
 begin
 MATCH (h:User), (f:User)
@@ -3777,37 +4221,9 @@ commit
 
 begin
 MATCH (h:User), (f:User)
-WHERE h.id = 30 AND f.id = 15
+WHERE h.id = 30 AND f.id = 9
 CREATE UNIQUE (h)-[:FRIEND]-(f);
 commit
-
-begin
-MATCH (h:User), (i:Interest)
-WHERE h.id = 30 AND i.name = "Cycling"
-CREATE UNIQUE (h)-[:HAS]->(i);
-commit
-
-
-begin
-MATCH (h:User), (i:Interest)
-WHERE h.id = 30 AND i.name = "Basketball"
-CREATE UNIQUE (h)-[:HAS]->(i);
-commit
-
-
-begin
-MATCH (h:User), (i:Interest)
-WHERE h.id = 30 AND i.name = "Hiking"
-CREATE UNIQUE (h)-[:HAS]->(i);
-commit
-
-
-begin
-MATCH (h:User), (i:Interest)
-WHERE h.id = 30 AND i.name = "Surfing"
-CREATE UNIQUE (h)-[:HAS]->(i);
-commit
-
 
 begin
 MATCH (h:User), (i:Interest)
@@ -3818,14 +4234,14 @@ commit
 
 begin
 MATCH (h:User), (i:Interest)
-WHERE h.id = 30 AND i.name = "Volleyball"
+WHERE h.id = 30 AND i.name = "Boating"
 CREATE UNIQUE (h)-[:HAS]->(i);
 commit
 
 
 begin
 MATCH (h:User), (i:Interest)
-WHERE h.id = 30 AND i.name = "Walking"
+WHERE h.id = 30 AND i.name = "Rock_Climbing"
 CREATE UNIQUE (h)-[:HAS]->(i);
 commit
 
@@ -3839,97 +4255,41 @@ commit
 
 begin
 MATCH (h:User), (i:Interest)
-WHERE h.id = 30 AND i.name = "Photography"
+WHERE h.id = 30 AND i.name = "Golf"
 CREATE UNIQUE (h)-[:HAS]->(i);
 commit
 
 begin
 MATCH (h:Human), (d:Machine)
-WHERE h.id = 30 AND d.id = 25
+WHERE h.id = 30 AND d.id = 27
 CREATE UNIQUE (h)-[:USES]->(d);
 commit
-
-
-begin
-MATCH (h:Human), (d:Machine)
-WHERE h.id = 30 AND d.id = 18
-CREATE UNIQUE (h)-[:USES]->(d);
-commit
-
-
-begin
-MATCH (h:Human), (d:Machine)
-WHERE h.id = 30 AND d.id = 100
-CREATE UNIQUE (h)-[:USES]->(d);
-commit
-
-    begin
-    MATCH (h:Human)-[:USES]->(m:Machine), (l:Location)
-    WHERE m.type = "phone" AND h.id = 30 AND l.name = "The Fray"
-    CREATE UNIQUE (m)-[:LOCATED {type: "yelp_review", time: "20140504"}]->(l);  
-    commit
-
-
-    begin
-    MATCH (h:Human)-[:USES]->(m:Machine), (l:Location)
-    WHERE m.type = "phone" AND h.id = 30 AND l.name = "Besaws"
-    CREATE UNIQUE (m)-[:LOCATED {type: "yelp_review", time: "20140505"}]->(l);  
-    commit
-
 
     begin
     MATCH (h:Human)-[:USES]->(m:Machine), (l:Location)
     WHERE m.type = "phone" AND h.id = 30 AND l.name = "Christina Perri"
-    CREATE UNIQUE (m)-[:LOCATED {type: "facebook_checkin", time: "20140501"}]->(l);  
+    CREATE UNIQUE (m)-[:LOCATED {type: "photo_tag", time: "20140504"}]->(l);  
     commit
 
 
     begin
     MATCH (h:Human)-[:USES]->(m:Machine), (l:Location)
-    WHERE m.type = "phone" AND h.id = 30 AND l.name = "Starbucks"
-    CREATE UNIQUE (m)-[:LOCATED {type: "photo_tag", time: "20140503"}]->(l);  
-    commit
-
-
-    begin
-    MATCH (h:Human)-[:USES]->(m:Machine), (l:Location)
-    WHERE m.type = "phone" AND h.id = 30 AND l.name = "Hollywood Theatre"
-    CREATE UNIQUE (m)-[:LOCATED {type: "facebook_checkin", time: "20140501"}]->(l);  
+    WHERE m.type = "phone" AND h.id = 30 AND l.name = "McMenamins"
+    CREATE UNIQUE (m)-[:LOCATED {type: "yelp_review", time: "20140504"}]->(l);  
     commit
 
     begin
-    MERGE (:Human:User { 
-           firstname: "Harley", lastname: "Myers",
-           fullname: "Harley Myers", id: 31, 
-           gender: "male", age: 35});
+    CREATE (:Human:User { 
+           firstname: "Reese", lastname: "Rodríguez",
+           fullname: "Reese Rodríguez", id: 31, 
+           gender: "female", age: 23});
     commit
 
 begin
 MATCH (h:User), (f:User)
-WHERE h.id = 31 AND f.id = 28
+WHERE h.id = 31 AND f.id = 5
 CREATE UNIQUE (h)-[:FRIEND]-(f);
 commit
-
-begin
-MATCH (h:User), (i:Interest)
-WHERE h.id = 31 AND i.name = "Cycling"
-CREATE UNIQUE (h)-[:HAS]->(i);
-commit
-
-
-begin
-MATCH (h:User), (i:Interest)
-WHERE h.id = 31 AND i.name = "Horse_Riding"
-CREATE UNIQUE (h)-[:HAS]->(i);
-commit
-
-
-begin
-MATCH (h:User), (i:Interest)
-WHERE h.id = 31 AND i.name = "Hiking"
-CREATE UNIQUE (h)-[:HAS]->(i);
-commit
-
 
 begin
 MATCH (h:User), (i:Interest)
@@ -3940,87 +4300,101 @@ commit
 
 begin
 MATCH (h:User), (i:Interest)
-WHERE h.id = 31 AND i.name = "Golf"
+WHERE h.id = 31 AND i.name = "Scuba_Diving"
 CREATE UNIQUE (h)-[:HAS]->(i);
 commit
 
 
 begin
 MATCH (h:User), (i:Interest)
-WHERE h.id = 31 AND i.name = "Bungee_Jumping"
+WHERE h.id = 31 AND i.name = "Volleyball"
 CREATE UNIQUE (h)-[:HAS]->(i);
 commit
 
 
 begin
 MATCH (h:User), (i:Interest)
-WHERE h.id = 31 AND i.name = "Fishing"
+WHERE h.id = 31 AND i.name = "Photography"
+CREATE UNIQUE (h)-[:HAS]->(i);
+commit
+
+
+begin
+MATCH (h:User), (i:Interest)
+WHERE h.id = 31 AND i.name = "Boating"
 CREATE UNIQUE (h)-[:HAS]->(i);
 commit
 
 begin
 MATCH (h:Human), (d:Machine)
-WHERE h.id = 31 AND d.id = 84
+WHERE h.id = 31 AND d.id = 76
+CREATE UNIQUE (h)-[:USES]->(d);
+commit
+
+
+begin
+MATCH (h:Human), (d:Machine)
+WHERE h.id = 31 AND d.id = 64
 CREATE UNIQUE (h)-[:USES]->(d);
 commit
 
     begin
     MATCH (h:Human)-[:USES]->(m:Machine), (l:Location)
     WHERE m.type = "phone" AND h.id = 31 AND l.name = "Hollywood Theatre"
-    CREATE UNIQUE (m)-[:LOCATED {type: "facebook_checkin", time: "20140504"}]->(l);  
+    CREATE UNIQUE (m)-[:LOCATED {type: "yelp_review", time: "20140502"}]->(l);  
     commit
 
 
     begin
     MATCH (h:Human)-[:USES]->(m:Machine), (l:Location)
-    WHERE m.type = "phone" AND h.id = 31 AND l.name = "Foster The People"
-    CREATE UNIQUE (m)-[:LOCATED {type: "facebook_checkin", time: "20140502"}]->(l);  
+    WHERE m.type = "phone" AND h.id = 31 AND l.name = "Robo Taco"
+    CREATE UNIQUE (m)-[:LOCATED {type: "photo_tag", time: "20140505"}]->(l);  
     commit
 
 
     begin
     MATCH (h:Human)-[:USES]->(m:Machine), (l:Location)
-    WHERE m.type = "phone" AND h.id = 31 AND l.name = "Robotaco"
-    CREATE UNIQUE (m)-[:LOCATED {type: "photo_tag", time: "20140502"}]->(l);  
+    WHERE m.type = "phone" AND h.id = 31 AND l.name = "Besaws"
+    CREATE UNIQUE (m)-[:LOCATED {type: "facebook_checkin", time: "20140503"}]->(l);  
     commit
 
     begin
-    MERGE (:Human:User { 
-           firstname: "Cameron", lastname: "Howard",
-           fullname: "Cameron Howard", id: 32, 
-           gender: "female", age: 18});
+    CREATE (:Human:User { 
+           firstname: "River", lastname: "Scott",
+           fullname: "River Scott", id: 32, 
+           gender: "female", age: 32});
     commit
 
 begin
 MATCH (h:User), (f:User)
-WHERE h.id = 32 AND f.id = 27
+WHERE h.id = 32 AND f.id = 17
+CREATE UNIQUE (h)-[:FRIEND]-(f);
+commit
+
+
+begin
+MATCH (h:User), (f:User)
+WHERE h.id = 32 AND f.id = 9
+CREATE UNIQUE (h)-[:FRIEND]-(f);
+commit
+
+
+begin
+MATCH (h:User), (f:User)
+WHERE h.id = 32 AND f.id = 22
+CREATE UNIQUE (h)-[:FRIEND]-(f);
+commit
+
+
+begin
+MATCH (h:User), (f:User)
+WHERE h.id = 32 AND f.id = 30
 CREATE UNIQUE (h)-[:FRIEND]-(f);
 commit
 
 begin
 MATCH (h:User), (i:Interest)
-WHERE h.id = 32 AND i.name = "Scuba_Diving"
-CREATE UNIQUE (h)-[:HAS]->(i);
-commit
-
-
-begin
-MATCH (h:User), (i:Interest)
-WHERE h.id = 32 AND i.name = "Boating"
-CREATE UNIQUE (h)-[:HAS]->(i);
-commit
-
-
-begin
-MATCH (h:User), (i:Interest)
-WHERE h.id = 32 AND i.name = "Walking"
-CREATE UNIQUE (h)-[:HAS]->(i);
-commit
-
-
-begin
-MATCH (h:User), (i:Interest)
-WHERE h.id = 32 AND i.name = "Fishing"
+WHERE h.id = 32 AND i.name = "River_Rafting"
 CREATE UNIQUE (h)-[:HAS]->(i);
 commit
 
@@ -4031,29 +4405,71 @@ WHERE h.id = 32 AND i.name = "Basketball"
 CREATE UNIQUE (h)-[:HAS]->(i);
 commit
 
+
 begin
-MATCH (h:Human), (d:Machine)
-WHERE h.id = 32 AND d.id = 63
-CREATE UNIQUE (h)-[:USES]->(d);
+MATCH (h:User), (i:Interest)
+WHERE h.id = 32 AND i.name = "Photography"
+CREATE UNIQUE (h)-[:HAS]->(i);
 commit
 
 
 begin
+MATCH (h:User), (i:Interest)
+WHERE h.id = 32 AND i.name = "Rock_Climbing"
+CREATE UNIQUE (h)-[:HAS]->(i);
+commit
+
+
+begin
+MATCH (h:User), (i:Interest)
+WHERE h.id = 32 AND i.name = "Baseball"
+CREATE UNIQUE (h)-[:HAS]->(i);
+commit
+
+
+begin
+MATCH (h:User), (i:Interest)
+WHERE h.id = 32 AND i.name = "Surfing"
+CREATE UNIQUE (h)-[:HAS]->(i);
+commit
+
+
+begin
+MATCH (h:User), (i:Interest)
+WHERE h.id = 32 AND i.name = "Cycling"
+CREATE UNIQUE (h)-[:HAS]->(i);
+commit
+
+
+begin
+MATCH (h:User), (i:Interest)
+WHERE h.id = 32 AND i.name = "Scuba_Diving"
+CREATE UNIQUE (h)-[:HAS]->(i);
+commit
+
+
+begin
+MATCH (h:User), (i:Interest)
+WHERE h.id = 32 AND i.name = "Horse_Riding"
+CREATE UNIQUE (h)-[:HAS]->(i);
+commit
+
+begin
 MATCH (h:Human), (d:Machine)
-WHERE h.id = 32 AND d.id = 108
+WHERE h.id = 32 AND d.id = 33
 CREATE UNIQUE (h)-[:USES]->(d);
 commit
 
     begin
     MATCH (h:Human)-[:USES]->(m:Machine), (l:Location)
-    WHERE m.type = "phone" AND h.id = 32 AND l.name = "Caffe Umbria"
-    CREATE UNIQUE (m)-[:LOCATED {type: "facebook_checkin", time: "20140505"}]->(l);  
+    WHERE m.type = "phone" AND h.id = 32 AND l.name = "Foster The People"
+    CREATE UNIQUE (m)-[:LOCATED {type: "photo_tag", time: "20140503"}]->(l);  
     commit
 
 
     begin
     MATCH (h:Human)-[:USES]->(m:Machine), (l:Location)
-    WHERE m.type = "phone" AND h.id = 32 AND l.name = "Christina Perri"
+    WHERE m.type = "phone" AND h.id = 32 AND l.name = "Caffe Umbria"
     CREATE UNIQUE (m)-[:LOCATED {type: "photo_tag", time: "20140505"}]->(l);  
     commit
 
@@ -4061,74 +4477,123 @@ commit
     begin
     MATCH (h:Human)-[:USES]->(m:Machine), (l:Location)
     WHERE m.type = "phone" AND h.id = 32 AND l.name = "Besaws"
-    CREATE UNIQUE (m)-[:LOCATED {type: "photo_tag", time: "20140505"}]->(l);  
+    CREATE UNIQUE (m)-[:LOCATED {type: "yelp_review", time: "20140502"}]->(l);  
     commit
 
 
     begin
     MATCH (h:Human)-[:USES]->(m:Machine), (l:Location)
-    WHERE m.type = "phone" AND h.id = 32 AND l.name = "Nike"
-    CREATE UNIQUE (m)-[:LOCATED {type: "yelp_review", time: "20140502"}]->(l);  
+    WHERE m.type = "phone" AND h.id = 32 AND l.name = "EastBurn"
+    CREATE UNIQUE (m)-[:LOCATED {type: "yelp_review", time: "20140501"}]->(l);  
     commit
 
     begin
-    MERGE (:Human:User { 
-           firstname: "Reese", lastname: "Nakamoto",
-           fullname: "Reese Nakamoto", id: 33, 
+    CREATE (:Human:User { 
+           firstname: "Kayden", lastname: "Barnes",
+           fullname: "Kayden Barnes", id: 33, 
            gender: "male", age: 33});
     commit
 
 begin
 MATCH (h:User), (f:User)
-WHERE h.id = 33 AND f.id = 16
+WHERE h.id = 33 AND f.id = 9
 CREATE UNIQUE (h)-[:FRIEND]-(f);
 commit
 
 
 begin
 MATCH (h:User), (f:User)
-WHERE h.id = 33 AND f.id = 26
+WHERE h.id = 33 AND f.id = 11
+CREATE UNIQUE (h)-[:FRIEND]-(f);
+commit
+
+
+begin
+MATCH (h:User), (f:User)
+WHERE h.id = 33 AND f.id = 21
+CREATE UNIQUE (h)-[:FRIEND]-(f);
+commit
+
+
+begin
+MATCH (h:User), (f:User)
+WHERE h.id = 33 AND f.id = 14
 CREATE UNIQUE (h)-[:FRIEND]-(f);
 commit
 
 begin
 MATCH (h:User), (i:Interest)
-WHERE h.id = 33 AND i.name = "Baseball"
+WHERE h.id = 33 AND i.name = "Volleyball"
+CREATE UNIQUE (h)-[:HAS]->(i);
+commit
+
+
+begin
+MATCH (h:User), (i:Interest)
+WHERE h.id = 33 AND i.name = "Rock_Climbing"
+CREATE UNIQUE (h)-[:HAS]->(i);
+commit
+
+
+begin
+MATCH (h:User), (i:Interest)
+WHERE h.id = 33 AND i.name = "Swimming"
+CREATE UNIQUE (h)-[:HAS]->(i);
+commit
+
+
+begin
+MATCH (h:User), (i:Interest)
+WHERE h.id = 33 AND i.name = "Cycling"
+CREATE UNIQUE (h)-[:HAS]->(i);
+commit
+
+
+begin
+MATCH (h:User), (i:Interest)
+WHERE h.id = 33 AND i.name = "Horse_Riding"
 CREATE UNIQUE (h)-[:HAS]->(i);
 commit
 
 begin
 MATCH (h:Human), (d:Machine)
-WHERE h.id = 33 AND d.id = 79
-CREATE UNIQUE (h)-[:USES]->(d);
-commit
-
-
-begin
-MATCH (h:Human), (d:Machine)
-WHERE h.id = 33 AND d.id = 7
-CREATE UNIQUE (h)-[:USES]->(d);
-commit
-
-
-begin
-MATCH (h:Human), (d:Machine)
-WHERE h.id = 33 AND d.id = 117
+WHERE h.id = 33 AND d.id = 13
 CREATE UNIQUE (h)-[:USES]->(d);
 commit
 
     begin
     MATCH (h:Human)-[:USES]->(m:Machine), (l:Location)
-    WHERE m.type = "phone" AND h.id = 33 AND l.name = "Besaws"
-    CREATE UNIQUE (m)-[:LOCATED {type: "photo_tag", time: "20140502"}]->(l);  
+    WHERE m.type = "phone" AND h.id = 33 AND l.name = "Foster The People"
+    CREATE UNIQUE (m)-[:LOCATED {type: "facebook_checkin", time: "20140503"}]->(l);  
+    commit
+
+
+    begin
+    MATCH (h:Human)-[:USES]->(m:Machine), (l:Location)
+    WHERE m.type = "phone" AND h.id = 33 AND l.name = "Nike"
+    CREATE UNIQUE (m)-[:LOCATED {type: "yelp_review", time: "20140504"}]->(l);  
     commit
 
     begin
-    MERGE (:Human:User { 
-           firstname: "Elliot", lastname: "Gómez",
-           fullname: "Elliot Gómez", id: 34, 
-           gender: "female", age: 21});
+    CREATE (:Human:User { 
+           firstname: "Skyler", lastname: "Stewart",
+           fullname: "Skyler Stewart", id: 34, 
+           gender: "female", age: 33});
     commit
+
+begin
+MATCH (h:User), (f:User)
+WHERE h.id = 34 AND f.id = 16
+CREATE UNIQUE (h)-[:FRIEND]-(f);
+commit
+
+
+begin
+MATCH (h:User), (f:User)
+WHERE h.id = 34 AND f.id = 28
+CREATE UNIQUE (h)-[:FRIEND]-(f);
+commit
+
 
 begin
 MATCH (h:User), (f:User)
@@ -4136,65 +4601,9 @@ WHERE h.id = 34 AND f.id = 24
 CREATE UNIQUE (h)-[:FRIEND]-(f);
 commit
 
-
-begin
-MATCH (h:User), (f:User)
-WHERE h.id = 34 AND f.id = 8
-CREATE UNIQUE (h)-[:FRIEND]-(f);
-commit
-
-begin
-MATCH (h:User), (i:Interest)
-WHERE h.id = 34 AND i.name = "Baseball"
-CREATE UNIQUE (h)-[:HAS]->(i);
-commit
-
-
-begin
-MATCH (h:User), (i:Interest)
-WHERE h.id = 34 AND i.name = "Horse_Riding"
-CREATE UNIQUE (h)-[:HAS]->(i);
-commit
-
-
-begin
-MATCH (h:User), (i:Interest)
-WHERE h.id = 34 AND i.name = "Bungee_Jumping"
-CREATE UNIQUE (h)-[:HAS]->(i);
-commit
-
-
 begin
 MATCH (h:User), (i:Interest)
 WHERE h.id = 34 AND i.name = "Hiking"
-CREATE UNIQUE (h)-[:HAS]->(i);
-commit
-
-
-begin
-MATCH (h:User), (i:Interest)
-WHERE h.id = 34 AND i.name = "Volleyball"
-CREATE UNIQUE (h)-[:HAS]->(i);
-commit
-
-
-begin
-MATCH (h:User), (i:Interest)
-WHERE h.id = 34 AND i.name = "Cycling"
-CREATE UNIQUE (h)-[:HAS]->(i);
-commit
-
-
-begin
-MATCH (h:User), (i:Interest)
-WHERE h.id = 34 AND i.name = "Golf"
-CREATE UNIQUE (h)-[:HAS]->(i);
-commit
-
-
-begin
-MATCH (h:User), (i:Interest)
-WHERE h.id = 34 AND i.name = "Surfing"
 CREATE UNIQUE (h)-[:HAS]->(i);
 commit
 
@@ -4208,108 +4617,143 @@ commit
 
 begin
 MATCH (h:User), (i:Interest)
-WHERE h.id = 34 AND i.name = "Scuba_Diving"
+WHERE h.id = 34 AND i.name = "Swimming"
+CREATE UNIQUE (h)-[:HAS]->(i);
+commit
+
+
+begin
+MATCH (h:User), (i:Interest)
+WHERE h.id = 34 AND i.name = "Surfing"
+CREATE UNIQUE (h)-[:HAS]->(i);
+commit
+
+
+begin
+MATCH (h:User), (i:Interest)
+WHERE h.id = 34 AND i.name = "Baseball"
+CREATE UNIQUE (h)-[:HAS]->(i);
+commit
+
+
+begin
+MATCH (h:User), (i:Interest)
+WHERE h.id = 34 AND i.name = "Walking"
+CREATE UNIQUE (h)-[:HAS]->(i);
+commit
+
+
+begin
+MATCH (h:User), (i:Interest)
+WHERE h.id = 34 AND i.name = "Bungee_Jumping"
 CREATE UNIQUE (h)-[:HAS]->(i);
 commit
 
 begin
 MATCH (h:Human), (d:Machine)
-WHERE h.id = 34 AND d.id = 11
+WHERE h.id = 34 AND d.id = 88
 CREATE UNIQUE (h)-[:USES]->(d);
 commit
 
 
 begin
 MATCH (h:Human), (d:Machine)
-WHERE h.id = 34 AND d.id = 19
+WHERE h.id = 34 AND d.id = 80
+CREATE UNIQUE (h)-[:USES]->(d);
+commit
+
+
+begin
+MATCH (h:Human), (d:Machine)
+WHERE h.id = 34 AND d.id = 65
 CREATE UNIQUE (h)-[:USES]->(d);
 commit
 
     begin
     MATCH (h:Human)-[:USES]->(m:Machine), (l:Location)
-    WHERE m.type = "phone" AND h.id = 34 AND l.name = "Hollywood Theatre"
-    CREATE UNIQUE (m)-[:LOCATED {type: "facebook_checkin", time: "20140505"}]->(l);  
+    WHERE m.type = "phone" AND h.id = 34 AND l.name = "The Fray"
+    CREATE UNIQUE (m)-[:LOCATED {type: "photo_tag", time: "20140505"}]->(l);  
     commit
 
 
     begin
     MATCH (h:Human)-[:USES]->(m:Machine), (l:Location)
-    WHERE m.type = "phone" AND h.id = 34 AND l.name = "Starbucks"
-    CREATE UNIQUE (m)-[:LOCATED {type: "facebook_checkin", time: "20140502"}]->(l);  
+    WHERE m.type = "phone" AND h.id = 34 AND l.name = "Besaws"
+    CREATE UNIQUE (m)-[:LOCATED {type: "yelp_review", time: "20140501"}]->(l);  
     commit
 
 
     begin
     MATCH (h:Human)-[:USES]->(m:Machine), (l:Location)
-    WHERE m.type = "phone" AND h.id = 34 AND l.name = "McMenamins"
+    WHERE m.type = "phone" AND h.id = 34 AND l.name = "Nike"
+    CREATE UNIQUE (m)-[:LOCATED {type: "yelp_review", time: "20140505"}]->(l);  
+    commit
+
+
+    begin
+    MATCH (h:Human)-[:USES]->(m:Machine), (l:Location)
+    WHERE m.type = "phone" AND h.id = 34 AND l.name = "Foster The People"
     CREATE UNIQUE (m)-[:LOCATED {type: "yelp_review", time: "20140504"}]->(l);  
     commit
 
 
     begin
     MATCH (h:Human)-[:USES]->(m:Machine), (l:Location)
-    WHERE m.type = "phone" AND h.id = 34 AND l.name = "Eastburn"
-    CREATE UNIQUE (m)-[:LOCATED {type: "facebook_checkin", time: "20140503"}]->(l);  
-    commit
-
-
-    begin
-    MATCH (h:Human)-[:USES]->(m:Machine), (l:Location)
-    WHERE m.type = "phone" AND h.id = 34 AND l.name = "Robotaco"
-    CREATE UNIQUE (m)-[:LOCATED {type: "facebook_checkin", time: "20140502"}]->(l);  
+    WHERE m.type = "phone" AND h.id = 34 AND l.name = "Caffe Umbria"
+    CREATE UNIQUE (m)-[:LOCATED {type: "facebook_checkin", time: "20140504"}]->(l);  
     commit
 
     begin
-    MERGE (:Human:User { 
-           firstname: "Jessie", lastname: "Barnes",
-           fullname: "Jessie Barnes", id: 35, 
-           gender: "female", age: 26});
+    CREATE (:Human:User { 
+           firstname: "Ryan", lastname: "Barnes",
+           fullname: "Ryan Barnes", id: 35, 
+           gender: "female", age: 23});
     commit
 
 begin
 MATCH (h:User), (f:User)
-WHERE h.id = 35 AND f.id = 27
+WHERE h.id = 35 AND f.id = 2
 CREATE UNIQUE (h)-[:FRIEND]-(f);
 commit
 
 
 begin
 MATCH (h:User), (f:User)
-WHERE h.id = 35 AND f.id = 29
+WHERE h.id = 35 AND f.id = 17
 CREATE UNIQUE (h)-[:FRIEND]-(f);
 commit
 
 
 begin
 MATCH (h:User), (f:User)
-WHERE h.id = 35 AND f.id = 7
+WHERE h.id = 35 AND f.id = 28
 CREATE UNIQUE (h)-[:FRIEND]-(f);
 commit
 
 
 begin
 MATCH (h:User), (f:User)
-WHERE h.id = 35 AND f.id = 10
+WHERE h.id = 35 AND f.id = 24
+CREATE UNIQUE (h)-[:FRIEND]-(f);
+commit
+
+
+begin
+MATCH (h:User), (f:User)
+WHERE h.id = 35 AND f.id = 0
 CREATE UNIQUE (h)-[:FRIEND]-(f);
 commit
 
 begin
 MATCH (h:User), (i:Interest)
-WHERE h.id = 35 AND i.name = "Basketball"
+WHERE h.id = 35 AND i.name = "Swimming"
 CREATE UNIQUE (h)-[:HAS]->(i);
 commit
 
 
 begin
 MATCH (h:User), (i:Interest)
-WHERE h.id = 35 AND i.name = "Hiking"
-CREATE UNIQUE (h)-[:HAS]->(i);
-commit
-
-
-begin
-MATCH (h:User), (i:Interest)
-WHERE h.id = 35 AND i.name = "Photography"
+WHERE h.id = 35 AND i.name = "Boating"
 CREATE UNIQUE (h)-[:HAS]->(i);
 commit
 
@@ -4323,7 +4767,7 @@ commit
 
 begin
 MATCH (h:User), (i:Interest)
-WHERE h.id = 35 AND i.name = "Golf"
+WHERE h.id = 35 AND i.name = "Scuba_Diving"
 CREATE UNIQUE (h)-[:HAS]->(i);
 commit
 
@@ -4337,81 +4781,95 @@ commit
 
 begin
 MATCH (h:User), (i:Interest)
-WHERE h.id = 35 AND i.name = "Fishing"
-CREATE UNIQUE (h)-[:HAS]->(i);
-commit
-
-
-begin
-MATCH (h:User), (i:Interest)
-WHERE h.id = 35 AND i.name = "Scuba_Diving"
-CREATE UNIQUE (h)-[:HAS]->(i);
-commit
-
-
-begin
-MATCH (h:User), (i:Interest)
-WHERE h.id = 35 AND i.name = "Bungee_Jumping"
-CREATE UNIQUE (h)-[:HAS]->(i);
-commit
-
-
-begin
-MATCH (h:User), (i:Interest)
-WHERE h.id = 35 AND i.name = "Surfing"
+WHERE h.id = 35 AND i.name = "Basketball"
 CREATE UNIQUE (h)-[:HAS]->(i);
 commit
 
 begin
 MATCH (h:Human), (d:Machine)
-WHERE h.id = 35 AND d.id = 67
+WHERE h.id = 35 AND d.id = 106
+CREATE UNIQUE (h)-[:USES]->(d);
+commit
+
+
+begin
+MATCH (h:Human), (d:Machine)
+WHERE h.id = 35 AND d.id = 53
 CREATE UNIQUE (h)-[:USES]->(d);
 commit
 
     begin
     MATCH (h:Human)-[:USES]->(m:Machine), (l:Location)
-    WHERE m.type = "phone" AND h.id = 35 AND l.name = "The Fray"
-    CREATE UNIQUE (m)-[:LOCATED {type: "yelp_review", time: "20140504"}]->(l);  
-    commit
-
-
-    begin
-    MATCH (h:Human)-[:USES]->(m:Machine), (l:Location)
-    WHERE m.type = "phone" AND h.id = 35 AND l.name = "Christina Perri"
-    CREATE UNIQUE (m)-[:LOCATED {type: "photo_tag", time: "20140501"}]->(l);  
-    commit
-
-
-    begin
-    MATCH (h:Human)-[:USES]->(m:Machine), (l:Location)
-    WHERE m.type = "phone" AND h.id = 35 AND l.name = "Robotaco"
-    CREATE UNIQUE (m)-[:LOCATED {type: "photo_tag", time: "20140505"}]->(l);  
-    commit
-
-
-    begin
-    MATCH (h:Human)-[:USES]->(m:Machine), (l:Location)
-    WHERE m.type = "phone" AND h.id = 35 AND l.name = "Besaws"
+    WHERE m.type = "phone" AND h.id = 35 AND l.name = "Nike"
     CREATE UNIQUE (m)-[:LOCATED {type: "facebook_checkin", time: "20140501"}]->(l);  
     commit
 
 
     begin
     MATCH (h:Human)-[:USES]->(m:Machine), (l:Location)
+    WHERE m.type = "phone" AND h.id = 35 AND l.name = "EastBurn"
+    CREATE UNIQUE (m)-[:LOCATED {type: "photo_tag", time: "20140503"}]->(l);  
+    commit
+
+
+    begin
+    MATCH (h:Human)-[:USES]->(m:Machine), (l:Location)
+    WHERE m.type = "phone" AND h.id = 35 AND l.name = "Robo Taco"
+    CREATE UNIQUE (m)-[:LOCATED {type: "photo_tag", time: "20140504"}]->(l);  
+    commit
+
+
+    begin
+    MATCH (h:Human)-[:USES]->(m:Machine), (l:Location)
     WHERE m.type = "phone" AND h.id = 35 AND l.name = "Starbucks"
-    CREATE UNIQUE (m)-[:LOCATED {type: "yelp_review", time: "20140504"}]->(l);  
+    CREATE UNIQUE (m)-[:LOCATED {type: "photo_tag", time: "20140502"}]->(l);  
+    commit
+
+
+    begin
+    MATCH (h:Human)-[:USES]->(m:Machine), (l:Location)
+    WHERE m.type = "phone" AND h.id = 35 AND l.name = "Christina Perri"
+    CREATE UNIQUE (m)-[:LOCATED {type: "facebook_checkin", time: "20140501"}]->(l);  
     commit
 
     begin
-    MERGE (:Human:User { 
-           firstname: "Reagan", lastname: "Richardson",
-           fullname: "Reagan Richardson", id: 36, 
-           gender: "male", age: 34});
+    CREATE (:Human:User { 
+           firstname: "Peyton", lastname: "Russell",
+           fullname: "Peyton Russell", id: 36, 
+           gender: "female", age: 33});
     commit
 
 begin
 MATCH (h:User), (f:User)
-WHERE h.id = 36 AND f.id = 31
+WHERE h.id = 36 AND f.id = 16
+CREATE UNIQUE (h)-[:FRIEND]-(f);
+commit
+
+
+begin
+MATCH (h:User), (f:User)
+WHERE h.id = 36 AND f.id = 10
+CREATE UNIQUE (h)-[:FRIEND]-(f);
+commit
+
+
+begin
+MATCH (h:User), (f:User)
+WHERE h.id = 36 AND f.id = 5
+CREATE UNIQUE (h)-[:FRIEND]-(f);
+commit
+
+
+begin
+MATCH (h:User), (f:User)
+WHERE h.id = 36 AND f.id = 21
+CREATE UNIQUE (h)-[:FRIEND]-(f);
+commit
+
+
+begin
+MATCH (h:User), (f:User)
+WHERE h.id = 36 AND f.id = 25
 CREATE UNIQUE (h)-[:FRIEND]-(f);
 commit
 
@@ -4422,132 +4880,34 @@ WHERE h.id = 36 AND f.id = 4
 CREATE UNIQUE (h)-[:FRIEND]-(f);
 commit
 
-
-begin
-MATCH (h:User), (f:User)
-WHERE h.id = 36 AND f.id = 17
-CREATE UNIQUE (h)-[:FRIEND]-(f);
-commit
-
-
-begin
-MATCH (h:User), (f:User)
-WHERE h.id = 36 AND f.id = 7
-CREATE UNIQUE (h)-[:FRIEND]-(f);
-commit
-
-
-begin
-MATCH (h:User), (f:User)
-WHERE h.id = 36 AND f.id = 13
-CREATE UNIQUE (h)-[:FRIEND]-(f);
-commit
-
 begin
 MATCH (h:User), (i:Interest)
 WHERE h.id = 36 AND i.name = "Walking"
 CREATE UNIQUE (h)-[:HAS]->(i);
 commit
 
-
-begin
-MATCH (h:User), (i:Interest)
-WHERE h.id = 36 AND i.name = "Photography"
-CREATE UNIQUE (h)-[:HAS]->(i);
-commit
-
 begin
 MATCH (h:Human), (d:Machine)
-WHERE h.id = 36 AND d.id = 39
-CREATE UNIQUE (h)-[:USES]->(d);
-commit
-
-
-begin
-MATCH (h:Human), (d:Machine)
-WHERE h.id = 36 AND d.id = 13
-CREATE UNIQUE (h)-[:USES]->(d);
-commit
-
-
-begin
-MATCH (h:Human), (d:Machine)
-WHERE h.id = 36 AND d.id = 78
+WHERE h.id = 36 AND d.id = 2
 CREATE UNIQUE (h)-[:USES]->(d);
 commit
 
     begin
     MATCH (h:Human)-[:USES]->(m:Machine), (l:Location)
-    WHERE m.type = "phone" AND h.id = 36 AND l.name = "Nike"
-    CREATE UNIQUE (m)-[:LOCATED {type: "yelp_review", time: "20140502"}]->(l);  
-    commit
-
-
-    begin
-    MATCH (h:Human)-[:USES]->(m:Machine), (l:Location)
-    WHERE m.type = "phone" AND h.id = 36 AND l.name = "Hollywood Theatre"
-    CREATE UNIQUE (m)-[:LOCATED {type: "photo_tag", time: "20140503"}]->(l);  
-    commit
-
-
-    begin
-    MATCH (h:Human)-[:USES]->(m:Machine), (l:Location)
-    WHERE m.type = "phone" AND h.id = 36 AND l.name = "Caffe Umbria"
-    CREATE UNIQUE (m)-[:LOCATED {type: "yelp_review", time: "20140505"}]->(l);  
-    commit
-
-
-    begin
-    MATCH (h:Human)-[:USES]->(m:Machine), (l:Location)
-    WHERE m.type = "phone" AND h.id = 36 AND l.name = "The Fray"
-    CREATE UNIQUE (m)-[:LOCATED {type: "yelp_review", time: "20140502"}]->(l);  
-    commit
-
-
-    begin
-    MATCH (h:Human)-[:USES]->(m:Machine), (l:Location)
-    WHERE m.type = "phone" AND h.id = 36 AND l.name = "Starbucks"
-    CREATE UNIQUE (m)-[:LOCATED {type: "yelp_review", time: "20140502"}]->(l);  
+    WHERE m.type = "phone" AND h.id = 36 AND l.name = "Foster The People"
+    CREATE UNIQUE (m)-[:LOCATED {type: "facebook_checkin", time: "20140505"}]->(l);  
     commit
 
     begin
-    MERGE (:Human:User { 
-           firstname: "Hayden", lastname: "Davis",
-           fullname: "Hayden Davis", id: 37, 
-           gender: "male", age: 18});
+    CREATE (:Human:User { 
+           firstname: "Sawyer", lastname: "Gray",
+           fullname: "Sawyer Gray", id: 37, 
+           gender: "male", age: 29});
     commit
 
 begin
 MATCH (h:User), (f:User)
-WHERE h.id = 37 AND f.id = 9
-CREATE UNIQUE (h)-[:FRIEND]-(f);
-commit
-
-
-begin
-MATCH (h:User), (f:User)
-WHERE h.id = 37 AND f.id = 30
-CREATE UNIQUE (h)-[:FRIEND]-(f);
-commit
-
-
-begin
-MATCH (h:User), (f:User)
-WHERE h.id = 37 AND f.id = 34
-CREATE UNIQUE (h)-[:FRIEND]-(f);
-commit
-
-
-begin
-MATCH (h:User), (f:User)
-WHERE h.id = 37 AND f.id = 18
-CREATE UNIQUE (h)-[:FRIEND]-(f);
-commit
-
-
-begin
-MATCH (h:User), (f:User)
-WHERE h.id = 37 AND f.id = 32
+WHERE h.id = 37 AND f.id = 1
 CREATE UNIQUE (h)-[:FRIEND]-(f);
 commit
 
@@ -4560,21 +4920,14 @@ commit
 
 begin
 MATCH (h:User), (i:Interest)
-WHERE h.id = 37 AND i.name = "Surfing"
+WHERE h.id = 37 AND i.name = "Horse_Riding"
 CREATE UNIQUE (h)-[:HAS]->(i);
 commit
 
 
 begin
 MATCH (h:User), (i:Interest)
-WHERE h.id = 37 AND i.name = "Fishing"
-CREATE UNIQUE (h)-[:HAS]->(i);
-commit
-
-
-begin
-MATCH (h:User), (i:Interest)
-WHERE h.id = 37 AND i.name = "Walking"
+WHERE h.id = 37 AND i.name = "Rock_Climbing"
 CREATE UNIQUE (h)-[:HAS]->(i);
 commit
 
@@ -4588,129 +4941,80 @@ commit
 
 begin
 MATCH (h:User), (i:Interest)
-WHERE h.id = 37 AND i.name = "Horse_Riding"
-CREATE UNIQUE (h)-[:HAS]->(i);
-commit
-
-
-begin
-MATCH (h:User), (i:Interest)
-WHERE h.id = 37 AND i.name = "Swimming"
-CREATE UNIQUE (h)-[:HAS]->(i);
-commit
-
-
-begin
-MATCH (h:User), (i:Interest)
-WHERE h.id = 37 AND i.name = "Volleyball"
-CREATE UNIQUE (h)-[:HAS]->(i);
-commit
-
-
-begin
-MATCH (h:User), (i:Interest)
-WHERE h.id = 37 AND i.name = "Boating"
-CREATE UNIQUE (h)-[:HAS]->(i);
-commit
-
-
-begin
-MATCH (h:User), (i:Interest)
 WHERE h.id = 37 AND i.name = "Golf"
 CREATE UNIQUE (h)-[:HAS]->(i);
 commit
 
 begin
 MATCH (h:Human), (d:Machine)
-WHERE h.id = 37 AND d.id = 31
+WHERE h.id = 37 AND d.id = 57
+CREATE UNIQUE (h)-[:USES]->(d);
+commit
+
+
+begin
+MATCH (h:Human), (d:Machine)
+WHERE h.id = 37 AND d.id = 119
+CREATE UNIQUE (h)-[:USES]->(d);
+commit
+
+
+begin
+MATCH (h:Human), (d:Machine)
+WHERE h.id = 37 AND d.id = 95
 CREATE UNIQUE (h)-[:USES]->(d);
 commit
 
     begin
     MATCH (h:Human)-[:USES]->(m:Machine), (l:Location)
-    WHERE m.type = "phone" AND h.id = 37 AND l.name = "Besaws"
-    CREATE UNIQUE (m)-[:LOCATED {type: "yelp_review", time: "20140501"}]->(l);  
-    commit
-
-
-    begin
-    MATCH (h:Human)-[:USES]->(m:Machine), (l:Location)
-    WHERE m.type = "phone" AND h.id = 37 AND l.name = "Christina Perri"
-    CREATE UNIQUE (m)-[:LOCATED {type: "yelp_review", time: "20140504"}]->(l);  
-    commit
-
-
-    begin
-    MATCH (h:Human)-[:USES]->(m:Machine), (l:Location)
-    WHERE m.type = "phone" AND h.id = 37 AND l.name = "Starbucks"
-    CREATE UNIQUE (m)-[:LOCATED {type: "yelp_review", time: "20140505"}]->(l);  
-    commit
-
-
-    begin
-    MATCH (h:Human)-[:USES]->(m:Machine), (l:Location)
-    WHERE m.type = "phone" AND h.id = 37 AND l.name = "Robotaco"
-    CREATE UNIQUE (m)-[:LOCATED {type: "yelp_review", time: "20140505"}]->(l);  
-    commit
-
-
-    begin
-    MATCH (h:Human)-[:USES]->(m:Machine), (l:Location)
-    WHERE m.type = "phone" AND h.id = 37 AND l.name = "Warpaint"
-    CREATE UNIQUE (m)-[:LOCATED {type: "yelp_review", time: "20140505"}]->(l);  
+    WHERE m.type = "phone" AND h.id = 37 AND l.name = "Nike"
+    CREATE UNIQUE (m)-[:LOCATED {type: "photo_tag", time: "20140505"}]->(l);  
     commit
 
     begin
-    MERGE (:Human:User { 
-           firstname: "Teagan", lastname: "Gutiérrez",
-           fullname: "Teagan Gutiérrez", id: 38, 
-           gender: "female", age: 30});
+    CREATE (:Human:User { 
+           firstname: "Harper", lastname: "Hall",
+           fullname: "Harper Hall", id: 38, 
+           gender: "female", age: 23});
     commit
 
 begin
 MATCH (h:User), (f:User)
-WHERE h.id = 38 AND f.id = 0
+WHERE h.id = 38 AND f.id = 7
 CREATE UNIQUE (h)-[:FRIEND]-(f);
 commit
 
 
 begin
 MATCH (h:User), (f:User)
-WHERE h.id = 38 AND f.id = 26
-CREATE UNIQUE (h)-[:FRIEND]-(f);
-commit
-
-
-begin
-MATCH (h:User), (f:User)
-WHERE h.id = 38 AND f.id = 32
-CREATE UNIQUE (h)-[:FRIEND]-(f);
-commit
-
-
-begin
-MATCH (h:User), (f:User)
-WHERE h.id = 38 AND f.id = 8
-CREATE UNIQUE (h)-[:FRIEND]-(f);
-commit
-
-
-begin
-MATCH (h:User), (f:User)
-WHERE h.id = 38 AND f.id = 33
+WHERE h.id = 38 AND f.id = 10
 CREATE UNIQUE (h)-[:FRIEND]-(f);
 commit
 
 begin
 MATCH (h:User), (i:Interest)
-WHERE h.id = 38 AND i.name = "Horse_Riding"
+WHERE h.id = 38 AND i.name = "Rock_Climbing"
 CREATE UNIQUE (h)-[:HAS]->(i);
 commit
 
 
 begin
 MATCH (h:User), (i:Interest)
-WHERE h.id = 38 AND i.name = "Hiking"
+WHERE h.id = 38 AND i.name = "River_Rafting"
+CREATE UNIQUE (h)-[:HAS]->(i);
+commit
+
+
+begin
+MATCH (h:User), (i:Interest)
+WHERE h.id = 38 AND i.name = "Golf"
+CREATE UNIQUE (h)-[:HAS]->(i);
+commit
+
+
+begin
+MATCH (h:User), (i:Interest)
+WHERE h.id = 38 AND i.name = "Volleyball"
 CREATE UNIQUE (h)-[:HAS]->(i);
 commit
 
@@ -4721,77 +5025,70 @@ WHERE h.id = 38 AND i.name = "Bungee_Jumping"
 CREATE UNIQUE (h)-[:HAS]->(i);
 commit
 
+
+begin
+MATCH (h:User), (i:Interest)
+WHERE h.id = 38 AND i.name = "Basketball"
+CREATE UNIQUE (h)-[:HAS]->(i);
+commit
+
+
+begin
+MATCH (h:User), (i:Interest)
+WHERE h.id = 38 AND i.name = "Surfing"
+CREATE UNIQUE (h)-[:HAS]->(i);
+commit
+
+
+begin
+MATCH (h:User), (i:Interest)
+WHERE h.id = 38 AND i.name = "Photography"
+CREATE UNIQUE (h)-[:HAS]->(i);
+commit
+
 begin
 MATCH (h:Human), (d:Machine)
-WHERE h.id = 38 AND d.id = 32
+WHERE h.id = 38 AND d.id = 72
+CREATE UNIQUE (h)-[:USES]->(d);
+commit
+
+
+begin
+MATCH (h:Human), (d:Machine)
+WHERE h.id = 38 AND d.id = 10
+CREATE UNIQUE (h)-[:USES]->(d);
+commit
+
+
+begin
+MATCH (h:Human), (d:Machine)
+WHERE h.id = 38 AND d.id = 67
 CREATE UNIQUE (h)-[:USES]->(d);
 commit
 
     begin
     MATCH (h:Human)-[:USES]->(m:Machine), (l:Location)
-    WHERE m.type = "phone" AND h.id = 38 AND l.name = "Foster The People"
-    CREATE UNIQUE (m)-[:LOCATED {type: "photo_tag", time: "20140504"}]->(l);  
-    commit
-
-
-    begin
-    MATCH (h:Human)-[:USES]->(m:Machine), (l:Location)
-    WHERE m.type = "phone" AND h.id = 38 AND l.name = "Starbucks"
-    CREATE UNIQUE (m)-[:LOCATED {type: "facebook_checkin", time: "20140501"}]->(l);  
-    commit
-
-
-    begin
-    MATCH (h:Human)-[:USES]->(m:Machine), (l:Location)
-    WHERE m.type = "phone" AND h.id = 38 AND l.name = "Nordstroms"
-    CREATE UNIQUE (m)-[:LOCATED {type: "facebook_checkin", time: "20140503"}]->(l);  
-    commit
-
-
-    begin
-    MATCH (h:Human)-[:USES]->(m:Machine), (l:Location)
-    WHERE m.type = "phone" AND h.id = 38 AND l.name = "Hollywood Theatre"
-    CREATE UNIQUE (m)-[:LOCATED {type: "photo_tag", time: "20140502"}]->(l);  
+    WHERE m.type = "phone" AND h.id = 38 AND l.name = "Christina Perri"
+    CREATE UNIQUE (m)-[:LOCATED {type: "yelp_review", time: "20140505"}]->(l);  
     commit
 
     begin
-    MERGE (:Human:User { 
-           firstname: "Jordan", lastname: "Flores",
-           fullname: "Jordan Flores", id: 39, 
-           gender: "female", age: 29});
+    CREATE (:Human:User { 
+           firstname: "Skyler", lastname: "Cruz",
+           fullname: "Skyler Cruz", id: 39, 
+           gender: "male", age: 27});
     commit
 
 begin
 MATCH (h:User), (f:User)
-WHERE h.id = 39 AND f.id = 17
+WHERE h.id = 39 AND f.id = 19
 CREATE UNIQUE (h)-[:FRIEND]-(f);
 commit
 
 
 begin
 MATCH (h:User), (f:User)
-WHERE h.id = 39 AND f.id = 9
-CREATE UNIQUE (h)-[:FRIEND]-(f);
-commit
-
-
-begin
-MATCH (h:User), (f:User)
-WHERE h.id = 39 AND f.id = 0
-CREATE UNIQUE (h)-[:FRIEND]-(f);
-commit
-
-
-begin
-MATCH (h:User), (f:User)
-WHERE h.id = 39 AND f.id = 11
-CREATE UNIQUE (h)-[:FRIEND]-(f);
-commit
-
-
-begin
-MATCH (h:User), (f:User)
-WHERE h.id = 39 AND f.id = 1
+WHERE h.id = 39 AND f.id = 15
 CREATE UNIQUE (h)-[:FRIEND]-(f);
 commit
 
@@ -4802,9 +5099,23 @@ WHERE h.id = 39 AND f.id = 28
 CREATE UNIQUE (h)-[:FRIEND]-(f);
 commit
 
+
+begin
+MATCH (h:User), (f:User)
+WHERE h.id = 39 AND f.id = 18
+CREATE UNIQUE (h)-[:FRIEND]-(f);
+commit
+
+
+begin
+MATCH (h:User), (f:User)
+WHERE h.id = 39 AND f.id = 6
+CREATE UNIQUE (h)-[:FRIEND]-(f);
+commit
+
 begin
 MATCH (h:User), (i:Interest)
-WHERE h.id = 39 AND i.name = "River_Rafting"
+WHERE h.id = 39 AND i.name = "Rock_Climbing"
 CREATE UNIQUE (h)-[:HAS]->(i);
 commit
 
@@ -4818,34 +5129,6 @@ commit
 
 begin
 MATCH (h:User), (i:Interest)
-WHERE h.id = 39 AND i.name = "Hiking"
-CREATE UNIQUE (h)-[:HAS]->(i);
-commit
-
-
-begin
-MATCH (h:User), (i:Interest)
-WHERE h.id = 39 AND i.name = "Volleyball"
-CREATE UNIQUE (h)-[:HAS]->(i);
-commit
-
-
-begin
-MATCH (h:User), (i:Interest)
-WHERE h.id = 39 AND i.name = "Photography"
-CREATE UNIQUE (h)-[:HAS]->(i);
-commit
-
-
-begin
-MATCH (h:User), (i:Interest)
-WHERE h.id = 39 AND i.name = "Walking"
-CREATE UNIQUE (h)-[:HAS]->(i);
-commit
-
-
-begin
-MATCH (h:User), (i:Interest)
 WHERE h.id = 39 AND i.name = "Boating"
 CREATE UNIQUE (h)-[:HAS]->(i);
 commit
@@ -4853,160 +5136,216 @@ commit
 
 begin
 MATCH (h:User), (i:Interest)
-WHERE h.id = 39 AND i.name = "Swimming"
+WHERE h.id = 39 AND i.name = "Horse_Riding"
+CREATE UNIQUE (h)-[:HAS]->(i);
+commit
+
+
+begin
+MATCH (h:User), (i:Interest)
+WHERE h.id = 39 AND i.name = "Surfing"
+CREATE UNIQUE (h)-[:HAS]->(i);
+commit
+
+
+begin
+MATCH (h:User), (i:Interest)
+WHERE h.id = 39 AND i.name = "Bungee_Jumping"
 CREATE UNIQUE (h)-[:HAS]->(i);
 commit
 
 begin
 MATCH (h:Human), (d:Machine)
-WHERE h.id = 39 AND d.id = 40
+WHERE h.id = 39 AND d.id = 4
 CREATE UNIQUE (h)-[:USES]->(d);
 commit
-
-
-begin
-MATCH (h:Human), (d:Machine)
-WHERE h.id = 39 AND d.id = 56
-CREATE UNIQUE (h)-[:USES]->(d);
-commit
-
-    begin
-    MATCH (h:Human)-[:USES]->(m:Machine), (l:Location)
-    WHERE m.type = "phone" AND h.id = 39 AND l.name = "Robotaco"
-    CREATE UNIQUE (m)-[:LOCATED {type: "yelp_review", time: "20140504"}]->(l);  
-    commit
-
 
     begin
     MATCH (h:Human)-[:USES]->(m:Machine), (l:Location)
     WHERE m.type = "phone" AND h.id = 39 AND l.name = "Foster The People"
-    CREATE UNIQUE (m)-[:LOCATED {type: "photo_tag", time: "20140501"}]->(l);  
-    commit
-
-
-    begin
-    MATCH (h:Human)-[:USES]->(m:Machine), (l:Location)
-    WHERE m.type = "phone" AND h.id = 39 AND l.name = "Caffe Umbria"
-    CREATE UNIQUE (m)-[:LOCATED {type: "facebook_checkin", time: "20140505"}]->(l);  
-    commit
-
-
-    begin
-    MATCH (h:Human)-[:USES]->(m:Machine), (l:Location)
-    WHERE m.type = "phone" AND h.id = 39 AND l.name = "Nordstroms"
-    CREATE UNIQUE (m)-[:LOCATED {type: "photo_tag", time: "20140503"}]->(l);  
-    commit
-
-
-    begin
-    MATCH (h:Human)-[:USES]->(m:Machine), (l:Location)
-    WHERE m.type = "phone" AND h.id = 39 AND l.name = "Nike"
-    CREATE UNIQUE (m)-[:LOCATED {type: "yelp_review", time: "20140503"}]->(l);  
-    commit
-
-    begin
-    MERGE (:Human:User { 
-           firstname: "Lyric", lastname: "Taylor",
-           fullname: "Lyric Taylor", id: 40, 
-           gender: "male", age: 20});
-    commit
-
-begin
-MATCH (h:User), (f:User)
-WHERE h.id = 40 AND f.id = 11
-CREATE UNIQUE (h)-[:FRIEND]-(f);
-commit
-
-
-begin
-MATCH (h:User), (f:User)
-WHERE h.id = 40 AND f.id = 33
-CREATE UNIQUE (h)-[:FRIEND]-(f);
-commit
-
-
-begin
-MATCH (h:User), (f:User)
-WHERE h.id = 40 AND f.id = 12
-CREATE UNIQUE (h)-[:FRIEND]-(f);
-commit
-
-
-begin
-MATCH (h:User), (f:User)
-WHERE h.id = 40 AND f.id = 0
-CREATE UNIQUE (h)-[:FRIEND]-(f);
-commit
-
-
-begin
-MATCH (h:User), (f:User)
-WHERE h.id = 40 AND f.id = 25
-CREATE UNIQUE (h)-[:FRIEND]-(f);
-commit
-
-
-begin
-MATCH (h:User), (f:User)
-WHERE h.id = 40 AND f.id = 4
-CREATE UNIQUE (h)-[:FRIEND]-(f);
-commit
-
-begin
-MATCH (h:User), (i:Interest)
-WHERE h.id = 40 AND i.name = "Baseball"
-CREATE UNIQUE (h)-[:HAS]->(i);
-commit
-
-begin
-MATCH (h:Human), (d:Machine)
-WHERE h.id = 40 AND d.id = 102
-CREATE UNIQUE (h)-[:USES]->(d);
-commit
-
-    begin
-    MATCH (h:Human)-[:USES]->(m:Machine), (l:Location)
-    WHERE m.type = "phone" AND h.id = 40 AND l.name = "Hollywood Theatre"
-    CREATE UNIQUE (m)-[:LOCATED {type: "photo_tag", time: "20140501"}]->(l);  
-    commit
-
-
-    begin
-    MATCH (h:Human)-[:USES]->(m:Machine), (l:Location)
-    WHERE m.type = "phone" AND h.id = 40 AND l.name = "Nordstroms"
-    CREATE UNIQUE (m)-[:LOCATED {type: "photo_tag", time: "20140504"}]->(l);  
-    commit
-
-
-    begin
-    MATCH (h:Human)-[:USES]->(m:Machine), (l:Location)
-    WHERE m.type = "phone" AND h.id = 40 AND l.name = "Warpaint"
     CREATE UNIQUE (m)-[:LOCATED {type: "photo_tag", time: "20140502"}]->(l);  
     commit
 
 
     begin
     MATCH (h:Human)-[:USES]->(m:Machine), (l:Location)
-    WHERE m.type = "phone" AND h.id = 40 AND l.name = "Christina Perri"
-    CREATE UNIQUE (m)-[:LOCATED {type: "photo_tag", time: "20140504"}]->(l);  
+    WHERE m.type = "phone" AND h.id = 39 AND l.name = "Nordstroms"
+    CREATE UNIQUE (m)-[:LOCATED {type: "yelp_review", time: "20140502"}]->(l);  
+    commit
+
+
+    begin
+    MATCH (h:Human)-[:USES]->(m:Machine), (l:Location)
+    WHERE m.type = "phone" AND h.id = 39 AND l.name = "Caffe Umbria"
+    CREATE UNIQUE (m)-[:LOCATED {type: "photo_tag", time: "20140505"}]->(l);  
+    commit
+
+
+    begin
+    MATCH (h:Human)-[:USES]->(m:Machine), (l:Location)
+    WHERE m.type = "phone" AND h.id = 39 AND l.name = "McMenamins"
+    CREATE UNIQUE (m)-[:LOCATED {type: "facebook_checkin", time: "20140504"}]->(l);  
+    commit
+
+
+    begin
+    MATCH (h:Human)-[:USES]->(m:Machine), (l:Location)
+    WHERE m.type = "phone" AND h.id = 39 AND l.name = "Warpaint"
+    CREATE UNIQUE (m)-[:LOCATED {type: "photo_tag", time: "20140505"}]->(l);  
     commit
 
     begin
-    MERGE (:Human:User { 
-           firstname: "Ariel", lastname: "Cox",
-           fullname: "Ariel Cox", id: 41, 
-           gender: "male", age: 20});
+    CREATE (:Human:User { 
+           firstname: "Justice", lastname: "Scott",
+           fullname: "Justice Scott", id: 40, 
+           gender: "female", age: 18});
     commit
 
 begin
 MATCH (h:User), (f:User)
-WHERE h.id = 41 AND f.id = 20
+WHERE h.id = 40 AND f.id = 2
+CREATE UNIQUE (h)-[:FRIEND]-(f);
+commit
+
+
+begin
+MATCH (h:User), (f:User)
+WHERE h.id = 40 AND f.id = 34
 CREATE UNIQUE (h)-[:FRIEND]-(f);
 commit
 
 begin
 MATCH (h:User), (i:Interest)
-WHERE h.id = 41 AND i.name = "Photography"
+WHERE h.id = 40 AND i.name = "Basketball"
+CREATE UNIQUE (h)-[:HAS]->(i);
+commit
+
+
+begin
+MATCH (h:User), (i:Interest)
+WHERE h.id = 40 AND i.name = "Surfing"
+CREATE UNIQUE (h)-[:HAS]->(i);
+commit
+
+
+begin
+MATCH (h:User), (i:Interest)
+WHERE h.id = 40 AND i.name = "River_Rafting"
+CREATE UNIQUE (h)-[:HAS]->(i);
+commit
+
+
+begin
+MATCH (h:User), (i:Interest)
+WHERE h.id = 40 AND i.name = "Hiking"
+CREATE UNIQUE (h)-[:HAS]->(i);
+commit
+
+begin
+MATCH (h:Human), (d:Machine)
+WHERE h.id = 40 AND d.id = 8
+CREATE UNIQUE (h)-[:USES]->(d);
+commit
+
+    begin
+    MATCH (h:Human)-[:USES]->(m:Machine), (l:Location)
+    WHERE m.type = "phone" AND h.id = 40 AND l.name = "Nordstroms"
+    CREATE UNIQUE (m)-[:LOCATED {type: "photo_tag", time: "20140501"}]->(l);  
+    commit
+
+
+    begin
+    MATCH (h:Human)-[:USES]->(m:Machine), (l:Location)
+    WHERE m.type = "phone" AND h.id = 40 AND l.name = "The Fray"
+    CREATE UNIQUE (m)-[:LOCATED {type: "photo_tag", time: "20140502"}]->(l);  
+    commit
+
+
+    begin
+    MATCH (h:Human)-[:USES]->(m:Machine), (l:Location)
+    WHERE m.type = "phone" AND h.id = 40 AND l.name = "Besaws"
+    CREATE UNIQUE (m)-[:LOCATED {type: "facebook_checkin", time: "20140505"}]->(l);  
+    commit
+
+
+    begin
+    MATCH (h:Human)-[:USES]->(m:Machine), (l:Location)
+    WHERE m.type = "phone" AND h.id = 40 AND l.name = "Hollywood Theatre"
+    CREATE UNIQUE (m)-[:LOCATED {type: "yelp_review", time: "20140502"}]->(l);  
+    commit
+
+    begin
+    CREATE (:Human:User { 
+           firstname: "Emery", lastname: "Johnson",
+           fullname: "Emery Johnson", id: 41, 
+           gender: "male", age: 27});
+    commit
+
+begin
+MATCH (h:User), (f:User)
+WHERE h.id = 41 AND f.id = 27
+CREATE UNIQUE (h)-[:FRIEND]-(f);
+commit
+
+
+begin
+MATCH (h:User), (f:User)
+WHERE h.id = 41 AND f.id = 23
+CREATE UNIQUE (h)-[:FRIEND]-(f);
+commit
+
+
+begin
+MATCH (h:User), (f:User)
+WHERE h.id = 41 AND f.id = 3
+CREATE UNIQUE (h)-[:FRIEND]-(f);
+commit
+
+
+begin
+MATCH (h:User), (f:User)
+WHERE h.id = 41 AND f.id = 40
+CREATE UNIQUE (h)-[:FRIEND]-(f);
+commit
+
+
+begin
+MATCH (h:User), (f:User)
+WHERE h.id = 41 AND f.id = 5
+CREATE UNIQUE (h)-[:FRIEND]-(f);
+commit
+
+
+begin
+MATCH (h:User), (f:User)
+WHERE h.id = 41 AND f.id = 33
+CREATE UNIQUE (h)-[:FRIEND]-(f);
+commit
+
+begin
+MATCH (h:User), (i:Interest)
+WHERE h.id = 41 AND i.name = "Hiking"
+CREATE UNIQUE (h)-[:HAS]->(i);
+commit
+
+
+begin
+MATCH (h:User), (i:Interest)
+WHERE h.id = 41 AND i.name = "River_Rafting"
+CREATE UNIQUE (h)-[:HAS]->(i);
+commit
+
+
+begin
+MATCH (h:User), (i:Interest)
+WHERE h.id = 41 AND i.name = "Surfing"
+CREATE UNIQUE (h)-[:HAS]->(i);
+commit
+
+
+begin
+MATCH (h:User), (i:Interest)
+WHERE h.id = 41 AND i.name = "Bungee_Jumping"
 CREATE UNIQUE (h)-[:HAS]->(i);
 commit
 
@@ -5020,97 +5359,69 @@ commit
 
 begin
 MATCH (h:User), (i:Interest)
-WHERE h.id = 41 AND i.name = "Baseball"
+WHERE h.id = 41 AND i.name = "Walking"
 CREATE UNIQUE (h)-[:HAS]->(i);
 commit
 
 
 begin
 MATCH (h:User), (i:Interest)
-WHERE h.id = 41 AND i.name = "Volleyball"
-CREATE UNIQUE (h)-[:HAS]->(i);
-commit
-
-
-begin
-MATCH (h:User), (i:Interest)
-WHERE h.id = 41 AND i.name = "River_Rafting"
+WHERE h.id = 41 AND i.name = "Photography"
 CREATE UNIQUE (h)-[:HAS]->(i);
 commit
 
 begin
 MATCH (h:Human), (d:Machine)
-WHERE h.id = 41 AND d.id = 74
-CREATE UNIQUE (h)-[:USES]->(d);
-commit
-
-
-begin
-MATCH (h:Human), (d:Machine)
-WHERE h.id = 41 AND d.id = 86
+WHERE h.id = 41 AND d.id = 38
 CREATE UNIQUE (h)-[:USES]->(d);
 commit
 
     begin
     MATCH (h:Human)-[:USES]->(m:Machine), (l:Location)
-    WHERE m.type = "phone" AND h.id = 41 AND l.name = "Nordstroms"
-    CREATE UNIQUE (m)-[:LOCATED {type: "facebook_checkin", time: "20140505"}]->(l);  
-    commit
-
-
-    begin
-    MATCH (h:Human)-[:USES]->(m:Machine), (l:Location)
-    WHERE m.type = "phone" AND h.id = 41 AND l.name = "Eastburn"
-    CREATE UNIQUE (m)-[:LOCATED {type: "facebook_checkin", time: "20140505"}]->(l);  
+    WHERE m.type = "phone" AND h.id = 41 AND l.name = "EastBurn"
+    CREATE UNIQUE (m)-[:LOCATED {type: "facebook_checkin", time: "20140501"}]->(l);  
     commit
 
 
     begin
     MATCH (h:Human)-[:USES]->(m:Machine), (l:Location)
     WHERE m.type = "phone" AND h.id = 41 AND l.name = "Besaws"
-    CREATE UNIQUE (m)-[:LOCATED {type: "yelp_review", time: "20140501"}]->(l);  
+    CREATE UNIQUE (m)-[:LOCATED {type: "yelp_review", time: "20140505"}]->(l);  
     commit
 
 
     begin
     MATCH (h:Human)-[:USES]->(m:Machine), (l:Location)
-    WHERE m.type = "phone" AND h.id = 41 AND l.name = "Robotaco"
-    CREATE UNIQUE (m)-[:LOCATED {type: "yelp_review", time: "20140501"}]->(l);  
-    commit
-
-
-    begin
-    MATCH (h:Human)-[:USES]->(m:Machine), (l:Location)
-    WHERE m.type = "phone" AND h.id = 41 AND l.name = "Warpaint"
-    CREATE UNIQUE (m)-[:LOCATED {type: "facebook_checkin", time: "20140504"}]->(l);  
+    WHERE m.type = "phone" AND h.id = 41 AND l.name = "McMenamins"
+    CREATE UNIQUE (m)-[:LOCATED {type: "yelp_review", time: "20140505"}]->(l);  
     commit
 
     begin
-    MERGE (:Human:User { 
-           firstname: "Sidney", lastname: "Gómez",
-           fullname: "Sidney Gómez", id: 42, 
-           gender: "female", age: 26});
+    CREATE (:Human:User { 
+           firstname: "Rylan", lastname: "Wilson",
+           fullname: "Rylan Wilson", id: 42, 
+           gender: "female", age: 27});
     commit
 
 begin
 MATCH (h:User), (f:User)
-WHERE h.id = 42 AND f.id = 21
+WHERE h.id = 42 AND f.id = 19
 CREATE UNIQUE (h)-[:FRIEND]-(f);
 commit
 
 
 begin
 MATCH (h:User), (f:User)
-WHERE h.id = 42 AND f.id = 6
+WHERE h.id = 42 AND f.id = 30
 CREATE UNIQUE (h)-[:FRIEND]-(f);
 commit
-
 
 begin
-MATCH (h:User), (f:User)
-WHERE h.id = 42 AND f.id = 9
-CREATE UNIQUE (h)-[:FRIEND]-(f);
+MATCH (h:User), (i:Interest)
+WHERE h.id = 42 AND i.name = "Hiking"
+CREATE UNIQUE (h)-[:HAS]->(i);
 commit
+
 
 begin
 MATCH (h:User), (i:Interest)
@@ -5118,105 +5429,70 @@ WHERE h.id = 42 AND i.name = "Surfing"
 CREATE UNIQUE (h)-[:HAS]->(i);
 commit
 
-
-begin
-MATCH (h:User), (i:Interest)
-WHERE h.id = 42 AND i.name = "Golf"
-CREATE UNIQUE (h)-[:HAS]->(i);
-commit
-
-
-begin
-MATCH (h:User), (i:Interest)
-WHERE h.id = 42 AND i.name = "Scuba_Diving"
-CREATE UNIQUE (h)-[:HAS]->(i);
-commit
-
-
-begin
-MATCH (h:User), (i:Interest)
-WHERE h.id = 42 AND i.name = "Cycling"
-CREATE UNIQUE (h)-[:HAS]->(i);
-commit
-
-
-begin
-MATCH (h:User), (i:Interest)
-WHERE h.id = 42 AND i.name = "Bungee_Jumping"
-CREATE UNIQUE (h)-[:HAS]->(i);
-commit
-
 begin
 MATCH (h:Human), (d:Machine)
-WHERE h.id = 42 AND d.id = 49
-CREATE UNIQUE (h)-[:USES]->(d);
-commit
-
-
-begin
-MATCH (h:Human), (d:Machine)
-WHERE h.id = 42 AND d.id = 65
-CREATE UNIQUE (h)-[:USES]->(d);
-commit
-
-
-begin
-MATCH (h:Human), (d:Machine)
-WHERE h.id = 42 AND d.id = 113
+WHERE h.id = 42 AND d.id = 18
 CREATE UNIQUE (h)-[:USES]->(d);
 commit
 
     begin
     MATCH (h:Human)-[:USES]->(m:Machine), (l:Location)
-    WHERE m.type = "phone" AND h.id = 42 AND l.name = "Nordstroms"
-    CREATE UNIQUE (m)-[:LOCATED {type: "facebook_checkin", time: "20140501"}]->(l);  
+    WHERE m.type = "phone" AND h.id = 42 AND l.name = "Warpaint"
+    CREATE UNIQUE (m)-[:LOCATED {type: "facebook_checkin", time: "20140504"}]->(l);  
     commit
 
 
     begin
     MATCH (h:Human)-[:USES]->(m:Machine), (l:Location)
-    WHERE m.type = "phone" AND h.id = 42 AND l.name = "Caffe Umbria"
-    CREATE UNIQUE (m)-[:LOCATED {type: "facebook_checkin", time: "20140502"}]->(l);  
-    commit
-
-
-    begin
-    MATCH (h:Human)-[:USES]->(m:Machine), (l:Location)
-    WHERE m.type = "phone" AND h.id = 42 AND l.name = "Nike"
-    CREATE UNIQUE (m)-[:LOCATED {type: "yelp_review", time: "20140503"}]->(l);  
+    WHERE m.type = "phone" AND h.id = 42 AND l.name = "Besaws"
+    CREATE UNIQUE (m)-[:LOCATED {type: "yelp_review", time: "20140505"}]->(l);  
     commit
 
 
     begin
     MATCH (h:Human)-[:USES]->(m:Machine), (l:Location)
     WHERE m.type = "phone" AND h.id = 42 AND l.name = "The Fray"
-    CREATE UNIQUE (m)-[:LOCATED {type: "yelp_review", time: "20140501"}]->(l);  
+    CREATE UNIQUE (m)-[:LOCATED {type: "photo_tag", time: "20140502"}]->(l);  
     commit
 
     begin
-    MERGE (:Human:User { 
-           firstname: "Avery", lastname: "Ross",
-           fullname: "Avery Ross", id: 43, 
-           gender: "male", age: 24});
+    CREATE (:Human:User { 
+           firstname: "River", lastname: "Morgan",
+           fullname: "River Morgan", id: 43, 
+           gender: "male", age: 22});
     commit
 
 begin
 MATCH (h:User), (f:User)
-WHERE h.id = 43 AND f.id = 18
+WHERE h.id = 43 AND f.id = 41
 CREATE UNIQUE (h)-[:FRIEND]-(f);
 commit
 
 
 begin
 MATCH (h:User), (f:User)
-WHERE h.id = 43 AND f.id = 2
+WHERE h.id = 43 AND f.id = 42
 CREATE UNIQUE (h)-[:FRIEND]-(f);
 commit
 
 
 begin
 MATCH (h:User), (f:User)
-WHERE h.id = 43 AND f.id = 7
+WHERE h.id = 43 AND f.id = 34
+CREATE UNIQUE (h)-[:FRIEND]-(f);
+commit
+
+
+begin
+MATCH (h:User), (f:User)
+WHERE h.id = 43 AND f.id = 20
+CREATE UNIQUE (h)-[:FRIEND]-(f);
+commit
+
+
+begin
+MATCH (h:User), (f:User)
+WHERE h.id = 43 AND f.id = 31
 CREATE UNIQUE (h)-[:FRIEND]-(f);
 commit
 
@@ -5226,128 +5502,72 @@ WHERE h.id = 43 AND i.name = "Basketball"
 CREATE UNIQUE (h)-[:HAS]->(i);
 commit
 
-
 begin
-MATCH (h:User), (i:Interest)
-WHERE h.id = 43 AND i.name = "Photography"
-CREATE UNIQUE (h)-[:HAS]->(i);
+MATCH (h:Human), (d:Machine)
+WHERE h.id = 43 AND d.id = 85
+CREATE UNIQUE (h)-[:USES]->(d);
 commit
 
-
-begin
-MATCH (h:User), (i:Interest)
-WHERE h.id = 43 AND i.name = "Rock_Climbing"
-CREATE UNIQUE (h)-[:HAS]->(i);
-commit
-
-
-begin
-MATCH (h:User), (i:Interest)
-WHERE h.id = 43 AND i.name = "Bungee_Jumping"
-CREATE UNIQUE (h)-[:HAS]->(i);
-commit
-
-
-begin
-MATCH (h:User), (i:Interest)
-WHERE h.id = 43 AND i.name = "Volleyball"
-CREATE UNIQUE (h)-[:HAS]->(i);
-commit
-
-
-begin
-MATCH (h:User), (i:Interest)
-WHERE h.id = 43 AND i.name = "Surfing"
-CREATE UNIQUE (h)-[:HAS]->(i);
-commit
-
-
-begin
-MATCH (h:User), (i:Interest)
-WHERE h.id = 43 AND i.name = "Baseball"
-CREATE UNIQUE (h)-[:HAS]->(i);
-commit
 
 begin
 MATCH (h:Human), (d:Machine)
-WHERE h.id = 43 AND d.id = 101
+WHERE h.id = 43 AND d.id = 35
 CREATE UNIQUE (h)-[:USES]->(d);
 commit
 
     begin
     MATCH (h:Human)-[:USES]->(m:Machine), (l:Location)
-    WHERE m.type = "phone" AND h.id = 43 AND l.name = "Nike"
-    CREATE UNIQUE (m)-[:LOCATED {type: "yelp_review", time: "20140505"}]->(l);  
-    commit
-
-
-    begin
-    MATCH (h:Human)-[:USES]->(m:Machine), (l:Location)
-    WHERE m.type = "phone" AND h.id = 43 AND l.name = "Robotaco"
-    CREATE UNIQUE (m)-[:LOCATED {type: "facebook_checkin", time: "20140502"}]->(l);  
-    commit
-
-
-    begin
-    MATCH (h:Human)-[:USES]->(m:Machine), (l:Location)
-    WHERE m.type = "phone" AND h.id = 43 AND l.name = "Caffe Umbria"
-    CREATE UNIQUE (m)-[:LOCATED {type: "facebook_checkin", time: "20140502"}]->(l);  
-    commit
-
-
-    begin
-    MATCH (h:Human)-[:USES]->(m:Machine), (l:Location)
-    WHERE m.type = "phone" AND h.id = 43 AND l.name = "McMenamins"
+    WHERE m.type = "phone" AND h.id = 43 AND l.name = "Starbucks"
     CREATE UNIQUE (m)-[:LOCATED {type: "facebook_checkin", time: "20140505"}]->(l);  
     commit
 
 
     begin
     MATCH (h:Human)-[:USES]->(m:Machine), (l:Location)
-    WHERE m.type = "phone" AND h.id = 43 AND l.name = "The Fray"
-    CREATE UNIQUE (m)-[:LOCATED {type: "yelp_review", time: "20140502"}]->(l);  
+    WHERE m.type = "phone" AND h.id = 43 AND l.name = "Robo Taco"
+    CREATE UNIQUE (m)-[:LOCATED {type: "yelp_review", time: "20140501"}]->(l);  
+    commit
+
+
+    begin
+    MATCH (h:Human)-[:USES]->(m:Machine), (l:Location)
+    WHERE m.type = "phone" AND h.id = 43 AND l.name = "Foster The People"
+    CREATE UNIQUE (m)-[:LOCATED {type: "photo_tag", time: "20140503"}]->(l);  
+    commit
+
+
+    begin
+    MATCH (h:Human)-[:USES]->(m:Machine), (l:Location)
+    WHERE m.type = "phone" AND h.id = 43 AND l.name = "Warpaint"
+    CREATE UNIQUE (m)-[:LOCATED {type: "facebook_checkin", time: "20140502"}]->(l);  
+    commit
+
+
+    begin
+    MATCH (h:Human)-[:USES]->(m:Machine), (l:Location)
+    WHERE m.type = "phone" AND h.id = 43 AND l.name = "Besaws"
+    CREATE UNIQUE (m)-[:LOCATED {type: "yelp_review", time: "20140501"}]->(l);  
     commit
 
     begin
-    MERGE (:Human:User { 
-           firstname: "Kai", lastname: "García",
-           fullname: "Kai García", id: 44, 
-           gender: "male", age: 31});
+    CREATE (:Human:User { 
+           firstname: "Peyton", lastname: "Moore",
+           fullname: "Peyton Moore", id: 44, 
+           gender: "female", age: 28});
     commit
 
 begin
 MATCH (h:User), (f:User)
-WHERE h.id = 44 AND f.id = 22
+WHERE h.id = 44 AND f.id = 31
 CREATE UNIQUE (h)-[:FRIEND]-(f);
 commit
 
 
 begin
 MATCH (h:User), (f:User)
-WHERE h.id = 44 AND f.id = 36
+WHERE h.id = 44 AND f.id = 6
 CREATE UNIQUE (h)-[:FRIEND]-(f);
 commit
-
-begin
-MATCH (h:User), (i:Interest)
-WHERE h.id = 44 AND i.name = "River_Rafting"
-CREATE UNIQUE (h)-[:HAS]->(i);
-commit
-
-
-begin
-MATCH (h:User), (i:Interest)
-WHERE h.id = 44 AND i.name = "Photography"
-CREATE UNIQUE (h)-[:HAS]->(i);
-commit
-
-
-begin
-MATCH (h:User), (i:Interest)
-WHERE h.id = 44 AND i.name = "Basketball"
-CREATE UNIQUE (h)-[:HAS]->(i);
-commit
-
 
 begin
 MATCH (h:User), (i:Interest)
@@ -5358,76 +5578,132 @@ commit
 
 begin
 MATCH (h:User), (i:Interest)
-WHERE h.id = 44 AND i.name = "Rock_Climbing"
+WHERE h.id = 44 AND i.name = "River_Rafting"
+CREATE UNIQUE (h)-[:HAS]->(i);
+commit
+
+
+begin
+MATCH (h:User), (i:Interest)
+WHERE h.id = 44 AND i.name = "Volleyball"
+CREATE UNIQUE (h)-[:HAS]->(i);
+commit
+
+
+begin
+MATCH (h:User), (i:Interest)
+WHERE h.id = 44 AND i.name = "Baseball"
+CREATE UNIQUE (h)-[:HAS]->(i);
+commit
+
+
+begin
+MATCH (h:User), (i:Interest)
+WHERE h.id = 44 AND i.name = "Walking"
+CREATE UNIQUE (h)-[:HAS]->(i);
+commit
+
+
+begin
+MATCH (h:User), (i:Interest)
+WHERE h.id = 44 AND i.name = "Horse_Riding"
+CREATE UNIQUE (h)-[:HAS]->(i);
+commit
+
+
+begin
+MATCH (h:User), (i:Interest)
+WHERE h.id = 44 AND i.name = "Bungee_Jumping"
+CREATE UNIQUE (h)-[:HAS]->(i);
+commit
+
+
+begin
+MATCH (h:User), (i:Interest)
+WHERE h.id = 44 AND i.name = "Scuba_Diving"
 CREATE UNIQUE (h)-[:HAS]->(i);
 commit
 
 begin
 MATCH (h:Human), (d:Machine)
-WHERE h.id = 44 AND d.id = 1
+WHERE h.id = 44 AND d.id = 98
 CREATE UNIQUE (h)-[:USES]->(d);
 commit
 
 
 begin
 MATCH (h:Human), (d:Machine)
-WHERE h.id = 44 AND d.id = 42
-CREATE UNIQUE (h)-[:USES]->(d);
-commit
-
-
-begin
-MATCH (h:Human), (d:Machine)
-WHERE h.id = 44 AND d.id = 47
+WHERE h.id = 44 AND d.id = 116
 CREATE UNIQUE (h)-[:USES]->(d);
 commit
 
     begin
     MATCH (h:Human)-[:USES]->(m:Machine), (l:Location)
-    WHERE m.type = "phone" AND h.id = 44 AND l.name = "Starbucks"
-    CREATE UNIQUE (m)-[:LOCATED {type: "facebook_checkin", time: "20140504"}]->(l);  
+    WHERE m.type = "phone" AND h.id = 44 AND l.name = "The Fray"
+    CREATE UNIQUE (m)-[:LOCATED {type: "yelp_review", time: "20140504"}]->(l);  
     commit
 
     begin
-    MERGE (:Human:User { 
-           firstname: "Reagan", lastname: "Clark",
-           fullname: "Reagan Clark", id: 45, 
-           gender: "male", age: 21});
+    CREATE (:Human:User { 
+           firstname: "Taylor", lastname: "Anderson",
+           fullname: "Taylor Anderson", id: 45, 
+           gender: "female", age: 35});
     commit
 
 begin
 MATCH (h:User), (f:User)
-WHERE h.id = 45 AND f.id = 41
+WHERE h.id = 45 AND f.id = 16
 CREATE UNIQUE (h)-[:FRIEND]-(f);
 commit
 
 
 begin
 MATCH (h:User), (f:User)
-WHERE h.id = 45 AND f.id = 22
+WHERE h.id = 45 AND f.id = 0
 CREATE UNIQUE (h)-[:FRIEND]-(f);
 commit
 
 
 begin
 MATCH (h:User), (f:User)
-WHERE h.id = 45 AND f.id = 11
+WHERE h.id = 45 AND f.id = 30
 CREATE UNIQUE (h)-[:FRIEND]-(f);
 commit
 
 
 begin
 MATCH (h:User), (f:User)
-WHERE h.id = 45 AND f.id = 9
+WHERE h.id = 45 AND f.id = 20
 CREATE UNIQUE (h)-[:FRIEND]-(f);
 commit
 
 
 begin
 MATCH (h:User), (f:User)
-WHERE h.id = 45 AND f.id = 24
+WHERE h.id = 45 AND f.id = 35
 CREATE UNIQUE (h)-[:FRIEND]-(f);
 commit
+
+
+begin
+MATCH (h:User), (f:User)
+WHERE h.id = 45 AND f.id = 12
+CREATE UNIQUE (h)-[:FRIEND]-(f);
+commit
+
+begin
+MATCH (h:User), (i:Interest)
+WHERE h.id = 45 AND i.name = "Surfing"
+CREATE UNIQUE (h)-[:HAS]->(i);
+commit
+
+
+begin
+MATCH (h:User), (i:Interest)
+WHERE h.id = 45 AND i.name = "Swimming"
+CREATE UNIQUE (h)-[:HAS]->(i);
+commit
+
 
 begin
 MATCH (h:User), (i:Interest)
@@ -5438,14 +5714,14 @@ commit
 
 begin
 MATCH (h:User), (i:Interest)
-WHERE h.id = 45 AND i.name = "Volleyball"
+WHERE h.id = 45 AND i.name = "Cycling"
 CREATE UNIQUE (h)-[:HAS]->(i);
 commit
 
 
 begin
 MATCH (h:User), (i:Interest)
-WHERE h.id = 45 AND i.name = "Boating"
+WHERE h.id = 45 AND i.name = "River_Rafting"
 CREATE UNIQUE (h)-[:HAS]->(i);
 commit
 
@@ -5466,95 +5742,46 @@ commit
 
 begin
 MATCH (h:User), (i:Interest)
-WHERE h.id = 45 AND i.name = "Rock_Climbing"
-CREATE UNIQUE (h)-[:HAS]->(i);
-commit
-
-
-begin
-MATCH (h:User), (i:Interest)
-WHERE h.id = 45 AND i.name = "Golf"
-CREATE UNIQUE (h)-[:HAS]->(i);
-commit
-
-
-begin
-MATCH (h:User), (i:Interest)
-WHERE h.id = 45 AND i.name = "Bungee_Jumping"
-CREATE UNIQUE (h)-[:HAS]->(i);
-commit
-
-
-begin
-MATCH (h:User), (i:Interest)
-WHERE h.id = 45 AND i.name = "Baseball"
-CREATE UNIQUE (h)-[:HAS]->(i);
-commit
-
-
-begin
-MATCH (h:User), (i:Interest)
-WHERE h.id = 45 AND i.name = "Photography"
+WHERE h.id = 45 AND i.name = "Basketball"
 CREATE UNIQUE (h)-[:HAS]->(i);
 commit
 
 begin
 MATCH (h:Human), (d:Machine)
-WHERE h.id = 45 AND d.id = 26
+WHERE h.id = 45 AND d.id = 40
 CREATE UNIQUE (h)-[:USES]->(d);
 commit
 
 
 begin
 MATCH (h:Human), (d:Machine)
-WHERE h.id = 45 AND d.id = 104
-CREATE UNIQUE (h)-[:USES]->(d);
-commit
-
-
-begin
-MATCH (h:Human), (d:Machine)
-WHERE h.id = 45 AND d.id = 106
+WHERE h.id = 45 AND d.id = 79
 CREATE UNIQUE (h)-[:USES]->(d);
 commit
 
     begin
     MATCH (h:Human)-[:USES]->(m:Machine), (l:Location)
-    WHERE m.type = "phone" AND h.id = 45 AND l.name = "Caffe Umbria"
-    CREATE UNIQUE (m)-[:LOCATED {type: "photo_tag", time: "20140503"}]->(l);  
+    WHERE m.type = "phone" AND h.id = 45 AND l.name = "Starbucks"
+    CREATE UNIQUE (m)-[:LOCATED {type: "photo_tag", time: "20140505"}]->(l);  
     commit
 
 
     begin
     MATCH (h:Human)-[:USES]->(m:Machine), (l:Location)
-    WHERE m.type = "phone" AND h.id = 45 AND l.name = "Warpaint"
-    CREATE UNIQUE (m)-[:LOCATED {type: "facebook_checkin", time: "20140501"}]->(l);  
-    commit
-
-
-    begin
-    MATCH (h:Human)-[:USES]->(m:Machine), (l:Location)
-    WHERE m.type = "phone" AND h.id = 45 AND l.name = "The Fray"
-    CREATE UNIQUE (m)-[:LOCATED {type: "facebook_checkin", time: "20140501"}]->(l);  
+    WHERE m.type = "phone" AND h.id = 45 AND l.name = "Robo Taco"
+    CREATE UNIQUE (m)-[:LOCATED {type: "photo_tag", time: "20140504"}]->(l);  
     commit
 
     begin
-    MERGE (:Human:User { 
-           firstname: "Jamie", lastname: "Harris",
-           fullname: "Jamie Harris", id: 46, 
-           gender: "female", age: 20});
+    CREATE (:Human:User { 
+           firstname: "Jessie", lastname: "Brown",
+           fullname: "Jessie Brown", id: 46, 
+           gender: "female", age: 30});
     commit
 
 begin
 MATCH (h:User), (f:User)
-WHERE h.id = 46 AND f.id = 13
-CREATE UNIQUE (h)-[:FRIEND]-(f);
-commit
-
-
-begin
-MATCH (h:User), (f:User)
-WHERE h.id = 46 AND f.id = 34
+WHERE h.id = 46 AND f.id = 39
 CREATE UNIQUE (h)-[:FRIEND]-(f);
 commit
 
@@ -5567,216 +5794,181 @@ commit
 
 begin
 MATCH (h:User), (i:Interest)
-WHERE h.id = 46 AND i.name = "Volleyball"
+WHERE h.id = 46 AND i.name = "Horse_Riding"
 CREATE UNIQUE (h)-[:HAS]->(i);
 commit
 
 
 begin
 MATCH (h:User), (i:Interest)
-WHERE h.id = 46 AND i.name = "Basketball"
+WHERE h.id = 46 AND i.name = "Baseball"
+CREATE UNIQUE (h)-[:HAS]->(i);
+commit
+
+
+begin
+MATCH (h:User), (i:Interest)
+WHERE h.id = 46 AND i.name = "Fishing"
+CREATE UNIQUE (h)-[:HAS]->(i);
+commit
+
+
+begin
+MATCH (h:User), (i:Interest)
+WHERE h.id = 46 AND i.name = "Photography"
 CREATE UNIQUE (h)-[:HAS]->(i);
 commit
 
 begin
 MATCH (h:Human), (d:Machine)
-WHERE h.id = 46 AND d.id = 43
+WHERE h.id = 46 AND d.id = 115
 CREATE UNIQUE (h)-[:USES]->(d);
 commit
 
 
 begin
 MATCH (h:Human), (d:Machine)
-WHERE h.id = 46 AND d.id = 75
+WHERE h.id = 46 AND d.id = 107
 CREATE UNIQUE (h)-[:USES]->(d);
 commit
 
     begin
     MATCH (h:Human)-[:USES]->(m:Machine), (l:Location)
-    WHERE m.type = "phone" AND h.id = 46 AND l.name = "Starbucks"
-    CREATE UNIQUE (m)-[:LOCATED {type: "yelp_review", time: "20140502"}]->(l);  
+    WHERE m.type = "phone" AND h.id = 46 AND l.name = "Foster The People"
+    CREATE UNIQUE (m)-[:LOCATED {type: "yelp_review", time: "20140501"}]->(l);  
     commit
 
 
     begin
     MATCH (h:Human)-[:USES]->(m:Machine), (l:Location)
-    WHERE m.type = "phone" AND h.id = 46 AND l.name = "Warpaint"
-    CREATE UNIQUE (m)-[:LOCATED {type: "yelp_review", time: "20140504"}]->(l);  
+    WHERE m.type = "phone" AND h.id = 46 AND l.name = "McMenamins"
+    CREATE UNIQUE (m)-[:LOCATED {type: "yelp_review", time: "20140501"}]->(l);  
+    commit
+
+
+    begin
+    MATCH (h:Human)-[:USES]->(m:Machine), (l:Location)
+    WHERE m.type = "phone" AND h.id = 46 AND l.name = "Besaws"
+    CREATE UNIQUE (m)-[:LOCATED {type: "facebook_checkin", time: "20140502"}]->(l);  
     commit
 
     begin
-    MERGE (:Human:User { 
-           firstname: "Armani", lastname: "Thomas",
-           fullname: "Armani Thomas", id: 47, 
-           gender: "male", age: 29});
+    CREATE (:Human:User { 
+           firstname: "Teagan", lastname: "Flores",
+           fullname: "Teagan Flores", id: 47, 
+           gender: "male", age: 31});
     commit
 
 begin
 MATCH (h:User), (f:User)
-WHERE h.id = 47 AND f.id = 37
+WHERE h.id = 47 AND f.id = 34
 CREATE UNIQUE (h)-[:FRIEND]-(f);
 commit
 
 
 begin
 MATCH (h:User), (f:User)
-WHERE h.id = 47 AND f.id = 17
-CREATE UNIQUE (h)-[:FRIEND]-(f);
-commit
-
-
-begin
-MATCH (h:User), (f:User)
-WHERE h.id = 47 AND f.id = 19
-CREATE UNIQUE (h)-[:FRIEND]-(f);
-commit
-
-
-begin
-MATCH (h:User), (f:User)
-WHERE h.id = 47 AND f.id = 11
-CREATE UNIQUE (h)-[:FRIEND]-(f);
-commit
-
-
-begin
-MATCH (h:User), (f:User)
-WHERE h.id = 47 AND f.id = 24
+WHERE h.id = 47 AND f.id = 15
 CREATE UNIQUE (h)-[:FRIEND]-(f);
 commit
 
 begin
 MATCH (h:User), (i:Interest)
-WHERE h.id = 47 AND i.name = "Basketball"
-CREATE UNIQUE (h)-[:HAS]->(i);
-commit
-
-
-begin
-MATCH (h:User), (i:Interest)
-WHERE h.id = 47 AND i.name = "Cycling"
-CREATE UNIQUE (h)-[:HAS]->(i);
-commit
-
-
-begin
-MATCH (h:User), (i:Interest)
-WHERE h.id = 47 AND i.name = "Bungee_Jumping"
-CREATE UNIQUE (h)-[:HAS]->(i);
-commit
-
-
-begin
-MATCH (h:User), (i:Interest)
-WHERE h.id = 47 AND i.name = "Hiking"
-CREATE UNIQUE (h)-[:HAS]->(i);
-commit
-
-
-begin
-MATCH (h:User), (i:Interest)
-WHERE h.id = 47 AND i.name = "Swimming"
-CREATE UNIQUE (h)-[:HAS]->(i);
-commit
-
-
-begin
-MATCH (h:User), (i:Interest)
-WHERE h.id = 47 AND i.name = "Golf"
+WHERE h.id = 47 AND i.name = "Walking"
 CREATE UNIQUE (h)-[:HAS]->(i);
 commit
 
 begin
 MATCH (h:Human), (d:Machine)
-WHERE h.id = 47 AND d.id = 80
+WHERE h.id = 47 AND d.id = 63
 CREATE UNIQUE (h)-[:USES]->(d);
 commit
 
     begin
     MATCH (h:Human)-[:USES]->(m:Machine), (l:Location)
-    WHERE m.type = "phone" AND h.id = 47 AND l.name = "Foster The People"
-    CREATE UNIQUE (m)-[:LOCATED {type: "facebook_checkin", time: "20140505"}]->(l);  
+    WHERE m.type = "phone" AND h.id = 47 AND l.name = "Warpaint"
+    CREATE UNIQUE (m)-[:LOCATED {type: "photo_tag", time: "20140503"}]->(l);  
     commit
 
 
     begin
     MATCH (h:Human)-[:USES]->(m:Machine), (l:Location)
     WHERE m.type = "phone" AND h.id = 47 AND l.name = "Christina Perri"
-    CREATE UNIQUE (m)-[:LOCATED {type: "facebook_checkin", time: "20140502"}]->(l);  
+    CREATE UNIQUE (m)-[:LOCATED {type: "facebook_checkin", time: "20140503"}]->(l);  
     commit
 
 
     begin
     MATCH (h:Human)-[:USES]->(m:Machine), (l:Location)
-    WHERE m.type = "phone" AND h.id = 47 AND l.name = "Eastburn"
+    WHERE m.type = "phone" AND h.id = 47 AND l.name = "The Fray"
+    CREATE UNIQUE (m)-[:LOCATED {type: "photo_tag", time: "20140505"}]->(l);  
+    commit
+
+
+    begin
+    MATCH (h:Human)-[:USES]->(m:Machine), (l:Location)
+    WHERE m.type = "phone" AND h.id = 47 AND l.name = "Robo Taco"
+    CREATE UNIQUE (m)-[:LOCATED {type: "photo_tag", time: "20140504"}]->(l);  
+    commit
+
+
+    begin
+    MATCH (h:Human)-[:USES]->(m:Machine), (l:Location)
+    WHERE m.type = "phone" AND h.id = 47 AND l.name = "Caffe Umbria"
     CREATE UNIQUE (m)-[:LOCATED {type: "facebook_checkin", time: "20140505"}]->(l);  
     commit
 
     begin
-    MERGE (:Human:User { 
-           firstname: "Logan", lastname: "James",
-           fullname: "Logan James", id: 48, 
-           gender: "male", age: 25});
+    CREATE (:Human:User { 
+           firstname: "Kai", lastname: "Hernández",
+           fullname: "Kai Hernández", id: 48, 
+           gender: "male", age: 28});
     commit
 
 begin
 MATCH (h:User), (f:User)
-WHERE h.id = 48 AND f.id = 22
+WHERE h.id = 48 AND f.id = 44
 CREATE UNIQUE (h)-[:FRIEND]-(f);
 commit
 
 
 begin
 MATCH (h:User), (f:User)
-WHERE h.id = 48 AND f.id = 28
+WHERE h.id = 48 AND f.id = 23
 CREATE UNIQUE (h)-[:FRIEND]-(f);
 commit
 
 
 begin
 MATCH (h:User), (f:User)
-WHERE h.id = 48 AND f.id = 13
+WHERE h.id = 48 AND f.id = 6
 CREATE UNIQUE (h)-[:FRIEND]-(f);
 commit
 
 
 begin
 MATCH (h:User), (f:User)
-WHERE h.id = 48 AND f.id = 8
+WHERE h.id = 48 AND f.id = 10
+CREATE UNIQUE (h)-[:FRIEND]-(f);
+commit
+
+
+begin
+MATCH (h:User), (f:User)
+WHERE h.id = 48 AND f.id = 42
+CREATE UNIQUE (h)-[:FRIEND]-(f);
+commit
+
+
+begin
+MATCH (h:User), (f:User)
+WHERE h.id = 48 AND f.id = 30
 CREATE UNIQUE (h)-[:FRIEND]-(f);
 commit
 
 begin
 MATCH (h:User), (i:Interest)
-WHERE h.id = 48 AND i.name = "Bungee_Jumping"
-CREATE UNIQUE (h)-[:HAS]->(i);
-commit
-
-
-begin
-MATCH (h:User), (i:Interest)
-WHERE h.id = 48 AND i.name = "Boating"
-CREATE UNIQUE (h)-[:HAS]->(i);
-commit
-
-
-begin
-MATCH (h:User), (i:Interest)
-WHERE h.id = 48 AND i.name = "Horse_Riding"
-CREATE UNIQUE (h)-[:HAS]->(i);
-commit
-
-
-begin
-MATCH (h:User), (i:Interest)
-WHERE h.id = 48 AND i.name = "Hiking"
-CREATE UNIQUE (h)-[:HAS]->(i);
-commit
-
-
-begin
-MATCH (h:User), (i:Interest)
-WHERE h.id = 48 AND i.name = "River_Rafting"
+WHERE h.id = 48 AND i.name = "Swimming"
 CREATE UNIQUE (h)-[:HAS]->(i);
 commit
 
@@ -5790,56 +5982,70 @@ commit
 
 begin
 MATCH (h:User), (i:Interest)
-WHERE h.id = 48 AND i.name = "Walking"
+WHERE h.id = 48 AND i.name = "Basketball"
 CREATE UNIQUE (h)-[:HAS]->(i);
 commit
 
 
 begin
 MATCH (h:User), (i:Interest)
-WHERE h.id = 48 AND i.name = "Surfing"
-CREATE UNIQUE (h)-[:HAS]->(i);
-commit
-
-
-begin
-MATCH (h:User), (i:Interest)
-WHERE h.id = 48 AND i.name = "Fishing"
-CREATE UNIQUE (h)-[:HAS]->(i);
-commit
-
-
-begin
-MATCH (h:User), (i:Interest)
-WHERE h.id = 48 AND i.name = "Photography"
+WHERE h.id = 48 AND i.name = "Boating"
 CREATE UNIQUE (h)-[:HAS]->(i);
 commit
 
 begin
 MATCH (h:Human), (d:Machine)
-WHERE h.id = 48 AND d.id = 55
+WHERE h.id = 48 AND d.id = 20
 CREATE UNIQUE (h)-[:USES]->(d);
 commit
 
 
 begin
 MATCH (h:Human), (d:Machine)
-WHERE h.id = 48 AND d.id = 3
+WHERE h.id = 48 AND d.id = 66
 CREATE UNIQUE (h)-[:USES]->(d);
 commit
 
     begin
     MATCH (h:Human)-[:USES]->(m:Machine), (l:Location)
-    WHERE m.type = "phone" AND h.id = 48 AND l.name = "Nordstroms"
+    WHERE m.type = "phone" AND h.id = 48 AND l.name = "The Fray"
+    CREATE UNIQUE (m)-[:LOCATED {type: "photo_tag", time: "20140503"}]->(l);  
+    commit
+
+
+    begin
+    MATCH (h:Human)-[:USES]->(m:Machine), (l:Location)
+    WHERE m.type = "phone" AND h.id = 48 AND l.name = "Starbucks"
     CREATE UNIQUE (m)-[:LOCATED {type: "photo_tag", time: "20140501"}]->(l);  
     commit
 
     begin
-    MERGE (:Human:User { 
-           firstname: "Sawyer", lastname: "Hernández",
-           fullname: "Sawyer Hernández", id: 49, 
-           gender: "female", age: 32});
+    CREATE (:Human:User { 
+           firstname: "River", lastname: "Butler",
+           fullname: "River Butler", id: 49, 
+           gender: "female", age: 27});
     commit
+
+begin
+MATCH (h:User), (f:User)
+WHERE h.id = 49 AND f.id = 41
+CREATE UNIQUE (h)-[:FRIEND]-(f);
+commit
+
+
+begin
+MATCH (h:User), (f:User)
+WHERE h.id = 49 AND f.id = 38
+CREATE UNIQUE (h)-[:FRIEND]-(f);
+commit
+
+
+begin
+MATCH (h:User), (f:User)
+WHERE h.id = 49 AND f.id = 18
+CREATE UNIQUE (h)-[:FRIEND]-(f);
+commit
+
 
 begin
 MATCH (h:User), (f:User)
@@ -5850,20 +6056,41 @@ commit
 
 begin
 MATCH (h:User), (f:User)
-WHERE h.id = 49 AND f.id = 4
-CREATE UNIQUE (h)-[:FRIEND]-(f);
-commit
-
-
-begin
-MATCH (h:User), (f:User)
-WHERE h.id = 49 AND f.id = 33
+WHERE h.id = 49 AND f.id = 39
 CREATE UNIQUE (h)-[:FRIEND]-(f);
 commit
 
 begin
 MATCH (h:User), (i:Interest)
-WHERE h.id = 49 AND i.name = "Hiking"
+WHERE h.id = 49 AND i.name = "Basketball"
+CREATE UNIQUE (h)-[:HAS]->(i);
+commit
+
+
+begin
+MATCH (h:User), (i:Interest)
+WHERE h.id = 49 AND i.name = "Swimming"
+CREATE UNIQUE (h)-[:HAS]->(i);
+commit
+
+
+begin
+MATCH (h:User), (i:Interest)
+WHERE h.id = 49 AND i.name = "Volleyball"
+CREATE UNIQUE (h)-[:HAS]->(i);
+commit
+
+
+begin
+MATCH (h:User), (i:Interest)
+WHERE h.id = 49 AND i.name = "Fishing"
+CREATE UNIQUE (h)-[:HAS]->(i);
+commit
+
+
+begin
+MATCH (h:User), (i:Interest)
+WHERE h.id = 49 AND i.name = "Baseball"
 CREATE UNIQUE (h)-[:HAS]->(i);
 commit
 
@@ -5874,23 +6101,16 @@ WHERE h.id = 49 AND i.name = "Cycling"
 CREATE UNIQUE (h)-[:HAS]->(i);
 commit
 
-
-begin
-MATCH (h:User), (i:Interest)
-WHERE h.id = 49 AND i.name = "Walking"
-CREATE UNIQUE (h)-[:HAS]->(i);
-commit
-
 begin
 MATCH (h:Human), (d:Machine)
-WHERE h.id = 49 AND d.id = 59
+WHERE h.id = 49 AND d.id = 17
 CREATE UNIQUE (h)-[:USES]->(d);
 commit
 
 
 begin
 MATCH (h:Human), (d:Machine)
-WHERE h.id = 49 AND d.id = 85
+WHERE h.id = 49 AND d.id = 102
 CREATE UNIQUE (h)-[:USES]->(d);
 commit
 
@@ -5903,36 +6123,71 @@ commit
 
     begin
     MATCH (h:Human)-[:USES]->(m:Machine), (l:Location)
-    WHERE m.type = "phone" AND h.id = 49 AND l.name = "McMenamins"
-    CREATE UNIQUE (m)-[:LOCATED {type: "photo_tag", time: "20140503"}]->(l);  
+    WHERE m.type = "phone" AND h.id = 49 AND l.name = "Caffe Umbria"
+    CREATE UNIQUE (m)-[:LOCATED {type: "yelp_review", time: "20140501"}]->(l);  
     commit
 
 
     begin
     MATCH (h:Human)-[:USES]->(m:Machine), (l:Location)
-    WHERE m.type = "phone" AND h.id = 49 AND l.name = "Hollywood Theatre"
-    CREATE UNIQUE (m)-[:LOCATED {type: "photo_tag", time: "20140505"}]->(l);  
+    WHERE m.type = "phone" AND h.id = 49 AND l.name = "Robo Taco"
+    CREATE UNIQUE (m)-[:LOCATED {type: "yelp_review", time: "20140503"}]->(l);  
     commit
 
     begin
-    MERGE (:Human:User { 
-           firstname: "Emerson", lastname: "Jackson",
-           fullname: "Emerson Jackson", id: 50, 
-           gender: "male", age: 32});
+    CREATE (:Human:User { 
+           firstname: "Tatum", lastname: "Evans",
+           fullname: "Tatum Evans", id: 50, 
+           gender: "female", age: 34});
     commit
 
 begin
 MATCH (h:User), (f:User)
-WHERE h.id = 50 AND f.id = 13
+WHERE h.id = 50 AND f.id = 43
 CREATE UNIQUE (h)-[:FRIEND]-(f);
 commit
 
 
 begin
 MATCH (h:User), (f:User)
-WHERE h.id = 50 AND f.id = 8
+WHERE h.id = 50 AND f.id = 12
 CREATE UNIQUE (h)-[:FRIEND]-(f);
 commit
+
+
+begin
+MATCH (h:User), (f:User)
+WHERE h.id = 50 AND f.id = 45
+CREATE UNIQUE (h)-[:FRIEND]-(f);
+commit
+
+begin
+MATCH (h:User), (i:Interest)
+WHERE h.id = 50 AND i.name = "Boating"
+CREATE UNIQUE (h)-[:HAS]->(i);
+commit
+
+
+begin
+MATCH (h:User), (i:Interest)
+WHERE h.id = 50 AND i.name = "Hiking"
+CREATE UNIQUE (h)-[:HAS]->(i);
+commit
+
+
+begin
+MATCH (h:User), (i:Interest)
+WHERE h.id = 50 AND i.name = "Bungee_Jumping"
+CREATE UNIQUE (h)-[:HAS]->(i);
+commit
+
+
+begin
+MATCH (h:User), (i:Interest)
+WHERE h.id = 50 AND i.name = "Basketball"
+CREATE UNIQUE (h)-[:HAS]->(i);
+commit
+
 
 begin
 MATCH (h:User), (i:Interest)
@@ -5943,67 +6198,60 @@ commit
 
 begin
 MATCH (h:User), (i:Interest)
-WHERE h.id = 50 AND i.name = "Fishing"
+WHERE h.id = 50 AND i.name = "Photography"
 CREATE UNIQUE (h)-[:HAS]->(i);
 commit
 
 begin
 MATCH (h:Human), (d:Machine)
-WHERE h.id = 50 AND d.id = 114
+WHERE h.id = 50 AND d.id = 97
+CREATE UNIQUE (h)-[:USES]->(d);
+commit
+
+
+begin
+MATCH (h:Human), (d:Machine)
+WHERE h.id = 50 AND d.id = 55
 CREATE UNIQUE (h)-[:USES]->(d);
 commit
 
     begin
     MATCH (h:Human)-[:USES]->(m:Machine), (l:Location)
-    WHERE m.type = "phone" AND h.id = 50 AND l.name = "Christina Perri"
-    CREATE UNIQUE (m)-[:LOCATED {type: "photo_tag", time: "20140502"}]->(l);  
-    commit
-
-
-    begin
-    MATCH (h:Human)-[:USES]->(m:Machine), (l:Location)
-    WHERE m.type = "phone" AND h.id = 50 AND l.name = "Hollywood Theatre"
-    CREATE UNIQUE (m)-[:LOCATED {type: "yelp_review", time: "20140505"}]->(l);  
-    commit
-
-
-    begin
-    MATCH (h:Human)-[:USES]->(m:Machine), (l:Location)
-    WHERE m.type = "phone" AND h.id = 50 AND l.name = "Nike"
-    CREATE UNIQUE (m)-[:LOCATED {type: "yelp_review", time: "20140505"}]->(l);  
-    commit
-
-
-    begin
-    MATCH (h:Human)-[:USES]->(m:Machine), (l:Location)
-    WHERE m.type = "phone" AND h.id = 50 AND l.name = "Warpaint"
-    CREATE UNIQUE (m)-[:LOCATED {type: "yelp_review", time: "20140503"}]->(l);  
+    WHERE m.type = "phone" AND h.id = 50 AND l.name = "Caffe Umbria"
+    CREATE UNIQUE (m)-[:LOCATED {type: "yelp_review", time: "20140502"}]->(l);  
     commit
 
     begin
-    MERGE (:Human:User { 
-           firstname: "Avery", lastname: "Miller",
-           fullname: "Avery Miller", id: 51, 
-           gender: "female", age: 18});
+    CREATE (:Human:User { 
+           firstname: "Elliot", lastname: "Anderson",
+           fullname: "Elliot Anderson", id: 51, 
+           gender: "female", age: 25});
     commit
 
 begin
 MATCH (h:User), (f:User)
-WHERE h.id = 51 AND f.id = 46
+WHERE h.id = 51 AND f.id = 49
 CREATE UNIQUE (h)-[:FRIEND]-(f);
 commit
 
 
 begin
 MATCH (h:User), (f:User)
-WHERE h.id = 51 AND f.id = 20
+WHERE h.id = 51 AND f.id = 42
 CREATE UNIQUE (h)-[:FRIEND]-(f);
 commit
 
 
 begin
 MATCH (h:User), (f:User)
-WHERE h.id = 51 AND f.id = 28
+WHERE h.id = 51 AND f.id = 27
+CREATE UNIQUE (h)-[:FRIEND]-(f);
+commit
+
+
+begin
+MATCH (h:User), (f:User)
+WHERE h.id = 51 AND f.id = 29
 CREATE UNIQUE (h)-[:FRIEND]-(f);
 commit
 
@@ -6017,20 +6265,13 @@ commit
 
 begin
 MATCH (h:User), (f:User)
-WHERE h.id = 51 AND f.id = 50
-CREATE UNIQUE (h)-[:FRIEND]-(f);
-commit
-
-
-begin
-MATCH (h:User), (f:User)
-WHERE h.id = 51 AND f.id = 40
+WHERE h.id = 51 AND f.id = 43
 CREATE UNIQUE (h)-[:FRIEND]-(f);
 commit
 
 begin
 MATCH (h:User), (i:Interest)
-WHERE h.id = 51 AND i.name = "Surfing"
+WHERE h.id = 51 AND i.name = "Boating"
 CREATE UNIQUE (h)-[:HAS]->(i);
 commit
 
@@ -6044,6 +6285,13 @@ commit
 
 begin
 MATCH (h:User), (i:Interest)
+WHERE h.id = 51 AND i.name = "Photography"
+CREATE UNIQUE (h)-[:HAS]->(i);
+commit
+
+
+begin
+MATCH (h:User), (i:Interest)
 WHERE h.id = 51 AND i.name = "Golf"
 CREATE UNIQUE (h)-[:HAS]->(i);
 commit
@@ -6051,94 +6299,115 @@ commit
 
 begin
 MATCH (h:User), (i:Interest)
-WHERE h.id = 51 AND i.name = "Swimming"
+WHERE h.id = 51 AND i.name = "River_Rafting"
 CREATE UNIQUE (h)-[:HAS]->(i);
 commit
 
 
 begin
 MATCH (h:User), (i:Interest)
-WHERE h.id = 51 AND i.name = "Fishing"
+WHERE h.id = 51 AND i.name = "Basketball"
+CREATE UNIQUE (h)-[:HAS]->(i);
+commit
+
+
+begin
+MATCH (h:User), (i:Interest)
+WHERE h.id = 51 AND i.name = "Cycling"
+CREATE UNIQUE (h)-[:HAS]->(i);
+commit
+
+
+begin
+MATCH (h:User), (i:Interest)
+WHERE h.id = 51 AND i.name = "Scuba_Diving"
+CREATE UNIQUE (h)-[:HAS]->(i);
+commit
+
+
+begin
+MATCH (h:User), (i:Interest)
+WHERE h.id = 51 AND i.name = "Horse_Riding"
 CREATE UNIQUE (h)-[:HAS]->(i);
 commit
 
 begin
 MATCH (h:Human), (d:Machine)
-WHERE h.id = 51 AND d.id = 15
+WHERE h.id = 51 AND d.id = 113
 CREATE UNIQUE (h)-[:USES]->(d);
 commit
 
 
 begin
 MATCH (h:Human), (d:Machine)
-WHERE h.id = 51 AND d.id = 97
+WHERE h.id = 51 AND d.id = 26
+CREATE UNIQUE (h)-[:USES]->(d);
+commit
+
+
+begin
+MATCH (h:Human), (d:Machine)
+WHERE h.id = 51 AND d.id = 11
 CREATE UNIQUE (h)-[:USES]->(d);
 commit
 
     begin
     MATCH (h:Human)-[:USES]->(m:Machine), (l:Location)
-    WHERE m.type = "phone" AND h.id = 51 AND l.name = "Caffe Umbria"
-    CREATE UNIQUE (m)-[:LOCATED {type: "photo_tag", time: "20140505"}]->(l);  
-    commit
-
-
-    begin
-    MATCH (h:Human)-[:USES]->(m:Machine), (l:Location)
-    WHERE m.type = "phone" AND h.id = 51 AND l.name = "Starbucks"
+    WHERE m.type = "phone" AND h.id = 51 AND l.name = "Hollywood Theatre"
     CREATE UNIQUE (m)-[:LOCATED {type: "yelp_review", time: "20140501"}]->(l);  
     commit
 
 
     begin
     MATCH (h:Human)-[:USES]->(m:Machine), (l:Location)
-    WHERE m.type = "phone" AND h.id = 51 AND l.name = "Christina Perri"
-    CREATE UNIQUE (m)-[:LOCATED {type: "photo_tag", time: "20140501"}]->(l);  
+    WHERE m.type = "phone" AND h.id = 51 AND l.name = "Besaws"
+    CREATE UNIQUE (m)-[:LOCATED {type: "photo_tag", time: "20140504"}]->(l);  
     commit
 
 
     begin
     MATCH (h:Human)-[:USES]->(m:Machine), (l:Location)
-    WHERE m.type = "phone" AND h.id = 51 AND l.name = "Warpaint"
-    CREATE UNIQUE (m)-[:LOCATED {type: "yelp_review", time: "20140503"}]->(l);  
-    commit
-
-
-    begin
-    MATCH (h:Human)-[:USES]->(m:Machine), (l:Location)
-    WHERE m.type = "phone" AND h.id = 51 AND l.name = "Eastburn"
-    CREATE UNIQUE (m)-[:LOCATED {type: "yelp_review", time: "20140504"}]->(l);  
+    WHERE m.type = "phone" AND h.id = 51 AND l.name = "Caffe Umbria"
+    CREATE UNIQUE (m)-[:LOCATED {type: "facebook_checkin", time: "20140505"}]->(l);  
     commit
 
     begin
-    MERGE (:Human:User { 
-           firstname: "Quinn", lastname: "Moore",
-           fullname: "Quinn Moore", id: 52, 
-           gender: "female", age: 33});
+    CREATE (:Human:User { 
+           firstname: "Blake", lastname: "Sánchez",
+           fullname: "Blake Sánchez", id: 52, 
+           gender: "female", age: 35});
     commit
 
 begin
 MATCH (h:User), (f:User)
-WHERE h.id = 52 AND f.id = 48
-CREATE UNIQUE (h)-[:FRIEND]-(f);
-commit
-
-
-begin
-MATCH (h:User), (f:User)
-WHERE h.id = 52 AND f.id = 22
+WHERE h.id = 52 AND f.id = 20
 CREATE UNIQUE (h)-[:FRIEND]-(f);
 commit
 
 begin
 MATCH (h:User), (i:Interest)
-WHERE h.id = 52 AND i.name = "Baseball"
+WHERE h.id = 52 AND i.name = "Surfing"
 CREATE UNIQUE (h)-[:HAS]->(i);
 commit
 
 
 begin
 MATCH (h:User), (i:Interest)
-WHERE h.id = 52 AND i.name = "Surfing"
+WHERE h.id = 52 AND i.name = "Golf"
+CREATE UNIQUE (h)-[:HAS]->(i);
+commit
+
+
+begin
+MATCH (h:User), (i:Interest)
+WHERE h.id = 52 AND i.name = "Rock_Climbing"
+CREATE UNIQUE (h)-[:HAS]->(i);
+commit
+
+
+begin
+MATCH (h:User), (i:Interest)
+WHERE h.id = 52 AND i.name = "Walking"
 CREATE UNIQUE (h)-[:HAS]->(i);
 commit
 
@@ -6152,7 +6421,21 @@ commit
 
 begin
 MATCH (h:User), (i:Interest)
-WHERE h.id = 52 AND i.name = "Cycling"
+WHERE h.id = 52 AND i.name = "Boating"
+CREATE UNIQUE (h)-[:HAS]->(i);
+commit
+
+
+begin
+MATCH (h:User), (i:Interest)
+WHERE h.id = 52 AND i.name = "Swimming"
+CREATE UNIQUE (h)-[:HAS]->(i);
+commit
+
+
+begin
+MATCH (h:User), (i:Interest)
+WHERE h.id = 52 AND i.name = "Baseball"
 CREATE UNIQUE (h)-[:HAS]->(i);
 commit
 
@@ -6163,107 +6446,93 @@ WHERE h.id = 52 AND i.name = "Basketball"
 CREATE UNIQUE (h)-[:HAS]->(i);
 commit
 
+
+begin
+MATCH (h:User), (i:Interest)
+WHERE h.id = 52 AND i.name = "Bungee_Jumping"
+CREATE UNIQUE (h)-[:HAS]->(i);
+commit
+
 begin
 MATCH (h:Human), (d:Machine)
-WHERE h.id = 52 AND d.id = 27
+WHERE h.id = 52 AND d.id = 118
+CREATE UNIQUE (h)-[:USES]->(d);
+commit
+
+
+begin
+MATCH (h:Human), (d:Machine)
+WHERE h.id = 52 AND d.id = 56
 CREATE UNIQUE (h)-[:USES]->(d);
 commit
 
     begin
     MATCH (h:Human)-[:USES]->(m:Machine), (l:Location)
-    WHERE m.type = "phone" AND h.id = 52 AND l.name = "Eastburn"
-    CREATE UNIQUE (m)-[:LOCATED {type: "photo_tag", time: "20140503"}]->(l);  
+    WHERE m.type = "phone" AND h.id = 52 AND l.name = "McMenamins"
+    CREATE UNIQUE (m)-[:LOCATED {type: "photo_tag", time: "20140504"}]->(l);  
     commit
 
 
     begin
     MATCH (h:Human)-[:USES]->(m:Machine), (l:Location)
-    WHERE m.type = "phone" AND h.id = 52 AND l.name = "McMenamins"
+    WHERE m.type = "phone" AND h.id = 52 AND l.name = "Hollywood Theatre"
     CREATE UNIQUE (m)-[:LOCATED {type: "facebook_checkin", time: "20140502"}]->(l);  
     commit
 
 
     begin
     MATCH (h:Human)-[:USES]->(m:Machine), (l:Location)
-    WHERE m.type = "phone" AND h.id = 52 AND l.name = "Caffe Umbria"
-    CREATE UNIQUE (m)-[:LOCATED {type: "facebook_checkin", time: "20140504"}]->(l);  
+    WHERE m.type = "phone" AND h.id = 52 AND l.name = "Robo Taco"
+    CREATE UNIQUE (m)-[:LOCATED {type: "facebook_checkin", time: "20140501"}]->(l);  
+    commit
+
+
+    begin
+    MATCH (h:Human)-[:USES]->(m:Machine), (l:Location)
+    WHERE m.type = "phone" AND h.id = 52 AND l.name = "The Fray"
+    CREATE UNIQUE (m)-[:LOCATED {type: "facebook_checkin", time: "20140501"}]->(l);  
     commit
 
     begin
-    MERGE (:Human:User { 
-           firstname: "Zion", lastname: "Turner",
-           fullname: "Zion Turner", id: 53, 
-           gender: "female", age: 20});
+    CREATE (:Human:User { 
+           firstname: "River", lastname: "Wood",
+           fullname: "River Wood", id: 53, 
+           gender: "female", age: 26});
     commit
 
 begin
 MATCH (h:User), (f:User)
-WHERE h.id = 53 AND f.id = 1
+WHERE h.id = 53 AND f.id = 25
 CREATE UNIQUE (h)-[:FRIEND]-(f);
 commit
 
 
 begin
 MATCH (h:User), (f:User)
-WHERE h.id = 53 AND f.id = 16
+WHERE h.id = 53 AND f.id = 14
 CREATE UNIQUE (h)-[:FRIEND]-(f);
 commit
 
 
 begin
 MATCH (h:User), (f:User)
-WHERE h.id = 53 AND f.id = 38
+WHERE h.id = 53 AND f.id = 44
 CREATE UNIQUE (h)-[:FRIEND]-(f);
 commit
 
 
 begin
 MATCH (h:User), (f:User)
-WHERE h.id = 53 AND f.id = 50
+WHERE h.id = 53 AND f.id = 49
 CREATE UNIQUE (h)-[:FRIEND]-(f);
 commit
 
 
 begin
 MATCH (h:User), (f:User)
-WHERE h.id = 53 AND f.id = 12
+WHERE h.id = 53 AND f.id = 3
 CREATE UNIQUE (h)-[:FRIEND]-(f);
 commit
-
-
-begin
-MATCH (h:User), (f:User)
-WHERE h.id = 53 AND f.id = 46
-CREATE UNIQUE (h)-[:FRIEND]-(f);
-commit
-
-begin
-MATCH (h:User), (i:Interest)
-WHERE h.id = 53 AND i.name = "Walking"
-CREATE UNIQUE (h)-[:HAS]->(i);
-commit
-
-
-begin
-MATCH (h:User), (i:Interest)
-WHERE h.id = 53 AND i.name = "Hiking"
-CREATE UNIQUE (h)-[:HAS]->(i);
-commit
-
-
-begin
-MATCH (h:User), (i:Interest)
-WHERE h.id = 53 AND i.name = "Boating"
-CREATE UNIQUE (h)-[:HAS]->(i);
-commit
-
-
-begin
-MATCH (h:User), (i:Interest)
-WHERE h.id = 53 AND i.name = "Baseball"
-CREATE UNIQUE (h)-[:HAS]->(i);
-commit
-
 
 begin
 MATCH (h:User), (i:Interest)
@@ -6274,87 +6543,164 @@ commit
 
 begin
 MATCH (h:User), (i:Interest)
+WHERE h.id = 53 AND i.name = "Walking"
+CREATE UNIQUE (h)-[:HAS]->(i);
+commit
+
+
+begin
+MATCH (h:User), (i:Interest)
 WHERE h.id = 53 AND i.name = "Surfing"
+CREATE UNIQUE (h)-[:HAS]->(i);
+commit
+
+
+begin
+MATCH (h:User), (i:Interest)
+WHERE h.id = 53 AND i.name = "Scuba_Diving"
+CREATE UNIQUE (h)-[:HAS]->(i);
+commit
+
+
+begin
+MATCH (h:User), (i:Interest)
+WHERE h.id = 53 AND i.name = "Golf"
+CREATE UNIQUE (h)-[:HAS]->(i);
+commit
+
+
+begin
+MATCH (h:User), (i:Interest)
+WHERE h.id = 53 AND i.name = "Horse_Riding"
+CREATE UNIQUE (h)-[:HAS]->(i);
+commit
+
+
+begin
+MATCH (h:User), (i:Interest)
+WHERE h.id = 53 AND i.name = "Basketball"
+CREATE UNIQUE (h)-[:HAS]->(i);
+commit
+
+
+begin
+MATCH (h:User), (i:Interest)
+WHERE h.id = 53 AND i.name = "Volleyball"
+CREATE UNIQUE (h)-[:HAS]->(i);
+commit
+
+
+begin
+MATCH (h:User), (i:Interest)
+WHERE h.id = 53 AND i.name = "Boating"
 CREATE UNIQUE (h)-[:HAS]->(i);
 commit
 
 begin
 MATCH (h:Human), (d:Machine)
-WHERE h.id = 53 AND d.id = 23
-CREATE UNIQUE (h)-[:USES]->(d);
-commit
-
-
-begin
-MATCH (h:Human), (d:Machine)
-WHERE h.id = 53 AND d.id = 95
+WHERE h.id = 53 AND d.id = 47
 CREATE UNIQUE (h)-[:USES]->(d);
 commit
 
     begin
     MATCH (h:Human)-[:USES]->(m:Machine), (l:Location)
-    WHERE m.type = "phone" AND h.id = 53 AND l.name = "Nike"
-    CREATE UNIQUE (m)-[:LOCATED {type: "yelp_review", time: "20140501"}]->(l);  
-    commit
-
-
-    begin
-    MATCH (h:Human)-[:USES]->(m:Machine), (l:Location)
-    WHERE m.type = "phone" AND h.id = 53 AND l.name = "Foster The People"
-    CREATE UNIQUE (m)-[:LOCATED {type: "photo_tag", time: "20140501"}]->(l);  
-    commit
-
-
-    begin
-    MATCH (h:Human)-[:USES]->(m:Machine), (l:Location)
-    WHERE m.type = "phone" AND h.id = 53 AND l.name = "Eastburn"
-    CREATE UNIQUE (m)-[:LOCATED {type: "facebook_checkin", time: "20140503"}]->(l);  
+    WHERE m.type = "phone" AND h.id = 53 AND l.name = "The Fray"
+    CREATE UNIQUE (m)-[:LOCATED {type: "facebook_checkin", time: "20140504"}]->(l);  
     commit
 
 
     begin
     MATCH (h:Human)-[:USES]->(m:Machine), (l:Location)
     WHERE m.type = "phone" AND h.id = 53 AND l.name = "Caffe Umbria"
-    CREATE UNIQUE (m)-[:LOCATED {type: "facebook_checkin", time: "20140501"}]->(l);  
+    CREATE UNIQUE (m)-[:LOCATED {type: "yelp_review", time: "20140504"}]->(l);  
+    commit
+
+
+    begin
+    MATCH (h:Human)-[:USES]->(m:Machine), (l:Location)
+    WHERE m.type = "phone" AND h.id = 53 AND l.name = "EastBurn"
+    CREATE UNIQUE (m)-[:LOCATED {type: "yelp_review", time: "20140503"}]->(l);  
+    commit
+
+
+    begin
+    MATCH (h:Human)-[:USES]->(m:Machine), (l:Location)
+    WHERE m.type = "phone" AND h.id = 53 AND l.name = "Robo Taco"
+    CREATE UNIQUE (m)-[:LOCATED {type: "facebook_checkin", time: "20140505"}]->(l);  
+    commit
+
+
+    begin
+    MATCH (h:Human)-[:USES]->(m:Machine), (l:Location)
+    WHERE m.type = "phone" AND h.id = 53 AND l.name = "McMenamins"
+    CREATE UNIQUE (m)-[:LOCATED {type: "yelp_review", time: "20140505"}]->(l);  
     commit
 
     begin
-    MERGE (:Human:User { 
-           firstname: "Sawyer", lastname: "Sullivan",
-           fullname: "Sawyer Sullivan", id: 54, 
-           gender: "female", age: 35});
+    CREATE (:Human:User { 
+           firstname: "Rowan", lastname: "Watson",
+           fullname: "Rowan Watson", id: 54, 
+           gender: "male", age: 33});
     commit
 
 begin
 MATCH (h:User), (f:User)
-WHERE h.id = 54 AND f.id = 37
+WHERE h.id = 54 AND f.id = 36
 CREATE UNIQUE (h)-[:FRIEND]-(f);
 commit
 
 
 begin
 MATCH (h:User), (f:User)
-WHERE h.id = 54 AND f.id = 26
+WHERE h.id = 54 AND f.id = 38
 CREATE UNIQUE (h)-[:FRIEND]-(f);
 commit
 
 
 begin
 MATCH (h:User), (f:User)
-WHERE h.id = 54 AND f.id = 8
+WHERE h.id = 54 AND f.id = 21
+CREATE UNIQUE (h)-[:FRIEND]-(f);
+commit
+
+
+begin
+MATCH (h:User), (f:User)
+WHERE h.id = 54 AND f.id = 16
 CREATE UNIQUE (h)-[:FRIEND]-(f);
 commit
 
 begin
 MATCH (h:User), (i:Interest)
-WHERE h.id = 54 AND i.name = "Rock_Climbing"
+WHERE h.id = 54 AND i.name = "Walking"
 CREATE UNIQUE (h)-[:HAS]->(i);
 commit
 
 
 begin
 MATCH (h:User), (i:Interest)
-WHERE h.id = 54 AND i.name = "Basketball"
+WHERE h.id = 54 AND i.name = "Hiking"
+CREATE UNIQUE (h)-[:HAS]->(i);
+commit
+
+
+begin
+MATCH (h:User), (i:Interest)
+WHERE h.id = 54 AND i.name = "Swimming"
+CREATE UNIQUE (h)-[:HAS]->(i);
+commit
+
+
+begin
+MATCH (h:User), (i:Interest)
+WHERE h.id = 54 AND i.name = "Baseball"
+CREATE UNIQUE (h)-[:HAS]->(i);
+commit
+
+
+begin
+MATCH (h:User), (i:Interest)
+WHERE h.id = 54 AND i.name = "River_Rafting"
 CREATE UNIQUE (h)-[:HAS]->(i);
 commit
 
@@ -6375,175 +6721,140 @@ commit
 
 begin
 MATCH (h:User), (i:Interest)
-WHERE h.id = 54 AND i.name = "Horse_Riding"
-CREATE UNIQUE (h)-[:HAS]->(i);
-commit
-
-
-begin
-MATCH (h:User), (i:Interest)
-WHERE h.id = 54 AND i.name = "Volleyball"
-CREATE UNIQUE (h)-[:HAS]->(i);
-commit
-
-
-begin
-MATCH (h:User), (i:Interest)
-WHERE h.id = 54 AND i.name = "Bungee_Jumping"
-CREATE UNIQUE (h)-[:HAS]->(i);
-commit
-
-
-begin
-MATCH (h:User), (i:Interest)
-WHERE h.id = 54 AND i.name = "Photography"
-CREATE UNIQUE (h)-[:HAS]->(i);
-commit
-
-
-begin
-MATCH (h:User), (i:Interest)
-WHERE h.id = 54 AND i.name = "Baseball"
-CREATE UNIQUE (h)-[:HAS]->(i);
-commit
-
-
-begin
-MATCH (h:User), (i:Interest)
-WHERE h.id = 54 AND i.name = "Scuba_Diving"
+WHERE h.id = 54 AND i.name = "Basketball"
 CREATE UNIQUE (h)-[:HAS]->(i);
 commit
 
 begin
 MATCH (h:Human), (d:Machine)
-WHERE h.id = 54 AND d.id = 37
+WHERE h.id = 54 AND d.id = 96
 CREATE UNIQUE (h)-[:USES]->(d);
 commit
 
 
 begin
 MATCH (h:Human), (d:Machine)
-WHERE h.id = 54 AND d.id = 112
+WHERE h.id = 54 AND d.id = 51
 CREATE UNIQUE (h)-[:USES]->(d);
 commit
 
     begin
     MATCH (h:Human)-[:USES]->(m:Machine), (l:Location)
-    WHERE m.type = "phone" AND h.id = 54 AND l.name = "Eastburn"
-    CREATE UNIQUE (m)-[:LOCATED {type: "yelp_review", time: "20140502"}]->(l);  
-    commit
-
-
-    begin
-    MATCH (h:Human)-[:USES]->(m:Machine), (l:Location)
-    WHERE m.type = "phone" AND h.id = 54 AND l.name = "Besaws"
+    WHERE m.type = "phone" AND h.id = 54 AND l.name = "Nordstroms"
     CREATE UNIQUE (m)-[:LOCATED {type: "yelp_review", time: "20140504"}]->(l);  
     commit
 
 
     begin
     MATCH (h:Human)-[:USES]->(m:Machine), (l:Location)
-    WHERE m.type = "phone" AND h.id = 54 AND l.name = "Hollywood Theatre"
-    CREATE UNIQUE (m)-[:LOCATED {type: "photo_tag", time: "20140502"}]->(l);  
+    WHERE m.type = "phone" AND h.id = 54 AND l.name = "Christina Perri"
+    CREATE UNIQUE (m)-[:LOCATED {type: "facebook_checkin", time: "20140502"}]->(l);  
     commit
 
 
     begin
     MATCH (h:Human)-[:USES]->(m:Machine), (l:Location)
-    WHERE m.type = "phone" AND h.id = 54 AND l.name = "Caffe Umbria"
-    CREATE UNIQUE (m)-[:LOCATED {type: "photo_tag", time: "20140501"}]->(l);  
+    WHERE m.type = "phone" AND h.id = 54 AND l.name = "McMenamins"
+    CREATE UNIQUE (m)-[:LOCATED {type: "photo_tag", time: "20140504"}]->(l);  
+    commit
+
+
+    begin
+    MATCH (h:Human)-[:USES]->(m:Machine), (l:Location)
+    WHERE m.type = "phone" AND h.id = 54 AND l.name = "Foster The People"
+    CREATE UNIQUE (m)-[:LOCATED {type: "photo_tag", time: "20140503"}]->(l);  
     commit
 
     begin
-    MERGE (:Human:User { 
-           firstname: "Phoenix", lastname: "Watanabe",
-           fullname: "Phoenix Watanabe", id: 55, 
-           gender: "male", age: 22});
+    CREATE (:Human:User { 
+           firstname: "Kayden", lastname: "Davis",
+           fullname: "Kayden Davis", id: 55, 
+           gender: "male", age: 23});
     commit
 
 begin
 MATCH (h:User), (f:User)
-WHERE h.id = 55 AND f.id = 26
+WHERE h.id = 55 AND f.id = 22
 CREATE UNIQUE (h)-[:FRIEND]-(f);
 commit
 
 
 begin
 MATCH (h:User), (f:User)
-WHERE h.id = 55 AND f.id = 17
-CREATE UNIQUE (h)-[:FRIEND]-(f);
-commit
-
-
-begin
-MATCH (h:User), (f:User)
-WHERE h.id = 55 AND f.id = 20
+WHERE h.id = 55 AND f.id = 45
 CREATE UNIQUE (h)-[:FRIEND]-(f);
 commit
 
 begin
 MATCH (h:User), (i:Interest)
-WHERE h.id = 55 AND i.name = "Horse_Riding"
-CREATE UNIQUE (h)-[:HAS]->(i);
-commit
-
-
-begin
-MATCH (h:User), (i:Interest)
-WHERE h.id = 55 AND i.name = "Walking"
+WHERE h.id = 55 AND i.name = "Rock_Climbing"
 CREATE UNIQUE (h)-[:HAS]->(i);
 commit
 
 begin
 MATCH (h:Human), (d:Machine)
-WHERE h.id = 55 AND d.id = 50
+WHERE h.id = 55 AND d.id = 70
 CREATE UNIQUE (h)-[:USES]->(d);
 commit
 
     begin
     MATCH (h:Human)-[:USES]->(m:Machine), (l:Location)
-    WHERE m.type = "phone" AND h.id = 55 AND l.name = "The Fray"
-    CREATE UNIQUE (m)-[:LOCATED {type: "yelp_review", time: "20140503"}]->(l);  
+    WHERE m.type = "phone" AND h.id = 55 AND l.name = "EastBurn"
+    CREATE UNIQUE (m)-[:LOCATED {type: "photo_tag", time: "20140505"}]->(l);  
+    commit
+
+
+    begin
+    MATCH (h:Human)-[:USES]->(m:Machine), (l:Location)
+    WHERE m.type = "phone" AND h.id = 55 AND l.name = "Nordstroms"
+    CREATE UNIQUE (m)-[:LOCATED {type: "yelp_review", time: "20140504"}]->(l);  
     commit
 
 
     begin
     MATCH (h:Human)-[:USES]->(m:Machine), (l:Location)
     WHERE m.type = "phone" AND h.id = 55 AND l.name = "McMenamins"
-    CREATE UNIQUE (m)-[:LOCATED {type: "yelp_review", time: "20140501"}]->(l);  
+    CREATE UNIQUE (m)-[:LOCATED {type: "yelp_review", time: "20140502"}]->(l);  
     commit
 
 
     begin
     MATCH (h:Human)-[:USES]->(m:Machine), (l:Location)
     WHERE m.type = "phone" AND h.id = 55 AND l.name = "Nike"
-    CREATE UNIQUE (m)-[:LOCATED {type: "yelp_review", time: "20140505"}]->(l);  
-    commit
-
-
-    begin
-    MATCH (h:Human)-[:USES]->(m:Machine), (l:Location)
-    WHERE m.type = "phone" AND h.id = 55 AND l.name = "Besaws"
-    CREATE UNIQUE (m)-[:LOCATED {type: "yelp_review", time: "20140505"}]->(l);  
-    commit
-
-
-    begin
-    MATCH (h:Human)-[:USES]->(m:Machine), (l:Location)
-    WHERE m.type = "phone" AND h.id = 55 AND l.name = "Starbucks"
-    CREATE UNIQUE (m)-[:LOCATED {type: "yelp_review", time: "20140504"}]->(l);  
+    CREATE UNIQUE (m)-[:LOCATED {type: "yelp_review", time: "20140502"}]->(l);  
     commit
 
     begin
-    MERGE (:Human:User { 
-           firstname: "Cameron", lastname: "Walker",
-           fullname: "Cameron Walker", id: 56, 
-           gender: "male", age: 33});
+    CREATE (:Human:User { 
+           firstname: "Avery", lastname: "Fisher",
+           fullname: "Avery Fisher", id: 56, 
+           gender: "female", age: 28});
     commit
 
 begin
 MATCH (h:User), (f:User)
-WHERE h.id = 56 AND f.id = 50
+WHERE h.id = 56 AND f.id = 11
+CREATE UNIQUE (h)-[:FRIEND]-(f);
+commit
+
+
+begin
+MATCH (h:User), (f:User)
+WHERE h.id = 56 AND f.id = 19
+CREATE UNIQUE (h)-[:FRIEND]-(f);
+commit
+
+
+begin
+MATCH (h:User), (f:User)
+WHERE h.id = 56 AND f.id = 18
+CREATE UNIQUE (h)-[:FRIEND]-(f);
+commit
+
+
+begin
+MATCH (h:User), (f:User)
+WHERE h.id = 56 AND f.id = 38
 CREATE UNIQUE (h)-[:FRIEND]-(f);
 commit
 
@@ -6557,62 +6868,13 @@ commit
 
 begin
 MATCH (h:User), (f:User)
-WHERE h.id = 56 AND f.id = 16
-CREATE UNIQUE (h)-[:FRIEND]-(f);
-commit
-
-
-begin
-MATCH (h:User), (f:User)
-WHERE h.id = 56 AND f.id = 24
+WHERE h.id = 56 AND f.id = 23
 CREATE UNIQUE (h)-[:FRIEND]-(f);
 commit
 
 begin
 MATCH (h:User), (i:Interest)
-WHERE h.id = 56 AND i.name = "River_Rafting"
-CREATE UNIQUE (h)-[:HAS]->(i);
-commit
-
-
-begin
-MATCH (h:User), (i:Interest)
-WHERE h.id = 56 AND i.name = "Hiking"
-CREATE UNIQUE (h)-[:HAS]->(i);
-commit
-
-
-begin
-MATCH (h:User), (i:Interest)
-WHERE h.id = 56 AND i.name = "Walking"
-CREATE UNIQUE (h)-[:HAS]->(i);
-commit
-
-
-begin
-MATCH (h:User), (i:Interest)
-WHERE h.id = 56 AND i.name = "Swimming"
-CREATE UNIQUE (h)-[:HAS]->(i);
-commit
-
-
-begin
-MATCH (h:User), (i:Interest)
-WHERE h.id = 56 AND i.name = "Baseball"
-CREATE UNIQUE (h)-[:HAS]->(i);
-commit
-
-
-begin
-MATCH (h:User), (i:Interest)
-WHERE h.id = 56 AND i.name = "Boating"
-CREATE UNIQUE (h)-[:HAS]->(i);
-commit
-
-
-begin
-MATCH (h:User), (i:Interest)
-WHERE h.id = 56 AND i.name = "Surfing"
+WHERE h.id = 56 AND i.name = "Basketball"
 CREATE UNIQUE (h)-[:HAS]->(i);
 commit
 
@@ -6626,101 +6888,108 @@ commit
 
 begin
 MATCH (h:User), (i:Interest)
-WHERE h.id = 56 AND i.name = "Basketball"
+WHERE h.id = 56 AND i.name = "Photography"
 CREATE UNIQUE (h)-[:HAS]->(i);
 commit
 
 
 begin
 MATCH (h:User), (i:Interest)
-WHERE h.id = 56 AND i.name = "Cycling"
+WHERE h.id = 56 AND i.name = "Boating"
+CREATE UNIQUE (h)-[:HAS]->(i);
+commit
+
+
+begin
+MATCH (h:User), (i:Interest)
+WHERE h.id = 56 AND i.name = "Hiking"
+CREATE UNIQUE (h)-[:HAS]->(i);
+commit
+
+
+begin
+MATCH (h:User), (i:Interest)
+WHERE h.id = 56 AND i.name = "River_Rafting"
+CREATE UNIQUE (h)-[:HAS]->(i);
+commit
+
+
+begin
+MATCH (h:User), (i:Interest)
+WHERE h.id = 56 AND i.name = "Bungee_Jumping"
 CREATE UNIQUE (h)-[:HAS]->(i);
 commit
 
 begin
 MATCH (h:Human), (d:Machine)
-WHERE h.id = 56 AND d.id = 28
+WHERE h.id = 56 AND d.id = 81
 CREATE UNIQUE (h)-[:USES]->(d);
 commit
 
 
 begin
 MATCH (h:Human), (d:Machine)
-WHERE h.id = 56 AND d.id = 90
+WHERE h.id = 56 AND d.id = 94
 CREATE UNIQUE (h)-[:USES]->(d);
 commit
 
 
 begin
 MATCH (h:Human), (d:Machine)
-WHERE h.id = 56 AND d.id = 64
+WHERE h.id = 56 AND d.id = 73
 CREATE UNIQUE (h)-[:USES]->(d);
 commit
 
     begin
     MATCH (h:Human)-[:USES]->(m:Machine), (l:Location)
-    WHERE m.type = "phone" AND h.id = 56 AND l.name = "Besaws"
-    CREATE UNIQUE (m)-[:LOCATED {type: "yelp_review", time: "20140502"}]->(l);  
-    commit
-
-
-    begin
-    MATCH (h:Human)-[:USES]->(m:Machine), (l:Location)
-    WHERE m.type = "phone" AND h.id = 56 AND l.name = "Eastburn"
-    CREATE UNIQUE (m)-[:LOCATED {type: "yelp_review", time: "20140505"}]->(l);  
+    WHERE m.type = "phone" AND h.id = 56 AND l.name = "Nordstroms"
+    CREATE UNIQUE (m)-[:LOCATED {type: "facebook_checkin", time: "20140501"}]->(l);  
     commit
 
     begin
-    MERGE (:Human:User { 
-           firstname: "Hayden", lastname: "Stewart",
-           fullname: "Hayden Stewart", id: 57, 
-           gender: "male", age: 23});
+    CREATE (:Human:User { 
+           firstname: "Justice", lastname: "Sánchez",
+           fullname: "Justice Sánchez", id: 57, 
+           gender: "female", age: 29});
     commit
 
 begin
 MATCH (h:User), (f:User)
-WHERE h.id = 57 AND f.id = 4
+WHERE h.id = 57 AND f.id = 12
 CREATE UNIQUE (h)-[:FRIEND]-(f);
 commit
 
 
 begin
 MATCH (h:User), (f:User)
-WHERE h.id = 57 AND f.id = 33
+WHERE h.id = 57 AND f.id = 41
 CREATE UNIQUE (h)-[:FRIEND]-(f);
 commit
 
 
 begin
 MATCH (h:User), (f:User)
-WHERE h.id = 57 AND f.id = 29
+WHERE h.id = 57 AND f.id = 18
 CREATE UNIQUE (h)-[:FRIEND]-(f);
 commit
 
 
 begin
 MATCH (h:User), (f:User)
-WHERE h.id = 57 AND f.id = 3
+WHERE h.id = 57 AND f.id = 52
+CREATE UNIQUE (h)-[:FRIEND]-(f);
+commit
+
+
+begin
+MATCH (h:User), (f:User)
+WHERE h.id = 57 AND f.id = 34
 CREATE UNIQUE (h)-[:FRIEND]-(f);
 commit
 
 begin
 MATCH (h:User), (i:Interest)
-WHERE h.id = 57 AND i.name = "Photography"
-CREATE UNIQUE (h)-[:HAS]->(i);
-commit
-
-
-begin
-MATCH (h:User), (i:Interest)
-WHERE h.id = 57 AND i.name = "Basketball"
-CREATE UNIQUE (h)-[:HAS]->(i);
-commit
-
-
-begin
-MATCH (h:User), (i:Interest)
-WHERE h.id = 57 AND i.name = "Surfing"
+WHERE h.id = 57 AND i.name = "Walking"
 CREATE UNIQUE (h)-[:HAS]->(i);
 commit
 
@@ -6734,77 +7003,56 @@ commit
 
 begin
 MATCH (h:User), (i:Interest)
-WHERE h.id = 57 AND i.name = "Scuba_Diving"
+WHERE h.id = 57 AND i.name = "River_Rafting"
 CREATE UNIQUE (h)-[:HAS]->(i);
 commit
 
 
 begin
 MATCH (h:User), (i:Interest)
-WHERE h.id = 57 AND i.name = "Bungee_Jumping"
-CREATE UNIQUE (h)-[:HAS]->(i);
-commit
-
-
-begin
-MATCH (h:User), (i:Interest)
-WHERE h.id = 57 AND i.name = "Golf"
+WHERE h.id = 57 AND i.name = "Baseball"
 CREATE UNIQUE (h)-[:HAS]->(i);
 commit
 
 begin
 MATCH (h:Human), (d:Machine)
-WHERE h.id = 57 AND d.id = 89
+WHERE h.id = 57 AND d.id = 112
 CREATE UNIQUE (h)-[:USES]->(d);
 commit
 
     begin
     MATCH (h:Human)-[:USES]->(m:Machine), (l:Location)
-    WHERE m.type = "phone" AND h.id = 57 AND l.name = "Eastburn"
-    CREATE UNIQUE (m)-[:LOCATED {type: "yelp_review", time: "20140503"}]->(l);  
+    WHERE m.type = "phone" AND h.id = 57 AND l.name = "Caffe Umbria"
+    CREATE UNIQUE (m)-[:LOCATED {type: "yelp_review", time: "20140504"}]->(l);  
+    commit
+
+
+    begin
+    MATCH (h:Human)-[:USES]->(m:Machine), (l:Location)
+    WHERE m.type = "phone" AND h.id = 57 AND l.name = "Nordstroms"
+    CREATE UNIQUE (m)-[:LOCATED {type: "yelp_review", time: "20140504"}]->(l);  
+    commit
+
+
+    begin
+    MATCH (h:Human)-[:USES]->(m:Machine), (l:Location)
+    WHERE m.type = "phone" AND h.id = 57 AND l.name = "Hollywood Theatre"
+    CREATE UNIQUE (m)-[:LOCATED {type: "yelp_review", time: "20140504"}]->(l);  
+    commit
+
+
+    begin
+    MATCH (h:Human)-[:USES]->(m:Machine), (l:Location)
+    WHERE m.type = "phone" AND h.id = 57 AND l.name = "Starbucks"
+    CREATE UNIQUE (m)-[:LOCATED {type: "facebook_checkin", time: "20140503"}]->(l);  
     commit
 
     begin
-    MERGE (:Human:User { 
-           firstname: "Harley", lastname: "Peterson",
-           fullname: "Harley Peterson", id: 58, 
-           gender: "male", age: 25});
+    CREATE (:Human:User { 
+           firstname: "Jordan", lastname: "White",
+           fullname: "Jordan White", id: 58, 
+           gender: "male", age: 32});
     commit
-
-begin
-MATCH (h:User), (f:User)
-WHERE h.id = 58 AND f.id = 45
-CREATE UNIQUE (h)-[:FRIEND]-(f);
-commit
-
-
-begin
-MATCH (h:User), (f:User)
-WHERE h.id = 58 AND f.id = 51
-CREATE UNIQUE (h)-[:FRIEND]-(f);
-commit
-
-
-begin
-MATCH (h:User), (f:User)
-WHERE h.id = 58 AND f.id = 38
-CREATE UNIQUE (h)-[:FRIEND]-(f);
-commit
-
-
-begin
-MATCH (h:User), (f:User)
-WHERE h.id = 58 AND f.id = 31
-CREATE UNIQUE (h)-[:FRIEND]-(f);
-commit
-
-
-begin
-MATCH (h:User), (f:User)
-WHERE h.id = 58 AND f.id = 28
-CREATE UNIQUE (h)-[:FRIEND]-(f);
-commit
-
 
 begin
 MATCH (h:User), (f:User)
@@ -6812,23 +7060,30 @@ WHERE h.id = 58 AND f.id = 16
 CREATE UNIQUE (h)-[:FRIEND]-(f);
 commit
 
+
+begin
+MATCH (h:User), (f:User)
+WHERE h.id = 58 AND f.id = 33
+CREATE UNIQUE (h)-[:FRIEND]-(f);
+commit
+
 begin
 MATCH (h:User), (i:Interest)
-WHERE h.id = 58 AND i.name = "Horse_Riding"
+WHERE h.id = 58 AND i.name = "Cycling"
 CREATE UNIQUE (h)-[:HAS]->(i);
 commit
 
 
 begin
 MATCH (h:User), (i:Interest)
-WHERE h.id = 58 AND i.name = "Walking"
+WHERE h.id = 58 AND i.name = "Swimming"
 CREATE UNIQUE (h)-[:HAS]->(i);
 commit
 
 
 begin
 MATCH (h:User), (i:Interest)
-WHERE h.id = 58 AND i.name = "Bungee_Jumping"
+WHERE h.id = 58 AND i.name = "Scuba_Diving"
 CREATE UNIQUE (h)-[:HAS]->(i);
 commit
 
@@ -6839,104 +7094,104 @@ WHERE h.id = 58 AND i.name = "Volleyball"
 CREATE UNIQUE (h)-[:HAS]->(i);
 commit
 
+
 begin
-MATCH (h:Human), (d:Machine)
-WHERE h.id = 58 AND d.id = 38
-CREATE UNIQUE (h)-[:USES]->(d);
+MATCH (h:User), (i:Interest)
+WHERE h.id = 58 AND i.name = "River_Rafting"
+CREATE UNIQUE (h)-[:HAS]->(i);
 commit
 
 
 begin
-MATCH (h:Human), (d:Machine)
-WHERE h.id = 58 AND d.id = 69
-CREATE UNIQUE (h)-[:USES]->(d);
+MATCH (h:User), (i:Interest)
+WHERE h.id = 58 AND i.name = "Photography"
+CREATE UNIQUE (h)-[:HAS]->(i);
 commit
 
 
 begin
-MATCH (h:Human), (d:Machine)
-WHERE h.id = 58 AND d.id = 103
-CREATE UNIQUE (h)-[:USES]->(d);
+MATCH (h:User), (i:Interest)
+WHERE h.id = 58 AND i.name = "Fishing"
+CREATE UNIQUE (h)-[:HAS]->(i);
 commit
 
-    begin
-    MATCH (h:Human)-[:USES]->(m:Machine), (l:Location)
-    WHERE m.type = "phone" AND h.id = 58 AND l.name = "Christina Perri"
-    CREATE UNIQUE (m)-[:LOCATED {type: "yelp_review", time: "20140502"}]->(l);  
-    commit
+
+begin
+MATCH (h:User), (i:Interest)
+WHERE h.id = 58 AND i.name = "Surfing"
+CREATE UNIQUE (h)-[:HAS]->(i);
+commit
 
 
-    begin
-    MATCH (h:Human)-[:USES]->(m:Machine), (l:Location)
-    WHERE m.type = "phone" AND h.id = 58 AND l.name = "Hollywood Theatre"
-    CREATE UNIQUE (m)-[:LOCATED {type: "photo_tag", time: "20140501"}]->(l);  
-    commit
+begin
+MATCH (h:User), (i:Interest)
+WHERE h.id = 58 AND i.name = "Baseball"
+CREATE UNIQUE (h)-[:HAS]->(i);
+commit
 
 
-    begin
-    MATCH (h:Human)-[:USES]->(m:Machine), (l:Location)
-    WHERE m.type = "phone" AND h.id = 58 AND l.name = "McMenamins"
-    CREATE UNIQUE (m)-[:LOCATED {type: "photo_tag", time: "20140505"}]->(l);  
-    commit
+begin
+MATCH (h:User), (i:Interest)
+WHERE h.id = 58 AND i.name = "Hiking"
+CREATE UNIQUE (h)-[:HAS]->(i);
+commit
 
-
-    begin
-    MATCH (h:Human)-[:USES]->(m:Machine), (l:Location)
-    WHERE m.type = "phone" AND h.id = 58 AND l.name = "Eastburn"
-    CREATE UNIQUE (m)-[:LOCATED {type: "photo_tag", time: "20140504"}]->(l);  
-    commit
-
+begin
+MATCH (h:Human), (d:Machine)
+WHERE h.id = 58 AND d.id = 31
+CREATE UNIQUE (h)-[:USES]->(d);
+commit
 
     begin
     MATCH (h:Human)-[:USES]->(m:Machine), (l:Location)
     WHERE m.type = "phone" AND h.id = 58 AND l.name = "Nike"
-    CREATE UNIQUE (m)-[:LOCATED {type: "yelp_review", time: "20140502"}]->(l);  
+    CREATE UNIQUE (m)-[:LOCATED {type: "yelp_review", time: "20140504"}]->(l);  
     commit
 
     begin
-    MERGE (:Human:User { 
-           firstname: "Jayden", lastname: "Ward",
-           fullname: "Jayden Ward", id: 59, 
-           gender: "female", age: 22});
+    CREATE (:Human:User { 
+           firstname: "Emory", lastname: "Lewis",
+           fullname: "Emory Lewis", id: 59, 
+           gender: "male", age: 26});
     commit
 
 begin
 MATCH (h:User), (f:User)
-WHERE h.id = 59 AND f.id = 27
+WHERE h.id = 59 AND f.id = 19
 CREATE UNIQUE (h)-[:FRIEND]-(f);
 commit
 
 
 begin
 MATCH (h:User), (f:User)
-WHERE h.id = 59 AND f.id = 57
+WHERE h.id = 59 AND f.id = 7
+CREATE UNIQUE (h)-[:FRIEND]-(f);
+commit
+
+
+begin
+MATCH (h:User), (f:User)
+WHERE h.id = 59 AND f.id = 32
+CREATE UNIQUE (h)-[:FRIEND]-(f);
+commit
+
+
+begin
+MATCH (h:User), (f:User)
+WHERE h.id = 59 AND f.id = 14
+CREATE UNIQUE (h)-[:FRIEND]-(f);
+commit
+
+
+begin
+MATCH (h:User), (f:User)
+WHERE h.id = 59 AND f.id = 43
 CREATE UNIQUE (h)-[:FRIEND]-(f);
 commit
 
 begin
 MATCH (h:User), (i:Interest)
-WHERE h.id = 59 AND i.name = "Bungee_Jumping"
-CREATE UNIQUE (h)-[:HAS]->(i);
-commit
-
-
-begin
-MATCH (h:User), (i:Interest)
-WHERE h.id = 59 AND i.name = "Volleyball"
-CREATE UNIQUE (h)-[:HAS]->(i);
-commit
-
-
-begin
-MATCH (h:User), (i:Interest)
-WHERE h.id = 59 AND i.name = "Photography"
-CREATE UNIQUE (h)-[:HAS]->(i);
-commit
-
-
-begin
-MATCH (h:User), (i:Interest)
-WHERE h.id = 59 AND i.name = "Basketball"
+WHERE h.id = 59 AND i.name = "Walking"
 CREATE UNIQUE (h)-[:HAS]->(i);
 commit
 
@@ -6950,14 +7205,28 @@ commit
 
 begin
 MATCH (h:User), (i:Interest)
-WHERE h.id = 59 AND i.name = "Baseball"
+WHERE h.id = 59 AND i.name = "Hiking"
 CREATE UNIQUE (h)-[:HAS]->(i);
 commit
 
 
 begin
 MATCH (h:User), (i:Interest)
-WHERE h.id = 59 AND i.name = "Hiking"
+WHERE h.id = 59 AND i.name = "Basketball"
+CREATE UNIQUE (h)-[:HAS]->(i);
+commit
+
+
+begin
+MATCH (h:User), (i:Interest)
+WHERE h.id = 59 AND i.name = "Horse_Riding"
+CREATE UNIQUE (h)-[:HAS]->(i);
+commit
+
+
+begin
+MATCH (h:User), (i:Interest)
+WHERE h.id = 59 AND i.name = "Bungee_Jumping"
 CREATE UNIQUE (h)-[:HAS]->(i);
 commit
 
@@ -6971,70 +7240,63 @@ commit
 
 begin
 MATCH (h:User), (i:Interest)
-WHERE h.id = 59 AND i.name = "Rock_Climbing"
+WHERE h.id = 59 AND i.name = "Volleyball"
 CREATE UNIQUE (h)-[:HAS]->(i);
 commit
 
 
 begin
 MATCH (h:User), (i:Interest)
-WHERE h.id = 59 AND i.name = "Scuba_Diving"
+WHERE h.id = 59 AND i.name = "Swimming"
+CREATE UNIQUE (h)-[:HAS]->(i);
+commit
+
+
+begin
+MATCH (h:User), (i:Interest)
+WHERE h.id = 59 AND i.name = "Surfing"
 CREATE UNIQUE (h)-[:HAS]->(i);
 commit
 
 begin
 MATCH (h:Human), (d:Machine)
-WHERE h.id = 59 AND d.id = 57
-CREATE UNIQUE (h)-[:USES]->(d);
-commit
-
-
-begin
-MATCH (h:Human), (d:Machine)
-WHERE h.id = 59 AND d.id = 34
+WHERE h.id = 59 AND d.id = 69
 CREATE UNIQUE (h)-[:USES]->(d);
 commit
 
     begin
     MATCH (h:Human)-[:USES]->(m:Machine), (l:Location)
-    WHERE m.type = "phone" AND h.id = 59 AND l.name = "Caffe Umbria"
-    CREATE UNIQUE (m)-[:LOCATED {type: "facebook_checkin", time: "20140501"}]->(l);  
+    WHERE m.type = "phone" AND h.id = 59 AND l.name = "Nike"
+    CREATE UNIQUE (m)-[:LOCATED {type: "photo_tag", time: "20140502"}]->(l);  
     commit
 
 
     begin
     MATCH (h:Human)-[:USES]->(m:Machine), (l:Location)
-    WHERE m.type = "phone" AND h.id = 59 AND l.name = "Eastburn"
-    CREATE UNIQUE (m)-[:LOCATED {type: "photo_tag", time: "20140503"}]->(l);  
+    WHERE m.type = "phone" AND h.id = 59 AND l.name = "The Fray"
+    CREATE UNIQUE (m)-[:LOCATED {type: "photo_tag", time: "20140501"}]->(l);  
     commit
 
 
     begin
     MATCH (h:Human)-[:USES]->(m:Machine), (l:Location)
-    WHERE m.type = "phone" AND h.id = 59 AND l.name = "McMenamins"
+    WHERE m.type = "phone" AND h.id = 59 AND l.name = "Foster The People"
+    CREATE UNIQUE (m)-[:LOCATED {type: "yelp_review", time: "20140503"}]->(l);  
+    commit
+
+
+    begin
+    MATCH (h:Human)-[:USES]->(m:Machine), (l:Location)
+    WHERE m.type = "phone" AND h.id = 59 AND l.name = "EastBurn"
     CREATE UNIQUE (m)-[:LOCATED {type: "photo_tag", time: "20140504"}]->(l);  
     commit
 
     begin
-    MERGE (:Human:User { 
-           firstname: "Morgan", lastname: "Lee",
-           fullname: "Morgan Lee", id: 60, 
-           gender: "female", age: 18});
+    CREATE (:Human:User { 
+           firstname: "Micah", lastname: "King",
+           fullname: "Micah King", id: 60, 
+           gender: "male", age: 23});
     commit
-
-begin
-MATCH (h:User), (f:User)
-WHERE h.id = 60 AND f.id = 4
-CREATE UNIQUE (h)-[:FRIEND]-(f);
-commit
-
-
-begin
-MATCH (h:User), (f:User)
-WHERE h.id = 60 AND f.id = 25
-CREATE UNIQUE (h)-[:FRIEND]-(f);
-commit
-
 
 begin
 MATCH (h:User), (f:User)
@@ -7045,149 +7307,121 @@ commit
 
 begin
 MATCH (h:User), (f:User)
-WHERE h.id = 60 AND f.id = 45
+WHERE h.id = 60 AND f.id = 6
 CREATE UNIQUE (h)-[:FRIEND]-(f);
 commit
 
 
 begin
 MATCH (h:User), (f:User)
-WHERE h.id = 60 AND f.id = 41
+WHERE h.id = 60 AND f.id = 2
 CREATE UNIQUE (h)-[:FRIEND]-(f);
 commit
 
 
 begin
 MATCH (h:User), (f:User)
-WHERE h.id = 60 AND f.id = 9
+WHERE h.id = 60 AND f.id = 44
+CREATE UNIQUE (h)-[:FRIEND]-(f);
+commit
+
+
+begin
+MATCH (h:User), (f:User)
+WHERE h.id = 60 AND f.id = 17
+CREATE UNIQUE (h)-[:FRIEND]-(f);
+commit
+
+
+begin
+MATCH (h:User), (f:User)
+WHERE h.id = 60 AND f.id = 50
 CREATE UNIQUE (h)-[:FRIEND]-(f);
 commit
 
 begin
 MATCH (h:User), (i:Interest)
-WHERE h.id = 60 AND i.name = "Horse_Riding"
+WHERE h.id = 60 AND i.name = "Swimming"
+CREATE UNIQUE (h)-[:HAS]->(i);
+commit
+
+
+begin
+MATCH (h:User), (i:Interest)
+WHERE h.id = 60 AND i.name = "Fishing"
+CREATE UNIQUE (h)-[:HAS]->(i);
+commit
+
+
+begin
+MATCH (h:User), (i:Interest)
+WHERE h.id = 60 AND i.name = "Hiking"
+CREATE UNIQUE (h)-[:HAS]->(i);
+commit
+
+
+begin
+MATCH (h:User), (i:Interest)
+WHERE h.id = 60 AND i.name = "Surfing"
+CREATE UNIQUE (h)-[:HAS]->(i);
+commit
+
+
+begin
+MATCH (h:User), (i:Interest)
+WHERE h.id = 60 AND i.name = "Bungee_Jumping"
 CREATE UNIQUE (h)-[:HAS]->(i);
 commit
 
 begin
 MATCH (h:Human), (d:Machine)
-WHERE h.id = 60 AND d.id = 72
+WHERE h.id = 60 AND d.id = 93
+CREATE UNIQUE (h)-[:USES]->(d);
+commit
+
+
+begin
+MATCH (h:Human), (d:Machine)
+WHERE h.id = 60 AND d.id = 30
 CREATE UNIQUE (h)-[:USES]->(d);
 commit
 
     begin
     MATCH (h:Human)-[:USES]->(m:Machine), (l:Location)
-    WHERE m.type = "phone" AND h.id = 60 AND l.name = "Nike"
-    CREATE UNIQUE (m)-[:LOCATED {type: "yelp_review", time: "20140504"}]->(l);  
-    commit
-
-
-    begin
-    MATCH (h:Human)-[:USES]->(m:Machine), (l:Location)
-    WHERE m.type = "phone" AND h.id = 60 AND l.name = "Nordstroms"
+    WHERE m.type = "phone" AND h.id = 60 AND l.name = "McMenamins"
     CREATE UNIQUE (m)-[:LOCATED {type: "facebook_checkin", time: "20140503"}]->(l);  
     commit
 
 
     begin
     MATCH (h:Human)-[:USES]->(m:Machine), (l:Location)
+    WHERE m.type = "phone" AND h.id = 60 AND l.name = "EastBurn"
+    CREATE UNIQUE (m)-[:LOCATED {type: "photo_tag", time: "20140502"}]->(l);  
+    commit
+
+
+    begin
+    MATCH (h:Human)-[:USES]->(m:Machine), (l:Location)
     WHERE m.type = "phone" AND h.id = 60 AND l.name = "Hollywood Theatre"
-    CREATE UNIQUE (m)-[:LOCATED {type: "photo_tag", time: "20140503"}]->(l);  
+    CREATE UNIQUE (m)-[:LOCATED {type: "photo_tag", time: "20140505"}]->(l);  
     commit
 
     begin
-    MERGE (:Human:User { 
-           firstname: "Jordyn", lastname: "Reyes",
-           fullname: "Jordyn Reyes", id: 61, 
-           gender: "male", age: 27});
+    CREATE (:Human:User { 
+           firstname: "Jordyn", lastname: "Kelly",
+           fullname: "Jordyn Kelly", id: 61, 
+           gender: "male", age: 32});
     commit
 
 begin
 MATCH (h:User), (f:User)
-WHERE h.id = 61 AND f.id = 47
+WHERE h.id = 61 AND f.id = 27
 CREATE UNIQUE (h)-[:FRIEND]-(f);
 commit
-
-
-begin
-MATCH (h:User), (f:User)
-WHERE h.id = 61 AND f.id = 45
-CREATE UNIQUE (h)-[:FRIEND]-(f);
-commit
-
-
-begin
-MATCH (h:User), (f:User)
-WHERE h.id = 61 AND f.id = 26
-CREATE UNIQUE (h)-[:FRIEND]-(f);
-commit
-
-
-begin
-MATCH (h:User), (f:User)
-WHERE h.id = 61 AND f.id = 18
-CREATE UNIQUE (h)-[:FRIEND]-(f);
-commit
-
-
-begin
-MATCH (h:User), (f:User)
-WHERE h.id = 61 AND f.id = 2
-CREATE UNIQUE (h)-[:FRIEND]-(f);
-commit
-
-begin
-MATCH (h:User), (i:Interest)
-WHERE h.id = 61 AND i.name = "Golf"
-CREATE UNIQUE (h)-[:HAS]->(i);
-commit
-
-
-begin
-MATCH (h:User), (i:Interest)
-WHERE h.id = 61 AND i.name = "Rock_Climbing"
-CREATE UNIQUE (h)-[:HAS]->(i);
-commit
-
-
-begin
-MATCH (h:User), (i:Interest)
-WHERE h.id = 61 AND i.name = "Horse_Riding"
-CREATE UNIQUE (h)-[:HAS]->(i);
-commit
-
-
-begin
-MATCH (h:User), (i:Interest)
-WHERE h.id = 61 AND i.name = "Hiking"
-CREATE UNIQUE (h)-[:HAS]->(i);
-commit
-
-
-begin
-MATCH (h:User), (i:Interest)
-WHERE h.id = 61 AND i.name = "Bungee_Jumping"
-CREATE UNIQUE (h)-[:HAS]->(i);
-commit
-
-
-begin
-MATCH (h:User), (i:Interest)
-WHERE h.id = 61 AND i.name = "Baseball"
-CREATE UNIQUE (h)-[:HAS]->(i);
-commit
-
 
 begin
 MATCH (h:User), (i:Interest)
 WHERE h.id = 61 AND i.name = "Volleyball"
-CREATE UNIQUE (h)-[:HAS]->(i);
-commit
-
-
-begin
-MATCH (h:User), (i:Interest)
-WHERE h.id = 61 AND i.name = "Boating"
 CREATE UNIQUE (h)-[:HAS]->(i);
 commit
 
@@ -7201,60 +7435,81 @@ commit
 
 begin
 MATCH (h:User), (i:Interest)
+WHERE h.id = 61 AND i.name = "Rock_Climbing"
+CREATE UNIQUE (h)-[:HAS]->(i);
+commit
+
+
+begin
+MATCH (h:User), (i:Interest)
+WHERE h.id = 61 AND i.name = "Surfing"
+CREATE UNIQUE (h)-[:HAS]->(i);
+commit
+
+
+begin
+MATCH (h:User), (i:Interest)
+WHERE h.id = 61 AND i.name = "Scuba_Diving"
+CREATE UNIQUE (h)-[:HAS]->(i);
+commit
+
+
+begin
+MATCH (h:User), (i:Interest)
+WHERE h.id = 61 AND i.name = "Golf"
+CREATE UNIQUE (h)-[:HAS]->(i);
+commit
+
+
+begin
+MATCH (h:User), (i:Interest)
+WHERE h.id = 61 AND i.name = "Cycling"
+CREATE UNIQUE (h)-[:HAS]->(i);
+commit
+
+
+begin
+MATCH (h:User), (i:Interest)
 WHERE h.id = 61 AND i.name = "Basketball"
 CREATE UNIQUE (h)-[:HAS]->(i);
 commit
 
 begin
 MATCH (h:Human), (d:Machine)
-WHERE h.id = 61 AND d.id = 36
+WHERE h.id = 61 AND d.id = 44
 CREATE UNIQUE (h)-[:USES]->(d);
 commit
 
     begin
     MATCH (h:Human)-[:USES]->(m:Machine), (l:Location)
-    WHERE m.type = "phone" AND h.id = 61 AND l.name = "Hollywood Theatre"
-    CREATE UNIQUE (m)-[:LOCATED {type: "facebook_checkin", time: "20140504"}]->(l);  
-    commit
-
-
-    begin
-    MATCH (h:Human)-[:USES]->(m:Machine), (l:Location)
-    WHERE m.type = "phone" AND h.id = 61 AND l.name = "McMenamins"
-    CREATE UNIQUE (m)-[:LOCATED {type: "photo_tag", time: "20140504"}]->(l);  
-    commit
-
-
-    begin
-    MATCH (h:Human)-[:USES]->(m:Machine), (l:Location)
-    WHERE m.type = "phone" AND h.id = 61 AND l.name = "Foster The People"
-    CREATE UNIQUE (m)-[:LOCATED {type: "yelp_review", time: "20140504"}]->(l);  
-    commit
-
-
-    begin
-    MATCH (h:Human)-[:USES]->(m:Machine), (l:Location)
-    WHERE m.type = "phone" AND h.id = 61 AND l.name = "Christina Perri"
-    CREATE UNIQUE (m)-[:LOCATED {type: "facebook_checkin", time: "20140504"}]->(l);  
-    commit
-
-
-    begin
-    MATCH (h:Human)-[:USES]->(m:Machine), (l:Location)
-    WHERE m.type = "phone" AND h.id = 61 AND l.name = "Besaws"
-    CREATE UNIQUE (m)-[:LOCATED {type: "yelp_review", time: "20140504"}]->(l);  
+    WHERE m.type = "phone" AND h.id = 61 AND l.name = "Caffe Umbria"
+    CREATE UNIQUE (m)-[:LOCATED {type: "facebook_checkin", time: "20140505"}]->(l);  
     commit
 
     begin
-    MERGE (:Human:User { 
-           firstname: "Ryan", lastname: "James",
-           fullname: "Ryan James", id: 62, 
-           gender: "male", age: 29});
+    CREATE (:Human:User { 
+           firstname: "Blake", lastname: "Kelly",
+           fullname: "Blake Kelly", id: 62, 
+           gender: "female", age: 27});
     commit
 
 begin
 MATCH (h:User), (f:User)
-WHERE h.id = 62 AND f.id = 40
+WHERE h.id = 62 AND f.id = 20
+CREATE UNIQUE (h)-[:FRIEND]-(f);
+commit
+
+
+begin
+MATCH (h:User), (f:User)
+WHERE h.id = 62 AND f.id = 58
+CREATE UNIQUE (h)-[:FRIEND]-(f);
+commit
+
+
+begin
+MATCH (h:User), (f:User)
+WHERE h.id = 62 AND f.id = 9
 CREATE UNIQUE (h)-[:FRIEND]-(f);
 commit
 
@@ -7265,58 +7520,9 @@ WHERE h.id = 62 AND f.id = 22
 CREATE UNIQUE (h)-[:FRIEND]-(f);
 commit
 
-
-begin
-MATCH (h:User), (f:User)
-WHERE h.id = 62 AND f.id = 5
-CREATE UNIQUE (h)-[:FRIEND]-(f);
-commit
-
-
-begin
-MATCH (h:User), (f:User)
-WHERE h.id = 62 AND f.id = 47
-CREATE UNIQUE (h)-[:FRIEND]-(f);
-commit
-
-
-begin
-MATCH (h:User), (f:User)
-WHERE h.id = 62 AND f.id = 25
-CREATE UNIQUE (h)-[:FRIEND]-(f);
-commit
-
-
-begin
-MATCH (h:User), (f:User)
-WHERE h.id = 62 AND f.id = 6
-CREATE UNIQUE (h)-[:FRIEND]-(f);
-commit
-
 begin
 MATCH (h:User), (i:Interest)
-WHERE h.id = 62 AND i.name = "Surfing"
-CREATE UNIQUE (h)-[:HAS]->(i);
-commit
-
-
-begin
-MATCH (h:User), (i:Interest)
-WHERE h.id = 62 AND i.name = "Volleyball"
-CREATE UNIQUE (h)-[:HAS]->(i);
-commit
-
-
-begin
-MATCH (h:User), (i:Interest)
-WHERE h.id = 62 AND i.name = "Boating"
-CREATE UNIQUE (h)-[:HAS]->(i);
-commit
-
-
-begin
-MATCH (h:User), (i:Interest)
-WHERE h.id = 62 AND i.name = "Basketball"
+WHERE h.id = 62 AND i.name = "Photography"
 CREATE UNIQUE (h)-[:HAS]->(i);
 commit
 
@@ -7327,79 +7533,58 @@ WHERE h.id = 62 AND i.name = "Hiking"
 CREATE UNIQUE (h)-[:HAS]->(i);
 commit
 
+
+begin
+MATCH (h:User), (i:Interest)
+WHERE h.id = 62 AND i.name = "Basketball"
+CREATE UNIQUE (h)-[:HAS]->(i);
+commit
+
 begin
 MATCH (h:Human), (d:Machine)
-WHERE h.id = 62 AND d.id = 51
+WHERE h.id = 62 AND d.id = 99
 CREATE UNIQUE (h)-[:USES]->(d);
 commit
 
     begin
     MATCH (h:Human)-[:USES]->(m:Machine), (l:Location)
+    WHERE m.type = "phone" AND h.id = 62 AND l.name = "Starbucks"
+    CREATE UNIQUE (m)-[:LOCATED {type: "photo_tag", time: "20140502"}]->(l);  
+    commit
+
+
+    begin
+    MATCH (h:Human)-[:USES]->(m:Machine), (l:Location)
     WHERE m.type = "phone" AND h.id = 62 AND l.name = "Caffe Umbria"
-    CREATE UNIQUE (m)-[:LOCATED {type: "photo_tag", time: "20140505"}]->(l);  
-    commit
-
-
-    begin
-    MATCH (h:Human)-[:USES]->(m:Machine), (l:Location)
-    WHERE m.type = "phone" AND h.id = 62 AND l.name = "Christina Perri"
-    CREATE UNIQUE (m)-[:LOCATED {type: "yelp_review", time: "20140505"}]->(l);  
-    commit
-
-
-    begin
-    MATCH (h:Human)-[:USES]->(m:Machine), (l:Location)
-    WHERE m.type = "phone" AND h.id = 62 AND l.name = "McMenamins"
-    CREATE UNIQUE (m)-[:LOCATED {type: "yelp_review", time: "20140503"}]->(l);  
-    commit
-
-
-    begin
-    MATCH (h:Human)-[:USES]->(m:Machine), (l:Location)
-    WHERE m.type = "phone" AND h.id = 62 AND l.name = "Warpaint"
-    CREATE UNIQUE (m)-[:LOCATED {type: "photo_tag", time: "20140505"}]->(l);  
+    CREATE UNIQUE (m)-[:LOCATED {type: "photo_tag", time: "20140502"}]->(l);  
     commit
 
     begin
-    MERGE (:Human:User { 
-           firstname: "Emery", lastname: "Barnes",
-           fullname: "Emery Barnes", id: 63, 
-           gender: "female", age: 26});
+    CREATE (:Human:User { 
+           firstname: "Rowan", lastname: "Davis",
+           fullname: "Rowan Davis", id: 63, 
+           gender: "female", age: 19});
     commit
 
 begin
 MATCH (h:User), (f:User)
-WHERE h.id = 63 AND f.id = 15
+WHERE h.id = 63 AND f.id = 5
 CREATE UNIQUE (h)-[:FRIEND]-(f);
+commit
+
+begin
+MATCH (h:User), (i:Interest)
+WHERE h.id = 63 AND i.name = "Fishing"
+CREATE UNIQUE (h)-[:HAS]->(i);
 commit
 
 
 begin
-MATCH (h:User), (f:User)
-WHERE h.id = 63 AND f.id = 20
-CREATE UNIQUE (h)-[:FRIEND]-(f);
+MATCH (h:User), (i:Interest)
+WHERE h.id = 63 AND i.name = "Walking"
+CREATE UNIQUE (h)-[:HAS]->(i);
 commit
 
-
-begin
-MATCH (h:User), (f:User)
-WHERE h.id = 63 AND f.id = 14
-CREATE UNIQUE (h)-[:FRIEND]-(f);
-commit
-
-
-begin
-MATCH (h:User), (f:User)
-WHERE h.id = 63 AND f.id = 3
-CREATE UNIQUE (h)-[:FRIEND]-(f);
-commit
-
-
-begin
-MATCH (h:User), (f:User)
-WHERE h.id = 63 AND f.id = 25
-CREATE UNIQUE (h)-[:FRIEND]-(f);
-commit
 
 begin
 MATCH (h:User), (i:Interest)
@@ -7417,21 +7602,7 @@ commit
 
 begin
 MATCH (h:User), (i:Interest)
-WHERE h.id = 63 AND i.name = "Cycling"
-CREATE UNIQUE (h)-[:HAS]->(i);
-commit
-
-
-begin
-MATCH (h:User), (i:Interest)
-WHERE h.id = 63 AND i.name = "Surfing"
-CREATE UNIQUE (h)-[:HAS]->(i);
-commit
-
-
-begin
-MATCH (h:User), (i:Interest)
-WHERE h.id = 63 AND i.name = "Swimming"
+WHERE h.id = 63 AND i.name = "Baseball"
 CREATE UNIQUE (h)-[:HAS]->(i);
 commit
 
@@ -7445,87 +7616,87 @@ commit
 
 begin
 MATCH (h:User), (i:Interest)
-WHERE h.id = 63 AND i.name = "Fishing"
-CREATE UNIQUE (h)-[:HAS]->(i);
-commit
-
-
-begin
-MATCH (h:User), (i:Interest)
-WHERE h.id = 63 AND i.name = "Baseball"
-CREATE UNIQUE (h)-[:HAS]->(i);
-commit
-
-
-begin
-MATCH (h:User), (i:Interest)
-WHERE h.id = 63 AND i.name = "River_Rafting"
-CREATE UNIQUE (h)-[:HAS]->(i);
-commit
-
-
-begin
-MATCH (h:User), (i:Interest)
-WHERE h.id = 63 AND i.name = "Volleyball"
+WHERE h.id = 63 AND i.name = "Surfing"
 CREATE UNIQUE (h)-[:HAS]->(i);
 commit
 
 begin
 MATCH (h:Human), (d:Machine)
-WHERE h.id = 63 AND d.id = 76
+WHERE h.id = 63 AND d.id = 1
 CREATE UNIQUE (h)-[:USES]->(d);
 commit
 
 
 begin
 MATCH (h:Human), (d:Machine)
-WHERE h.id = 63 AND d.id = 94
+WHERE h.id = 63 AND d.id = 50
 CREATE UNIQUE (h)-[:USES]->(d);
 commit
 
     begin
     MATCH (h:Human)-[:USES]->(m:Machine), (l:Location)
-    WHERE m.type = "phone" AND h.id = 63 AND l.name = "Nike"
-    CREATE UNIQUE (m)-[:LOCATED {type: "photo_tag", time: "20140504"}]->(l);  
+    WHERE m.type = "phone" AND h.id = 63 AND l.name = "Besaws"
+    CREATE UNIQUE (m)-[:LOCATED {type: "yelp_review", time: "20140502"}]->(l);  
     commit
 
     begin
-    MERGE (:Human:User { 
-           firstname: "Phoenix", lastname: "Allen",
-           fullname: "Phoenix Allen", id: 64, 
+    CREATE (:Human:User { 
+           firstname: "Skyler", lastname: "Fisher",
+           fullname: "Skyler Fisher", id: 64, 
            gender: "female", age: 35});
     commit
 
 begin
 MATCH (h:User), (f:User)
-WHERE h.id = 64 AND f.id = 53
+WHERE h.id = 64 AND f.id = 59
 CREATE UNIQUE (h)-[:FRIEND]-(f);
 commit
 
 
 begin
 MATCH (h:User), (f:User)
-WHERE h.id = 64 AND f.id = 3
-CREATE UNIQUE (h)-[:FRIEND]-(f);
-commit
-
-
-begin
-MATCH (h:User), (f:User)
-WHERE h.id = 64 AND f.id = 26
-CREATE UNIQUE (h)-[:FRIEND]-(f);
-commit
-
-
-begin
-MATCH (h:User), (f:User)
-WHERE h.id = 64 AND f.id = 50
+WHERE h.id = 64 AND f.id = 12
 CREATE UNIQUE (h)-[:FRIEND]-(f);
 commit
 
 begin
 MATCH (h:User), (i:Interest)
-WHERE h.id = 64 AND i.name = "Volleyball"
+WHERE h.id = 64 AND i.name = "Horse_Riding"
+CREATE UNIQUE (h)-[:HAS]->(i);
+commit
+
+
+begin
+MATCH (h:User), (i:Interest)
+WHERE h.id = 64 AND i.name = "Photography"
+CREATE UNIQUE (h)-[:HAS]->(i);
+commit
+
+
+begin
+MATCH (h:User), (i:Interest)
+WHERE h.id = 64 AND i.name = "Walking"
+CREATE UNIQUE (h)-[:HAS]->(i);
+commit
+
+
+begin
+MATCH (h:User), (i:Interest)
+WHERE h.id = 64 AND i.name = "Boating"
+CREATE UNIQUE (h)-[:HAS]->(i);
+commit
+
+
+begin
+MATCH (h:User), (i:Interest)
+WHERE h.id = 64 AND i.name = "Scuba_Diving"
+CREATE UNIQUE (h)-[:HAS]->(i);
+commit
+
+
+begin
+MATCH (h:User), (i:Interest)
+WHERE h.id = 64 AND i.name = "Hiking"
 CREATE UNIQUE (h)-[:HAS]->(i);
 commit
 
@@ -7536,11 +7707,46 @@ WHERE h.id = 64 AND i.name = "Rock_Climbing"
 CREATE UNIQUE (h)-[:HAS]->(i);
 commit
 
+
+begin
+MATCH (h:User), (i:Interest)
+WHERE h.id = 64 AND i.name = "Surfing"
+CREATE UNIQUE (h)-[:HAS]->(i);
+commit
+
+
+begin
+MATCH (h:User), (i:Interest)
+WHERE h.id = 64 AND i.name = "Basketball"
+CREATE UNIQUE (h)-[:HAS]->(i);
+commit
+
 begin
 MATCH (h:Human), (d:Machine)
-WHERE h.id = 64 AND d.id = 14
+WHERE h.id = 64 AND d.id = 77
 CREATE UNIQUE (h)-[:USES]->(d);
 commit
+
+
+begin
+MATCH (h:Human), (d:Machine)
+WHERE h.id = 64 AND d.id = 43
+CREATE UNIQUE (h)-[:USES]->(d);
+commit
+
+
+begin
+MATCH (h:Human), (d:Machine)
+WHERE h.id = 64 AND d.id = 84
+CREATE UNIQUE (h)-[:USES]->(d);
+commit
+
+    begin
+    MATCH (h:Human)-[:USES]->(m:Machine), (l:Location)
+    WHERE m.type = "phone" AND h.id = 64 AND l.name = "Warpaint"
+    CREATE UNIQUE (m)-[:LOCATED {type: "photo_tag", time: "20140502"}]->(l);  
+    commit
+
 
     begin
     MATCH (h:Human)-[:USES]->(m:Machine), (l:Location)
@@ -7551,23 +7757,58 @@ commit
 
     begin
     MATCH (h:Human)-[:USES]->(m:Machine), (l:Location)
-    WHERE m.type = "phone" AND h.id = 64 AND l.name = "Robotaco"
-    CREATE UNIQUE (m)-[:LOCATED {type: "facebook_checkin", time: "20140501"}]->(l);  
+    WHERE m.type = "phone" AND h.id = 64 AND l.name = "Nike"
+    CREATE UNIQUE (m)-[:LOCATED {type: "facebook_checkin", time: "20140505"}]->(l);  
     commit
 
 
     begin
     MATCH (h:Human)-[:USES]->(m:Machine), (l:Location)
-    WHERE m.type = "phone" AND h.id = 64 AND l.name = "Besaws"
-    CREATE UNIQUE (m)-[:LOCATED {type: "facebook_checkin", time: "20140503"}]->(l);  
+    WHERE m.type = "phone" AND h.id = 64 AND l.name = "Robo Taco"
+    CREATE UNIQUE (m)-[:LOCATED {type: "photo_tag", time: "20140505"}]->(l);  
+    commit
+
+
+    begin
+    MATCH (h:Human)-[:USES]->(m:Machine), (l:Location)
+    WHERE m.type = "phone" AND h.id = 64 AND l.name = "Hollywood Theatre"
+    CREATE UNIQUE (m)-[:LOCATED {type: "facebook_checkin", time: "20140504"}]->(l);  
     commit
 
     begin
-    MERGE (:Human:User { 
-           firstname: "Teagan", lastname: "Li",
-           fullname: "Teagan Li", id: 65, 
-           gender: "female", age: 26});
+    CREATE (:Human:User { 
+           firstname: "Morgan", lastname: "Gutiérrez",
+           fullname: "Morgan Gutiérrez", id: 65, 
+           gender: "female", age: 27});
     commit
+
+begin
+MATCH (h:User), (f:User)
+WHERE h.id = 65 AND f.id = 19
+CREATE UNIQUE (h)-[:FRIEND]-(f);
+commit
+
+
+begin
+MATCH (h:User), (f:User)
+WHERE h.id = 65 AND f.id = 7
+CREATE UNIQUE (h)-[:FRIEND]-(f);
+commit
+
+
+begin
+MATCH (h:User), (f:User)
+WHERE h.id = 65 AND f.id = 4
+CREATE UNIQUE (h)-[:FRIEND]-(f);
+commit
+
+
+begin
+MATCH (h:User), (f:User)
+WHERE h.id = 65 AND f.id = 28
+CREATE UNIQUE (h)-[:FRIEND]-(f);
+commit
+
 
 begin
 MATCH (h:User), (f:User)
@@ -7578,27 +7819,20 @@ commit
 
 begin
 MATCH (h:User), (f:User)
-WHERE h.id = 65 AND f.id = 26
-CREATE UNIQUE (h)-[:FRIEND]-(f);
-commit
-
-
-begin
-MATCH (h:User), (f:User)
-WHERE h.id = 65 AND f.id = 12
-CREATE UNIQUE (h)-[:FRIEND]-(f);
-commit
-
-
-begin
-MATCH (h:User), (f:User)
-WHERE h.id = 65 AND f.id = 23
+WHERE h.id = 65 AND f.id = 60
 CREATE UNIQUE (h)-[:FRIEND]-(f);
 commit
 
 begin
 MATCH (h:User), (i:Interest)
-WHERE h.id = 65 AND i.name = "Swimming"
+WHERE h.id = 65 AND i.name = "Rock_Climbing"
+CREATE UNIQUE (h)-[:HAS]->(i);
+commit
+
+
+begin
+MATCH (h:User), (i:Interest)
+WHERE h.id = 65 AND i.name = "Bungee_Jumping"
 CREATE UNIQUE (h)-[:HAS]->(i);
 commit
 
@@ -7612,20 +7846,6 @@ commit
 
 begin
 MATCH (h:User), (i:Interest)
-WHERE h.id = 65 AND i.name = "Boating"
-CREATE UNIQUE (h)-[:HAS]->(i);
-commit
-
-
-begin
-MATCH (h:User), (i:Interest)
-WHERE h.id = 65 AND i.name = "Baseball"
-CREATE UNIQUE (h)-[:HAS]->(i);
-commit
-
-
-begin
-MATCH (h:User), (i:Interest)
 WHERE h.id = 65 AND i.name = "Horse_Riding"
 CREATE UNIQUE (h)-[:HAS]->(i);
 commit
@@ -7633,87 +7853,73 @@ commit
 
 begin
 MATCH (h:User), (i:Interest)
-WHERE h.id = 65 AND i.name = "Hiking"
-CREATE UNIQUE (h)-[:HAS]->(i);
-commit
-
-
-begin
-MATCH (h:User), (i:Interest)
-WHERE h.id = 65 AND i.name = "Photography"
-CREATE UNIQUE (h)-[:HAS]->(i);
-commit
-
-
-begin
-MATCH (h:User), (i:Interest)
-WHERE h.id = 65 AND i.name = "Cycling"
-CREATE UNIQUE (h)-[:HAS]->(i);
-commit
-
-
-begin
-MATCH (h:User), (i:Interest)
-WHERE h.id = 65 AND i.name = "Bungee_Jumping"
+WHERE h.id = 65 AND i.name = "Swimming"
 CREATE UNIQUE (h)-[:HAS]->(i);
 commit
 
 begin
 MATCH (h:Human), (d:Machine)
-WHERE h.id = 65 AND d.id = 99
+WHERE h.id = 65 AND d.id = 48
 CREATE UNIQUE (h)-[:USES]->(d);
 commit
 
     begin
     MATCH (h:Human)-[:USES]->(m:Machine), (l:Location)
-    WHERE m.type = "phone" AND h.id = 65 AND l.name = "McMenamins"
-    CREATE UNIQUE (m)-[:LOCATED {type: "photo_tag", time: "20140501"}]->(l);  
-    commit
-
-
-    begin
-    MATCH (h:Human)-[:USES]->(m:Machine), (l:Location)
-    WHERE m.type = "phone" AND h.id = 65 AND l.name = "Robotaco"
+    WHERE m.type = "phone" AND h.id = 65 AND l.name = "Nike"
     CREATE UNIQUE (m)-[:LOCATED {type: "photo_tag", time: "20140505"}]->(l);  
     commit
 
 
     begin
     MATCH (h:Human)-[:USES]->(m:Machine), (l:Location)
-    WHERE m.type = "phone" AND h.id = 65 AND l.name = "Hollywood Theatre"
-    CREATE UNIQUE (m)-[:LOCATED {type: "facebook_checkin", time: "20140501"}]->(l);  
+    WHERE m.type = "phone" AND h.id = 65 AND l.name = "Warpaint"
+    CREATE UNIQUE (m)-[:LOCATED {type: "yelp_review", time: "20140502"}]->(l);  
     commit
 
 
     begin
     MATCH (h:Human)-[:USES]->(m:Machine), (l:Location)
-    WHERE m.type = "phone" AND h.id = 65 AND l.name = "Warpaint"
-    CREATE UNIQUE (m)-[:LOCATED {type: "facebook_checkin", time: "20140503"}]->(l);  
+    WHERE m.type = "phone" AND h.id = 65 AND l.name = "The Fray"
+    CREATE UNIQUE (m)-[:LOCATED {type: "facebook_checkin", time: "20140502"}]->(l);  
+    commit
+
+
+    begin
+    MATCH (h:Human)-[:USES]->(m:Machine), (l:Location)
+    WHERE m.type = "phone" AND h.id = 65 AND l.name = "EastBurn"
+    CREATE UNIQUE (m)-[:LOCATED {type: "facebook_checkin", time: "20140505"}]->(l);  
     commit
 
     begin
-    MERGE (:Human:User { 
-           firstname: "Sidney", lastname: "Cruz",
-           fullname: "Sidney Cruz", id: 66, 
-           gender: "female", age: 31});
+    CREATE (:Human:User { 
+           firstname: "Jessie", lastname: "Reed",
+           fullname: "Jessie Reed", id: 66, 
+           gender: "female", age: 26});
     commit
 
 begin
 MATCH (h:User), (f:User)
-WHERE h.id = 66 AND f.id = 9
+WHERE h.id = 66 AND f.id = 26
 CREATE UNIQUE (h)-[:FRIEND]-(f);
 commit
 
 
 begin
 MATCH (h:User), (f:User)
-WHERE h.id = 66 AND f.id = 62
+WHERE h.id = 66 AND f.id = 50
 CREATE UNIQUE (h)-[:FRIEND]-(f);
 commit
 
 begin
 MATCH (h:User), (i:Interest)
-WHERE h.id = 66 AND i.name = "River_Rafting"
+WHERE h.id = 66 AND i.name = "Volleyball"
+CREATE UNIQUE (h)-[:HAS]->(i);
+commit
+
+
+begin
+MATCH (h:User), (i:Interest)
+WHERE h.id = 66 AND i.name = "Baseball"
 CREATE UNIQUE (h)-[:HAS]->(i);
 commit
 
@@ -7727,7 +7933,7 @@ commit
 
 begin
 MATCH (h:User), (i:Interest)
-WHERE h.id = 66 AND i.name = "Horse_Riding"
+WHERE h.id = 66 AND i.name = "Bungee_Jumping"
 CREATE UNIQUE (h)-[:HAS]->(i);
 commit
 
@@ -7741,35 +7947,14 @@ commit
 
 begin
 MATCH (h:User), (i:Interest)
-WHERE h.id = 66 AND i.name = "Photography"
+WHERE h.id = 66 AND i.name = "Scuba_Diving"
 CREATE UNIQUE (h)-[:HAS]->(i);
 commit
 
 
 begin
 MATCH (h:User), (i:Interest)
-WHERE h.id = 66 AND i.name = "Volleyball"
-CREATE UNIQUE (h)-[:HAS]->(i);
-commit
-
-
-begin
-MATCH (h:User), (i:Interest)
-WHERE h.id = 66 AND i.name = "Basketball"
-CREATE UNIQUE (h)-[:HAS]->(i);
-commit
-
-
-begin
-MATCH (h:User), (i:Interest)
-WHERE h.id = 66 AND i.name = "Rock_Climbing"
-CREATE UNIQUE (h)-[:HAS]->(i);
-commit
-
-
-begin
-MATCH (h:User), (i:Interest)
-WHERE h.id = 66 AND i.name = "Swimming"
+WHERE h.id = 66 AND i.name = "Horse_Riding"
 CREATE UNIQUE (h)-[:HAS]->(i);
 commit
 
@@ -7782,77 +7967,77 @@ commit
 
 begin
 MATCH (h:Human), (d:Machine)
-WHERE h.id = 66 AND d.id = 44
+WHERE h.id = 66 AND d.id = 9
 CREATE UNIQUE (h)-[:USES]->(d);
 commit
 
     begin
     MATCH (h:Human)-[:USES]->(m:Machine), (l:Location)
-    WHERE m.type = "phone" AND h.id = 66 AND l.name = "Besaws"
+    WHERE m.type = "phone" AND h.id = 66 AND l.name = "Foster The People"
     CREATE UNIQUE (m)-[:LOCATED {type: "photo_tag", time: "20140502"}]->(l);  
     commit
 
-
     begin
-    MATCH (h:Human)-[:USES]->(m:Machine), (l:Location)
-    WHERE m.type = "phone" AND h.id = 66 AND l.name = "Eastburn"
-    CREATE UNIQUE (m)-[:LOCATED {type: "facebook_checkin", time: "20140502"}]->(l);  
-    commit
-
-
-    begin
-    MATCH (h:Human)-[:USES]->(m:Machine), (l:Location)
-    WHERE m.type = "phone" AND h.id = 66 AND l.name = "Starbucks"
-    CREATE UNIQUE (m)-[:LOCATED {type: "photo_tag", time: "20140504"}]->(l);  
-    commit
-
-
-    begin
-    MATCH (h:Human)-[:USES]->(m:Machine), (l:Location)
-    WHERE m.type = "phone" AND h.id = 66 AND l.name = "Foster The People"
-    CREATE UNIQUE (m)-[:LOCATED {type: "yelp_review", time: "20140503"}]->(l);  
-    commit
-
-    begin
-    MERGE (:Human:User { 
-           firstname: "Sawyer", lastname: "Cook",
-           fullname: "Sawyer Cook", id: 67, 
-           gender: "female", age: 26});
+    CREATE (:Human:User { 
+           firstname: "Avery", lastname: "Campbell",
+           fullname: "Avery Campbell", id: 67, 
+           gender: "male", age: 33});
     commit
 
 begin
 MATCH (h:User), (f:User)
-WHERE h.id = 67 AND f.id = 33
+WHERE h.id = 67 AND f.id = 56
 CREATE UNIQUE (h)-[:FRIEND]-(f);
 commit
 
 
 begin
 MATCH (h:User), (f:User)
-WHERE h.id = 67 AND f.id = 65
+WHERE h.id = 67 AND f.id = 64
 CREATE UNIQUE (h)-[:FRIEND]-(f);
 commit
 
 
 begin
 MATCH (h:User), (f:User)
-WHERE h.id = 67 AND f.id = 10
+WHERE h.id = 67 AND f.id = 12
 CREATE UNIQUE (h)-[:FRIEND]-(f);
 commit
 
 
 begin
 MATCH (h:User), (f:User)
-WHERE h.id = 67 AND f.id = 21
+WHERE h.id = 67 AND f.id = 48
 CREATE UNIQUE (h)-[:FRIEND]-(f);
 commit
 
 
 begin
 MATCH (h:User), (f:User)
-WHERE h.id = 67 AND f.id = 50
+WHERE h.id = 67 AND f.id = 63
 CREATE UNIQUE (h)-[:FRIEND]-(f);
 commit
+
+
+begin
+MATCH (h:User), (f:User)
+WHERE h.id = 67 AND f.id = 16
+CREATE UNIQUE (h)-[:FRIEND]-(f);
+commit
+
+begin
+MATCH (h:User), (i:Interest)
+WHERE h.id = 67 AND i.name = "Baseball"
+CREATE UNIQUE (h)-[:HAS]->(i);
+commit
+
+
+begin
+MATCH (h:User), (i:Interest)
+WHERE h.id = 67 AND i.name = "Boating"
+CREATE UNIQUE (h)-[:HAS]->(i);
+commit
+
 
 begin
 MATCH (h:User), (i:Interest)
@@ -7863,7 +8048,21 @@ commit
 
 begin
 MATCH (h:User), (i:Interest)
-WHERE h.id = 67 AND i.name = "River_Rafting"
+WHERE h.id = 67 AND i.name = "Walking"
+CREATE UNIQUE (h)-[:HAS]->(i);
+commit
+
+
+begin
+MATCH (h:User), (i:Interest)
+WHERE h.id = 67 AND i.name = "Volleyball"
+CREATE UNIQUE (h)-[:HAS]->(i);
+commit
+
+
+begin
+MATCH (h:User), (i:Interest)
+WHERE h.id = 67 AND i.name = "Swimming"
 CREATE UNIQUE (h)-[:HAS]->(i);
 commit
 
@@ -7884,109 +8083,60 @@ commit
 
 begin
 MATCH (h:User), (i:Interest)
-WHERE h.id = 67 AND i.name = "Walking"
-CREATE UNIQUE (h)-[:HAS]->(i);
-commit
-
-
-begin
-MATCH (h:User), (i:Interest)
 WHERE h.id = 67 AND i.name = "Basketball"
 CREATE UNIQUE (h)-[:HAS]->(i);
 commit
 
-
-begin
-MATCH (h:User), (i:Interest)
-WHERE h.id = 67 AND i.name = "Boating"
-CREATE UNIQUE (h)-[:HAS]->(i);
-commit
-
-
-begin
-MATCH (h:User), (i:Interest)
-WHERE h.id = 67 AND i.name = "Photography"
-CREATE UNIQUE (h)-[:HAS]->(i);
-commit
-
-
-begin
-MATCH (h:User), (i:Interest)
-WHERE h.id = 67 AND i.name = "Surfing"
-CREATE UNIQUE (h)-[:HAS]->(i);
-commit
-
-
-begin
-MATCH (h:User), (i:Interest)
-WHERE h.id = 67 AND i.name = "Volleyball"
-CREATE UNIQUE (h)-[:HAS]->(i);
-commit
-
 begin
 MATCH (h:Human), (d:Machine)
-WHERE h.id = 67 AND d.id = 62
-CREATE UNIQUE (h)-[:USES]->(d);
-commit
-
-
-begin
-MATCH (h:Human), (d:Machine)
-WHERE h.id = 67 AND d.id = 81
-CREATE UNIQUE (h)-[:USES]->(d);
-commit
-
-
-begin
-MATCH (h:Human), (d:Machine)
-WHERE h.id = 67 AND d.id = 9
+WHERE h.id = 67 AND d.id = 86
 CREATE UNIQUE (h)-[:USES]->(d);
 commit
 
     begin
     MATCH (h:Human)-[:USES]->(m:Machine), (l:Location)
-    WHERE m.type = "phone" AND h.id = 67 AND l.name = "Hollywood Theatre"
-    CREATE UNIQUE (m)-[:LOCATED {type: "photo_tag", time: "20140502"}]->(l);  
+    WHERE m.type = "phone" AND h.id = 67 AND l.name = "Nike"
+    CREATE UNIQUE (m)-[:LOCATED {type: "photo_tag", time: "20140505"}]->(l);  
+    commit
+
+
+    begin
+    MATCH (h:Human)-[:USES]->(m:Machine), (l:Location)
+    WHERE m.type = "phone" AND h.id = 67 AND l.name = "Besaws"
+    CREATE UNIQUE (m)-[:LOCATED {type: "yelp_review", time: "20140504"}]->(l);  
     commit
 
 
     begin
     MATCH (h:Human)-[:USES]->(m:Machine), (l:Location)
     WHERE m.type = "phone" AND h.id = 67 AND l.name = "Starbucks"
+    CREATE UNIQUE (m)-[:LOCATED {type: "photo_tag", time: "20140504"}]->(l);  
+    commit
+
+
+    begin
+    MATCH (h:Human)-[:USES]->(m:Machine), (l:Location)
+    WHERE m.type = "phone" AND h.id = 67 AND l.name = "The Fray"
     CREATE UNIQUE (m)-[:LOCATED {type: "yelp_review", time: "20140504"}]->(l);  
     commit
 
+
     begin
-    MERGE (:Human:User { 
-           firstname: "Jordyn", lastname: "Watson",
-           fullname: "Jordyn Watson", id: 68, 
-           gender: "male", age: 34});
+    MATCH (h:Human)-[:USES]->(m:Machine), (l:Location)
+    WHERE m.type = "phone" AND h.id = 67 AND l.name = "Robo Taco"
+    CREATE UNIQUE (m)-[:LOCATED {type: "yelp_review", time: "20140503"}]->(l);  
+    commit
+
+    begin
+    CREATE (:Human:User { 
+           firstname: "Kayden", lastname: "Kelly",
+           fullname: "Kayden Kelly", id: 68, 
+           gender: "female", age: 25});
     commit
 
 begin
 MATCH (h:User), (f:User)
-WHERE h.id = 68 AND f.id = 21
-CREATE UNIQUE (h)-[:FRIEND]-(f);
-commit
-
-
-begin
-MATCH (h:User), (f:User)
-WHERE h.id = 68 AND f.id = 53
-CREATE UNIQUE (h)-[:FRIEND]-(f);
-commit
-
-
-begin
-MATCH (h:User), (f:User)
-WHERE h.id = 68 AND f.id = 62
-CREATE UNIQUE (h)-[:FRIEND]-(f);
-commit
-
-
-begin
-MATCH (h:User), (f:User)
-WHERE h.id = 68 AND f.id = 14
+WHERE h.id = 68 AND f.id = 29
 CREATE UNIQUE (h)-[:FRIEND]-(f);
 commit
 
@@ -8000,13 +8150,62 @@ commit
 
 begin
 MATCH (h:User), (f:User)
-WHERE h.id = 68 AND f.id = 47
+WHERE h.id = 68 AND f.id = 52
+CREATE UNIQUE (h)-[:FRIEND]-(f);
+commit
+
+
+begin
+MATCH (h:User), (f:User)
+WHERE h.id = 68 AND f.id = 22
 CREATE UNIQUE (h)-[:FRIEND]-(f);
 commit
 
 begin
 MATCH (h:User), (i:Interest)
-WHERE h.id = 68 AND i.name = "Horse_Riding"
+WHERE h.id = 68 AND i.name = "Baseball"
+CREATE UNIQUE (h)-[:HAS]->(i);
+commit
+
+
+begin
+MATCH (h:User), (i:Interest)
+WHERE h.id = 68 AND i.name = "Photography"
+CREATE UNIQUE (h)-[:HAS]->(i);
+commit
+
+
+begin
+MATCH (h:User), (i:Interest)
+WHERE h.id = 68 AND i.name = "Bungee_Jumping"
+CREATE UNIQUE (h)-[:HAS]->(i);
+commit
+
+
+begin
+MATCH (h:User), (i:Interest)
+WHERE h.id = 68 AND i.name = "Cycling"
+CREATE UNIQUE (h)-[:HAS]->(i);
+commit
+
+
+begin
+MATCH (h:User), (i:Interest)
+WHERE h.id = 68 AND i.name = "Scuba_Diving"
+CREATE UNIQUE (h)-[:HAS]->(i);
+commit
+
+
+begin
+MATCH (h:User), (i:Interest)
+WHERE h.id = 68 AND i.name = "Swimming"
+CREATE UNIQUE (h)-[:HAS]->(i);
+commit
+
+
+begin
+MATCH (h:User), (i:Interest)
+WHERE h.id = 68 AND i.name = "Golf"
 CREATE UNIQUE (h)-[:HAS]->(i);
 commit
 
@@ -8024,212 +8223,142 @@ WHERE h.id = 68 AND i.name = "Boating"
 CREATE UNIQUE (h)-[:HAS]->(i);
 commit
 
-
-begin
-MATCH (h:User), (i:Interest)
-WHERE h.id = 68 AND i.name = "Surfing"
-CREATE UNIQUE (h)-[:HAS]->(i);
-commit
-
-
-begin
-MATCH (h:User), (i:Interest)
-WHERE h.id = 68 AND i.name = "Golf"
-CREATE UNIQUE (h)-[:HAS]->(i);
-commit
-
-
-begin
-MATCH (h:User), (i:Interest)
-WHERE h.id = 68 AND i.name = "Hiking"
-CREATE UNIQUE (h)-[:HAS]->(i);
-commit
-
 begin
 MATCH (h:Human), (d:Machine)
-WHERE h.id = 68 AND d.id = 20
+WHERE h.id = 68 AND d.id = 5
 CREATE UNIQUE (h)-[:USES]->(d);
 commit
 
     begin
     MATCH (h:Human)-[:USES]->(m:Machine), (l:Location)
-    WHERE m.type = "phone" AND h.id = 68 AND l.name = "McMenamins"
-    CREATE UNIQUE (m)-[:LOCATED {type: "yelp_review", time: "20140505"}]->(l);  
-    commit
-
-
-    begin
-    MATCH (h:Human)-[:USES]->(m:Machine), (l:Location)
-    WHERE m.type = "phone" AND h.id = 68 AND l.name = "Robotaco"
-    CREATE UNIQUE (m)-[:LOCATED {type: "facebook_checkin", time: "20140505"}]->(l);  
+    WHERE m.type = "phone" AND h.id = 68 AND l.name = "Hollywood Theatre"
+    CREATE UNIQUE (m)-[:LOCATED {type: "photo_tag", time: "20140502"}]->(l);  
     commit
 
 
     begin
     MATCH (h:Human)-[:USES]->(m:Machine), (l:Location)
     WHERE m.type = "phone" AND h.id = 68 AND l.name = "Besaws"
-    CREATE UNIQUE (m)-[:LOCATED {type: "yelp_review", time: "20140502"}]->(l);  
-    commit
-
-
-    begin
-    MATCH (h:Human)-[:USES]->(m:Machine), (l:Location)
-    WHERE m.type = "phone" AND h.id = 68 AND l.name = "Nike"
-    CREATE UNIQUE (m)-[:LOCATED {type: "facebook_checkin", time: "20140505"}]->(l);  
-    commit
-
-
-    begin
-    MATCH (h:Human)-[:USES]->(m:Machine), (l:Location)
-    WHERE m.type = "phone" AND h.id = 68 AND l.name = "The Fray"
     CREATE UNIQUE (m)-[:LOCATED {type: "yelp_review", time: "20140503"}]->(l);  
     commit
 
+
     begin
-    MERGE (:Human:User { 
-           firstname: "Payton", lastname: "Baker",
-           fullname: "Payton Baker", id: 69, 
-           gender: "male", age: 29});
+    MATCH (h:Human)-[:USES]->(m:Machine), (l:Location)
+    WHERE m.type = "phone" AND h.id = 68 AND l.name = "Starbucks"
+    CREATE UNIQUE (m)-[:LOCATED {type: "yelp_review", time: "20140504"}]->(l);  
+    commit
+
+
+    begin
+    MATCH (h:Human)-[:USES]->(m:Machine), (l:Location)
+    WHERE m.type = "phone" AND h.id = 68 AND l.name = "Christina Perri"
+    CREATE UNIQUE (m)-[:LOCATED {type: "facebook_checkin", time: "20140504"}]->(l);  
+    commit
+
+
+    begin
+    MATCH (h:Human)-[:USES]->(m:Machine), (l:Location)
+    WHERE m.type = "phone" AND h.id = 68 AND l.name = "McMenamins"
+    CREATE UNIQUE (m)-[:LOCATED {type: "facebook_checkin", time: "20140502"}]->(l);  
+    commit
+
+    begin
+    CREATE (:Human:User { 
+           firstname: "Reese", lastname: "Kelly",
+           fullname: "Reese Kelly", id: 69, 
+           gender: "male", age: 32});
     commit
 
 begin
 MATCH (h:User), (f:User)
-WHERE h.id = 69 AND f.id = 25
+WHERE h.id = 69 AND f.id = 51
 CREATE UNIQUE (h)-[:FRIEND]-(f);
 commit
 
 
 begin
 MATCH (h:User), (f:User)
-WHERE h.id = 69 AND f.id = 7
+WHERE h.id = 69 AND f.id = 52
 CREATE UNIQUE (h)-[:FRIEND]-(f);
 commit
 
 
 begin
 MATCH (h:User), (f:User)
-WHERE h.id = 69 AND f.id = 22
+WHERE h.id = 69 AND f.id = 32
 CREATE UNIQUE (h)-[:FRIEND]-(f);
 commit
 
 
 begin
 MATCH (h:User), (f:User)
-WHERE h.id = 69 AND f.id = 18
-CREATE UNIQUE (h)-[:FRIEND]-(f);
-commit
-
-
-begin
-MATCH (h:User), (f:User)
-WHERE h.id = 69 AND f.id = 5
-CREATE UNIQUE (h)-[:FRIEND]-(f);
-commit
-
-
-begin
-MATCH (h:User), (f:User)
-WHERE h.id = 69 AND f.id = 26
+WHERE h.id = 69 AND f.id = 21
 CREATE UNIQUE (h)-[:FRIEND]-(f);
 commit
 
 begin
 MATCH (h:User), (i:Interest)
-WHERE h.id = 69 AND i.name = "Basketball"
+WHERE h.id = 69 AND i.name = "Horse_Riding"
+CREATE UNIQUE (h)-[:HAS]->(i);
+commit
+
+
+begin
+MATCH (h:User), (i:Interest)
+WHERE h.id = 69 AND i.name = "Golf"
+CREATE UNIQUE (h)-[:HAS]->(i);
+commit
+
+
+begin
+MATCH (h:User), (i:Interest)
+WHERE h.id = 69 AND i.name = "Rock_Climbing"
 CREATE UNIQUE (h)-[:HAS]->(i);
 commit
 
 begin
 MATCH (h:Human), (d:Machine)
-WHERE h.id = 69 AND d.id = 68
+WHERE h.id = 69 AND d.id = 25
 CREATE UNIQUE (h)-[:USES]->(d);
 commit
 
     begin
     MATCH (h:Human)-[:USES]->(m:Machine), (l:Location)
-    WHERE m.type = "phone" AND h.id = 69 AND l.name = "Caffe Umbria"
+    WHERE m.type = "phone" AND h.id = 69 AND l.name = "Nike"
     CREATE UNIQUE (m)-[:LOCATED {type: "facebook_checkin", time: "20140502"}]->(l);  
     commit
 
-
     begin
-    MATCH (h:Human)-[:USES]->(m:Machine), (l:Location)
-    WHERE m.type = "phone" AND h.id = 69 AND l.name = "Warpaint"
-    CREATE UNIQUE (m)-[:LOCATED {type: "photo_tag", time: "20140503"}]->(l);  
-    commit
-
-    begin
-    MERGE (:Human:User { 
-           firstname: "Jaylin", lastname: "Flores",
-           fullname: "Jaylin Flores", id: 70, 
-           gender: "female", age: 28});
+    CREATE (:Human:User { 
+           firstname: "Phoenix", lastname: "Thompson",
+           fullname: "Phoenix Thompson", id: 70, 
+           gender: "male", age: 21});
     commit
 
 begin
 MATCH (h:User), (f:User)
-WHERE h.id = 70 AND f.id = 56
+WHERE h.id = 70 AND f.id = 0
 CREATE UNIQUE (h)-[:FRIEND]-(f);
 commit
 
 
 begin
 MATCH (h:User), (f:User)
-WHERE h.id = 70 AND f.id = 47
+WHERE h.id = 70 AND f.id = 22
 CREATE UNIQUE (h)-[:FRIEND]-(f);
 commit
 
 
 begin
 MATCH (h:User), (f:User)
-WHERE h.id = 70 AND f.id = 9
-CREATE UNIQUE (h)-[:FRIEND]-(f);
-commit
-
-
-begin
-MATCH (h:User), (f:User)
-WHERE h.id = 70 AND f.id = 67
-CREATE UNIQUE (h)-[:FRIEND]-(f);
-commit
-
-
-begin
-MATCH (h:User), (f:User)
-WHERE h.id = 70 AND f.id = 18
-CREATE UNIQUE (h)-[:FRIEND]-(f);
-commit
-
-
-begin
-MATCH (h:User), (f:User)
-WHERE h.id = 70 AND f.id = 66
+WHERE h.id = 70 AND f.id = 58
 CREATE UNIQUE (h)-[:FRIEND]-(f);
 commit
 
 begin
 MATCH (h:User), (i:Interest)
-WHERE h.id = 70 AND i.name = "Volleyball"
-CREATE UNIQUE (h)-[:HAS]->(i);
-commit
-
-
-begin
-MATCH (h:User), (i:Interest)
-WHERE h.id = 70 AND i.name = "Walking"
-CREATE UNIQUE (h)-[:HAS]->(i);
-commit
-
-
-begin
-MATCH (h:User), (i:Interest)
-WHERE h.id = 70 AND i.name = "Golf"
-CREATE UNIQUE (h)-[:HAS]->(i);
-commit
-
-
-begin
-MATCH (h:User), (i:Interest)
-WHERE h.id = 70 AND i.name = "Basketball"
+WHERE h.id = 70 AND i.name = "Swimming"
 CREATE UNIQUE (h)-[:HAS]->(i);
 commit
 
@@ -8243,36 +8372,43 @@ commit
 
 begin
 MATCH (h:User), (i:Interest)
-WHERE h.id = 70 AND i.name = "Boating"
+WHERE h.id = 70 AND i.name = "Scuba_Diving"
 CREATE UNIQUE (h)-[:HAS]->(i);
 commit
 
 
 begin
 MATCH (h:User), (i:Interest)
-WHERE h.id = 70 AND i.name = "Bungee_Jumping"
+WHERE h.id = 70 AND i.name = "Fishing"
+CREATE UNIQUE (h)-[:HAS]->(i);
+commit
+
+
+begin
+MATCH (h:User), (i:Interest)
+WHERE h.id = 70 AND i.name = "Baseball"
+CREATE UNIQUE (h)-[:HAS]->(i);
+commit
+
+
+begin
+MATCH (h:User), (i:Interest)
+WHERE h.id = 70 AND i.name = "Golf"
 CREATE UNIQUE (h)-[:HAS]->(i);
 commit
 
 begin
 MATCH (h:Human), (d:Machine)
-WHERE h.id = 70 AND d.id = 105
+WHERE h.id = 70 AND d.id = 87
 CREATE UNIQUE (h)-[:USES]->(d);
 commit
 
-    begin
-    MATCH (h:Human)-[:USES]->(m:Machine), (l:Location)
-    WHERE m.type = "phone" AND h.id = 70 AND l.name = "The Fray"
-    CREATE UNIQUE (m)-[:LOCATED {type: "yelp_review", time: "20140503"}]->(l);  
-    commit
 
-
-    begin
-    MATCH (h:Human)-[:USES]->(m:Machine), (l:Location)
-    WHERE m.type = "phone" AND h.id = 70 AND l.name = "Nike"
-    CREATE UNIQUE (m)-[:LOCATED {type: "yelp_review", time: "20140502"}]->(l);  
-    commit
-
+begin
+MATCH (h:Human), (d:Machine)
+WHERE h.id = 70 AND d.id = 21
+CREATE UNIQUE (h)-[:USES]->(d);
+commit
 
     begin
     MATCH (h:Human)-[:USES]->(m:Machine), (l:Location)
@@ -8281,18 +8417,11 @@ commit
     commit
 
     begin
-    MERGE (:Human:User { 
-           firstname: "Micah", lastname: "Torres",
-           fullname: "Micah Torres", id: 71, 
-           gender: "female", age: 23});
+    CREATE (:Human:User { 
+           firstname: "Amari", lastname: "Butler",
+           fullname: "Amari Butler", id: 71, 
+           gender: "male", age: 19});
     commit
-
-begin
-MATCH (h:User), (f:User)
-WHERE h.id = 71 AND f.id = 22
-CREATE UNIQUE (h)-[:FRIEND]-(f);
-commit
-
 
 begin
 MATCH (h:User), (f:User)
@@ -8303,27 +8432,27 @@ commit
 
 begin
 MATCH (h:User), (f:User)
-WHERE h.id = 71 AND f.id = 68
+WHERE h.id = 71 AND f.id = 41
 CREATE UNIQUE (h)-[:FRIEND]-(f);
 commit
 
 
 begin
 MATCH (h:User), (f:User)
-WHERE h.id = 71 AND f.id = 67
-CREATE UNIQUE (h)-[:FRIEND]-(f);
-commit
-
-
-begin
-MATCH (h:User), (f:User)
-WHERE h.id = 71 AND f.id = 45
+WHERE h.id = 71 AND f.id = 22
 CREATE UNIQUE (h)-[:FRIEND]-(f);
 commit
 
 begin
 MATCH (h:User), (i:Interest)
-WHERE h.id = 71 AND i.name = "Swimming"
+WHERE h.id = 71 AND i.name = "Surfing"
+CREATE UNIQUE (h)-[:HAS]->(i);
+commit
+
+
+begin
+MATCH (h:User), (i:Interest)
+WHERE h.id = 71 AND i.name = "Hiking"
 CREATE UNIQUE (h)-[:HAS]->(i);
 commit
 
@@ -8337,7 +8466,21 @@ commit
 
 begin
 MATCH (h:User), (i:Interest)
-WHERE h.id = 71 AND i.name = "Volleyball"
+WHERE h.id = 71 AND i.name = "River_Rafting"
+CREATE UNIQUE (h)-[:HAS]->(i);
+commit
+
+
+begin
+MATCH (h:User), (i:Interest)
+WHERE h.id = 71 AND i.name = "Scuba_Diving"
+CREATE UNIQUE (h)-[:HAS]->(i);
+commit
+
+
+begin
+MATCH (h:User), (i:Interest)
+WHERE h.id = 71 AND i.name = "Cycling"
 CREATE UNIQUE (h)-[:HAS]->(i);
 commit
 
@@ -8355,84 +8498,69 @@ WHERE h.id = 71 AND i.name = "Baseball"
 CREATE UNIQUE (h)-[:HAS]->(i);
 commit
 
-
 begin
-MATCH (h:User), (i:Interest)
-WHERE h.id = 71 AND i.name = "Cycling"
-CREATE UNIQUE (h)-[:HAS]->(i);
-commit
-
-
-begin
-MATCH (h:User), (i:Interest)
-WHERE h.id = 71 AND i.name = "Horse_Riding"
-CREATE UNIQUE (h)-[:HAS]->(i);
-commit
-
-
-begin
-MATCH (h:User), (i:Interest)
-WHERE h.id = 71 AND i.name = "Golf"
-CREATE UNIQUE (h)-[:HAS]->(i);
-commit
-
-
-begin
-MATCH (h:User), (i:Interest)
-WHERE h.id = 71 AND i.name = "Basketball"
-CREATE UNIQUE (h)-[:HAS]->(i);
-commit
-
-
-begin
-MATCH (h:User), (i:Interest)
-WHERE h.id = 71 AND i.name = "Rock_Climbing"
-CREATE UNIQUE (h)-[:HAS]->(i);
+MATCH (h:Human), (d:Machine)
+WHERE h.id = 71 AND d.id = 108
+CREATE UNIQUE (h)-[:USES]->(d);
 commit
 
     begin
     MATCH (h:Human)-[:USES]->(m:Machine), (l:Location)
-    WHERE m.type = "phone" AND h.id = 71 AND l.name = "Starbucks"
-    CREATE UNIQUE (m)-[:LOCATED {type: "photo_tag", time: "20140505"}]->(l);  
+    WHERE m.type = "phone" AND h.id = 71 AND l.name = "Caffe Umbria"
+    CREATE UNIQUE (m)-[:LOCATED {type: "yelp_review", time: "20140503"}]->(l);  
     commit
 
 
     begin
     MATCH (h:Human)-[:USES]->(m:Machine), (l:Location)
-    WHERE m.type = "phone" AND h.id = 71 AND l.name = "The Fray"
-    CREATE UNIQUE (m)-[:LOCATED {type: "facebook_checkin", time: "20140505"}]->(l);  
+    WHERE m.type = "phone" AND h.id = 71 AND l.name = "Christina Perri"
+    CREATE UNIQUE (m)-[:LOCATED {type: "yelp_review", time: "20140501"}]->(l);  
     commit
 
 
     begin
     MATCH (h:Human)-[:USES]->(m:Machine), (l:Location)
-    WHERE m.type = "phone" AND h.id = 71 AND l.name = "Robotaco"
-    CREATE UNIQUE (m)-[:LOCATED {type: "yelp_review", time: "20140505"}]->(l);  
-    commit
-
-
-    begin
-    MATCH (h:Human)-[:USES]->(m:Machine), (l:Location)
-    WHERE m.type = "phone" AND h.id = 71 AND l.name = "Nike"
-    CREATE UNIQUE (m)-[:LOCATED {type: "photo_tag", time: "20140504"}]->(l);  
+    WHERE m.type = "phone" AND h.id = 71 AND l.name = "EastBurn"
+    CREATE UNIQUE (m)-[:LOCATED {type: "yelp_review", time: "20140504"}]->(l);  
     commit
 
     begin
-    MERGE (:Human:User { 
-           firstname: "Emery", lastname: "Phillips",
-           fullname: "Emery Phillips", id: 72, 
-           gender: "male", age: 22});
+    CREATE (:Human:User { 
+           firstname: "Emery", lastname: "Reyes",
+           fullname: "Emery Reyes", id: 72, 
+           gender: "male", age: 32});
     commit
 
 begin
 MATCH (h:User), (f:User)
-WHERE h.id = 72 AND f.id = 5
+WHERE h.id = 72 AND f.id = 63
 CREATE UNIQUE (h)-[:FRIEND]-(f);
 commit
 
 begin
 MATCH (h:User), (i:Interest)
-WHERE h.id = 72 AND i.name = "Scuba_Diving"
+WHERE h.id = 72 AND i.name = "Cycling"
+CREATE UNIQUE (h)-[:HAS]->(i);
+commit
+
+
+begin
+MATCH (h:User), (i:Interest)
+WHERE h.id = 72 AND i.name = "River_Rafting"
+CREATE UNIQUE (h)-[:HAS]->(i);
+commit
+
+
+begin
+MATCH (h:User), (i:Interest)
+WHERE h.id = 72 AND i.name = "Bungee_Jumping"
+CREATE UNIQUE (h)-[:HAS]->(i);
+commit
+
+
+begin
+MATCH (h:User), (i:Interest)
+WHERE h.id = 72 AND i.name = "Walking"
 CREATE UNIQUE (h)-[:HAS]->(i);
 commit
 
@@ -8443,85 +8571,49 @@ WHERE h.id = 72 AND i.name = "Swimming"
 CREATE UNIQUE (h)-[:HAS]->(i);
 commit
 
-
 begin
-MATCH (h:User), (i:Interest)
-WHERE h.id = 72 AND i.name = "Basketball"
-CREATE UNIQUE (h)-[:HAS]->(i);
-commit
-
-
-begin
-MATCH (h:User), (i:Interest)
-WHERE h.id = 72 AND i.name = "Rock_Climbing"
-CREATE UNIQUE (h)-[:HAS]->(i);
+MATCH (h:Human), (d:Machine)
+WHERE h.id = 72 AND d.id = 114
+CREATE UNIQUE (h)-[:USES]->(d);
 commit
 
     begin
     MATCH (h:Human)-[:USES]->(m:Machine), (l:Location)
-    WHERE m.type = "phone" AND h.id = 72 AND l.name = "Foster The People"
+    WHERE m.type = "phone" AND h.id = 72 AND l.name = "The Fray"
     CREATE UNIQUE (m)-[:LOCATED {type: "facebook_checkin", time: "20140501"}]->(l);  
     commit
 
 
     begin
     MATCH (h:Human)-[:USES]->(m:Machine), (l:Location)
-    WHERE m.type = "phone" AND h.id = 72 AND l.name = "Eastburn"
-    CREATE UNIQUE (m)-[:LOCATED {type: "facebook_checkin", time: "20140503"}]->(l);  
-    commit
-
-
-    begin
-    MATCH (h:Human)-[:USES]->(m:Machine), (l:Location)
-    WHERE m.type = "phone" AND h.id = 72 AND l.name = "Robotaco"
+    WHERE m.type = "phone" AND h.id = 72 AND l.name = "Caffe Umbria"
     CREATE UNIQUE (m)-[:LOCATED {type: "photo_tag", time: "20140505"}]->(l);  
     commit
 
 
     begin
     MATCH (h:Human)-[:USES]->(m:Machine), (l:Location)
-    WHERE m.type = "phone" AND h.id = 72 AND l.name = "The Fray"
-    CREATE UNIQUE (m)-[:LOCATED {type: "facebook_checkin", time: "20140505"}]->(l);  
-    commit
-
-
-    begin
-    MATCH (h:Human)-[:USES]->(m:Machine), (l:Location)
-    WHERE m.type = "phone" AND h.id = 72 AND l.name = "Christina Perri"
-    CREATE UNIQUE (m)-[:LOCATED {type: "facebook_checkin", time: "20140502"}]->(l);  
+    WHERE m.type = "phone" AND h.id = 72 AND l.name = "Warpaint"
+    CREATE UNIQUE (m)-[:LOCATED {type: "yelp_review", time: "20140501"}]->(l);  
     commit
 
     begin
-    MERGE (:Human:User { 
-           firstname: "Taylor", lastname: "Russell",
-           fullname: "Taylor Russell", id: 73, 
-           gender: "male", age: 30});
+    CREATE (:Human:User { 
+           firstname: "Avery", lastname: "Jenkins",
+           fullname: "Avery Jenkins", id: 73, 
+           gender: "female", age: 19});
     commit
-
-begin
-MATCH (h:User), (f:User)
-WHERE h.id = 73 AND f.id = 46
-CREATE UNIQUE (h)-[:FRIEND]-(f);
-commit
-
-
-begin
-MATCH (h:User), (f:User)
-WHERE h.id = 73 AND f.id = 70
-CREATE UNIQUE (h)-[:FRIEND]-(f);
-commit
-
-
-begin
-MATCH (h:User), (f:User)
-WHERE h.id = 73 AND f.id = 35
-CREATE UNIQUE (h)-[:FRIEND]-(f);
-commit
-
 
 begin
 MATCH (h:User), (f:User)
 WHERE h.id = 73 AND f.id = 39
+CREATE UNIQUE (h)-[:FRIEND]-(f);
+commit
+
+
+begin
+MATCH (h:User), (f:User)
+WHERE h.id = 73 AND f.id = 67
 CREATE UNIQUE (h)-[:FRIEND]-(f);
 commit
 
@@ -8534,7 +8626,21 @@ commit
 
 begin
 MATCH (h:User), (i:Interest)
-WHERE h.id = 73 AND i.name = "Walking"
+WHERE h.id = 73 AND i.name = "Photography"
+CREATE UNIQUE (h)-[:HAS]->(i);
+commit
+
+
+begin
+MATCH (h:User), (i:Interest)
+WHERE h.id = 73 AND i.name = "Golf"
+CREATE UNIQUE (h)-[:HAS]->(i);
+commit
+
+
+begin
+MATCH (h:User), (i:Interest)
+WHERE h.id = 73 AND i.name = "Horse_Riding"
 CREATE UNIQUE (h)-[:HAS]->(i);
 commit
 
@@ -8548,91 +8654,104 @@ commit
 
 begin
 MATCH (h:User), (i:Interest)
-WHERE h.id = 73 AND i.name = "Horse_Riding"
+WHERE h.id = 73 AND i.name = "Walking"
 CREATE UNIQUE (h)-[:HAS]->(i);
+commit
+
+
+begin
+MATCH (h:User), (i:Interest)
+WHERE h.id = 73 AND i.name = "Hiking"
+CREATE UNIQUE (h)-[:HAS]->(i);
+commit
+
+
+begin
+MATCH (h:User), (i:Interest)
+WHERE h.id = 73 AND i.name = "Volleyball"
+CREATE UNIQUE (h)-[:HAS]->(i);
+commit
+
+
+begin
+MATCH (h:User), (i:Interest)
+WHERE h.id = 73 AND i.name = "Surfing"
+CREATE UNIQUE (h)-[:HAS]->(i);
+commit
+
+begin
+MATCH (h:Human), (d:Machine)
+WHERE h.id = 73 AND d.id = 58
+CREATE UNIQUE (h)-[:USES]->(d);
 commit
 
     begin
     MATCH (h:Human)-[:USES]->(m:Machine), (l:Location)
-    WHERE m.type = "phone" AND h.id = 73 AND l.name = "Hollywood Theatre"
-    CREATE UNIQUE (m)-[:LOCATED {type: "photo_tag", time: "20140502"}]->(l);  
-    commit
-
-
-    begin
-    MATCH (h:Human)-[:USES]->(m:Machine), (l:Location)
-    WHERE m.type = "phone" AND h.id = 73 AND l.name = "Foster The People"
-    CREATE UNIQUE (m)-[:LOCATED {type: "facebook_checkin", time: "20140503"}]->(l);  
-    commit
-
-
-    begin
-    MATCH (h:Human)-[:USES]->(m:Machine), (l:Location)
-    WHERE m.type = "phone" AND h.id = 73 AND l.name = "Nordstroms"
-    CREATE UNIQUE (m)-[:LOCATED {type: "facebook_checkin", time: "20140503"}]->(l);  
+    WHERE m.type = "phone" AND h.id = 73 AND l.name = "EastBurn"
+    CREATE UNIQUE (m)-[:LOCATED {type: "photo_tag", time: "20140501"}]->(l);  
     commit
 
 
     begin
     MATCH (h:Human)-[:USES]->(m:Machine), (l:Location)
     WHERE m.type = "phone" AND h.id = 73 AND l.name = "Warpaint"
-    CREATE UNIQUE (m)-[:LOCATED {type: "photo_tag", time: "20140503"}]->(l);  
-    commit
-
-
-    begin
-    MATCH (h:Human)-[:USES]->(m:Machine), (l:Location)
-    WHERE m.type = "phone" AND h.id = 73 AND l.name = "Robotaco"
-    CREATE UNIQUE (m)-[:LOCATED {type: "yelp_review", time: "20140501"}]->(l);  
+    CREATE UNIQUE (m)-[:LOCATED {type: "photo_tag", time: "20140502"}]->(l);  
     commit
 
     begin
-    MERGE (:Human:User { 
-           firstname: "Quinn", lastname: "Cooper",
-           fullname: "Quinn Cooper", id: 74, 
-           gender: "female", age: 35});
+    CREATE (:Human:User { 
+           firstname: "Hayden", lastname: "Rogers",
+           fullname: "Hayden Rogers", id: 74, 
+           gender: "male", age: 28});
     commit
 
 begin
 MATCH (h:User), (f:User)
-WHERE h.id = 74 AND f.id = 41
+WHERE h.id = 74 AND f.id = 5
 CREATE UNIQUE (h)-[:FRIEND]-(f);
+commit
+
+begin
+MATCH (h:User), (i:Interest)
+WHERE h.id = 74 AND i.name = "Cycling"
+CREATE UNIQUE (h)-[:HAS]->(i);
 commit
 
 
 begin
-MATCH (h:User), (f:User)
-WHERE h.id = 74 AND f.id = 6
-CREATE UNIQUE (h)-[:FRIEND]-(f);
+MATCH (h:User), (i:Interest)
+WHERE h.id = 74 AND i.name = "Scuba_Diving"
+CREATE UNIQUE (h)-[:HAS]->(i);
 commit
 
 
 begin
-MATCH (h:User), (f:User)
-WHERE h.id = 74 AND f.id = 39
-CREATE UNIQUE (h)-[:FRIEND]-(f);
+MATCH (h:User), (i:Interest)
+WHERE h.id = 74 AND i.name = "Golf"
+CREATE UNIQUE (h)-[:HAS]->(i);
 commit
 
 
 begin
-MATCH (h:User), (f:User)
-WHERE h.id = 74 AND f.id = 9
-CREATE UNIQUE (h)-[:FRIEND]-(f);
+MATCH (h:User), (i:Interest)
+WHERE h.id = 74 AND i.name = "Rock_Climbing"
+CREATE UNIQUE (h)-[:HAS]->(i);
 commit
 
 
 begin
-MATCH (h:User), (f:User)
-WHERE h.id = 74 AND f.id = 48
-CREATE UNIQUE (h)-[:FRIEND]-(f);
+MATCH (h:User), (i:Interest)
+WHERE h.id = 74 AND i.name = "Baseball"
+CREATE UNIQUE (h)-[:HAS]->(i);
 commit
 
 
 begin
-MATCH (h:User), (f:User)
-WHERE h.id = 74 AND f.id = 55
-CREATE UNIQUE (h)-[:FRIEND]-(f);
+MATCH (h:User), (i:Interest)
+WHERE h.id = 74 AND i.name = "Fishing"
+CREATE UNIQUE (h)-[:HAS]->(i);
 commit
+
 
 begin
 MATCH (h:User), (i:Interest)
@@ -8643,88 +8762,60 @@ commit
 
 begin
 MATCH (h:User), (i:Interest)
-WHERE h.id = 74 AND i.name = "Swimming"
+WHERE h.id = 74 AND i.name = "Bungee_Jumping"
 CREATE UNIQUE (h)-[:HAS]->(i);
 commit
-
-
-begin
-MATCH (h:User), (i:Interest)
-WHERE h.id = 74 AND i.name = "Boating"
-CREATE UNIQUE (h)-[:HAS]->(i);
-commit
-
-
-begin
-MATCH (h:User), (i:Interest)
-WHERE h.id = 74 AND i.name = "Basketball"
-CREATE UNIQUE (h)-[:HAS]->(i);
-commit
-
-    begin
-    MATCH (h:Human)-[:USES]->(m:Machine), (l:Location)
-    WHERE m.type = "phone" AND h.id = 74 AND l.name = "Foster The People"
-    CREATE UNIQUE (m)-[:LOCATED {type: "photo_tag", time: "20140505"}]->(l);  
-    commit
-
 
     begin
     MATCH (h:Human)-[:USES]->(m:Machine), (l:Location)
     WHERE m.type = "phone" AND h.id = 74 AND l.name = "McMenamins"
-    CREATE UNIQUE (m)-[:LOCATED {type: "yelp_review", time: "20140505"}]->(l);  
+    CREATE UNIQUE (m)-[:LOCATED {type: "facebook_checkin", time: "20140503"}]->(l);  
     commit
 
 
     begin
     MATCH (h:Human)-[:USES]->(m:Machine), (l:Location)
-    WHERE m.type = "phone" AND h.id = 74 AND l.name = "Warpaint"
-    CREATE UNIQUE (m)-[:LOCATED {type: "yelp_review", time: "20140503"}]->(l);  
-    commit
-
-
-    begin
-    MATCH (h:Human)-[:USES]->(m:Machine), (l:Location)
-    WHERE m.type = "phone" AND h.id = 74 AND l.name = "The Fray"
-    CREATE UNIQUE (m)-[:LOCATED {type: "yelp_review", time: "20140502"}]->(l);  
+    WHERE m.type = "phone" AND h.id = 74 AND l.name = "Besaws"
+    CREATE UNIQUE (m)-[:LOCATED {type: "photo_tag", time: "20140504"}]->(l);  
     commit
 
     begin
-    MERGE (:Human:User { 
-           firstname: "Reagan", lastname: "Barnes",
-           fullname: "Reagan Barnes", id: 75, 
-           gender: "male", age: 23});
+    CREATE (:Human:User { 
+           firstname: "Quinn", lastname: "Nelson",
+           fullname: "Quinn Nelson", id: 75, 
+           gender: "female", age: 27});
     commit
 
 begin
 MATCH (h:User), (f:User)
-WHERE h.id = 75 AND f.id = 7
+WHERE h.id = 75 AND f.id = 61
 CREATE UNIQUE (h)-[:FRIEND]-(f);
 commit
 
 
 begin
 MATCH (h:User), (f:User)
-WHERE h.id = 75 AND f.id = 69
+WHERE h.id = 75 AND f.id = 49
 CREATE UNIQUE (h)-[:FRIEND]-(f);
 commit
 
 
 begin
 MATCH (h:User), (f:User)
-WHERE h.id = 75 AND f.id = 17
+WHERE h.id = 75 AND f.id = 0
+CREATE UNIQUE (h)-[:FRIEND]-(f);
+commit
+
+
+begin
+MATCH (h:User), (f:User)
+WHERE h.id = 75 AND f.id = 74
 CREATE UNIQUE (h)-[:FRIEND]-(f);
 commit
 
 begin
 MATCH (h:User), (i:Interest)
-WHERE h.id = 75 AND i.name = "Hiking"
-CREATE UNIQUE (h)-[:HAS]->(i);
-commit
-
-
-begin
-MATCH (h:User), (i:Interest)
-WHERE h.id = 75 AND i.name = "Swimming"
+WHERE h.id = 75 AND i.name = "Boating"
 CREATE UNIQUE (h)-[:HAS]->(i);
 commit
 
@@ -8738,60 +8829,109 @@ commit
 
 begin
 MATCH (h:User), (i:Interest)
-WHERE h.id = 75 AND i.name = "Basketball"
+WHERE h.id = 75 AND i.name = "Surfing"
+CREATE UNIQUE (h)-[:HAS]->(i);
+commit
+
+
+begin
+MATCH (h:User), (i:Interest)
+WHERE h.id = 75 AND i.name = "Scuba_Diving"
+CREATE UNIQUE (h)-[:HAS]->(i);
+commit
+
+
+begin
+MATCH (h:User), (i:Interest)
+WHERE h.id = 75 AND i.name = "Cycling"
+CREATE UNIQUE (h)-[:HAS]->(i);
+commit
+
+
+begin
+MATCH (h:User), (i:Interest)
+WHERE h.id = 75 AND i.name = "Bungee_Jumping"
+CREATE UNIQUE (h)-[:HAS]->(i);
+commit
+
+
+begin
+MATCH (h:User), (i:Interest)
+WHERE h.id = 75 AND i.name = "Hiking"
+CREATE UNIQUE (h)-[:HAS]->(i);
+commit
+
+
+begin
+MATCH (h:User), (i:Interest)
+WHERE h.id = 75 AND i.name = "Horse_Riding"
+CREATE UNIQUE (h)-[:HAS]->(i);
+commit
+
+
+begin
+MATCH (h:User), (i:Interest)
+WHERE h.id = 75 AND i.name = "River_Rafting"
+CREATE UNIQUE (h)-[:HAS]->(i);
+commit
+
+
+begin
+MATCH (h:User), (i:Interest)
+WHERE h.id = 75 AND i.name = "Golf"
 CREATE UNIQUE (h)-[:HAS]->(i);
 commit
 
     begin
     MATCH (h:Human)-[:USES]->(m:Machine), (l:Location)
-    WHERE m.type = "phone" AND h.id = 75 AND l.name = "Caffe Umbria"
-    CREATE UNIQUE (m)-[:LOCATED {type: "facebook_checkin", time: "20140501"}]->(l);  
+    WHERE m.type = "phone" AND h.id = 75 AND l.name = "Warpaint"
+    CREATE UNIQUE (m)-[:LOCATED {type: "yelp_review", time: "20140504"}]->(l);  
     commit
 
 
     begin
     MATCH (h:Human)-[:USES]->(m:Machine), (l:Location)
-    WHERE m.type = "phone" AND h.id = 75 AND l.name = "Nike"
-    CREATE UNIQUE (m)-[:LOCATED {type: "facebook_checkin", time: "20140505"}]->(l);  
-    commit
-
-
-    begin
-    MATCH (h:Human)-[:USES]->(m:Machine), (l:Location)
-    WHERE m.type = "phone" AND h.id = 75 AND l.name = "McMenamins"
-    CREATE UNIQUE (m)-[:LOCATED {type: "photo_tag", time: "20140502"}]->(l);  
+    WHERE m.type = "phone" AND h.id = 75 AND l.name = "Christina Perri"
+    CREATE UNIQUE (m)-[:LOCATED {type: "photo_tag", time: "20140504"}]->(l);  
     commit
 
     begin
-    MERGE (:Human:User { 
-           firstname: "Landry", lastname: "Price",
-           fullname: "Landry Price", id: 76, 
-           gender: "female", age: 20});
+    CREATE (:Human:User { 
+           firstname: "Jayden", lastname: "Morris",
+           fullname: "Jayden Morris", id: 76, 
+           gender: "female", age: 23});
     commit
 
 begin
 MATCH (h:User), (f:User)
-WHERE h.id = 76 AND f.id = 37
+WHERE h.id = 76 AND f.id = 62
 CREATE UNIQUE (h)-[:FRIEND]-(f);
 commit
 
 
 begin
 MATCH (h:User), (f:User)
-WHERE h.id = 76 AND f.id = 4
+WHERE h.id = 76 AND f.id = 60
 CREATE UNIQUE (h)-[:FRIEND]-(f);
 commit
 
 
 begin
 MATCH (h:User), (f:User)
-WHERE h.id = 76 AND f.id = 24
+WHERE h.id = 76 AND f.id = 43
 CREATE UNIQUE (h)-[:FRIEND]-(f);
 commit
 
 begin
 MATCH (h:User), (i:Interest)
-WHERE h.id = 76 AND i.name = "Bungee_Jumping"
+WHERE h.id = 76 AND i.name = "Surfing"
+CREATE UNIQUE (h)-[:HAS]->(i);
+commit
+
+
+begin
+MATCH (h:User), (i:Interest)
+WHERE h.id = 76 AND i.name = "Swimming"
 CREATE UNIQUE (h)-[:HAS]->(i);
 commit
 
@@ -8805,35 +8945,28 @@ commit
 
 begin
 MATCH (h:User), (i:Interest)
-WHERE h.id = 76 AND i.name = "Cycling"
+WHERE h.id = 76 AND i.name = "Boating"
 CREATE UNIQUE (h)-[:HAS]->(i);
 commit
 
     begin
     MATCH (h:Human)-[:USES]->(m:Machine), (l:Location)
-    WHERE m.type = "phone" AND h.id = 76 AND l.name = "The Fray"
-    CREATE UNIQUE (m)-[:LOCATED {type: "facebook_checkin", time: "20140502"}]->(l);  
+    WHERE m.type = "phone" AND h.id = 76 AND l.name = "EastBurn"
+    CREATE UNIQUE (m)-[:LOCATED {type: "facebook_checkin", time: "20140501"}]->(l);  
+    commit
+
+
+    begin
+    MATCH (h:Human)-[:USES]->(m:Machine), (l:Location)
+    WHERE m.type = "phone" AND h.id = 76 AND l.name = "Starbucks"
+    CREATE UNIQUE (m)-[:LOCATED {type: "yelp_review", time: "20140503"}]->(l);  
     commit
 
 
     begin
     MATCH (h:Human)-[:USES]->(m:Machine), (l:Location)
     WHERE m.type = "phone" AND h.id = 76 AND l.name = "Foster The People"
-    CREATE UNIQUE (m)-[:LOCATED {type: "photo_tag", time: "20140504"}]->(l);  
-    commit
-
-
-    begin
-    MATCH (h:Human)-[:USES]->(m:Machine), (l:Location)
-    WHERE m.type = "phone" AND h.id = 76 AND l.name = "Christina Perri"
     CREATE UNIQUE (m)-[:LOCATED {type: "yelp_review", time: "20140504"}]->(l);  
-    commit
-
-
-    begin
-    MATCH (h:Human)-[:USES]->(m:Machine), (l:Location)
-    WHERE m.type = "phone" AND h.id = 76 AND l.name = "Eastburn"
-    CREATE UNIQUE (m)-[:LOCATED {type: "photo_tag", time: "20140501"}]->(l);  
     commit
 
 
@@ -8844,63 +8977,42 @@ commit
     commit
 
     begin
-    MERGE (:Human:User { 
-           firstname: "Cameron", lastname: "Watson",
-           fullname: "Cameron Watson", id: 77, 
-           gender: "female", age: 30});
+    CREATE (:Human:User { 
+           firstname: "River", lastname: "Torres",
+           fullname: "River Torres", id: 77, 
+           gender: "female", age: 34});
     commit
 
 begin
 MATCH (h:User), (f:User)
-WHERE h.id = 77 AND f.id = 74
-CREATE UNIQUE (h)-[:FRIEND]-(f);
-commit
-
-
-begin
-MATCH (h:User), (f:User)
-WHERE h.id = 77 AND f.id = 50
-CREATE UNIQUE (h)-[:FRIEND]-(f);
-commit
-
-
-begin
-MATCH (h:User), (f:User)
-WHERE h.id = 77 AND f.id = 48
-CREATE UNIQUE (h)-[:FRIEND]-(f);
-commit
-
-
-begin
-MATCH (h:User), (f:User)
-WHERE h.id = 77 AND f.id = 19
-CREATE UNIQUE (h)-[:FRIEND]-(f);
-commit
-
-
-begin
-MATCH (h:User), (f:User)
-WHERE h.id = 77 AND f.id = 1
+WHERE h.id = 77 AND f.id = 36
 CREATE UNIQUE (h)-[:FRIEND]-(f);
 commit
 
 begin
 MATCH (h:User), (i:Interest)
-WHERE h.id = 77 AND i.name = "Bungee_Jumping"
+WHERE h.id = 77 AND i.name = "Scuba_Diving"
+CREATE UNIQUE (h)-[:HAS]->(i);
+commit
+
+
+begin
+MATCH (h:User), (i:Interest)
+WHERE h.id = 77 AND i.name = "Cycling"
+CREATE UNIQUE (h)-[:HAS]->(i);
+commit
+
+
+begin
+MATCH (h:User), (i:Interest)
+WHERE h.id = 77 AND i.name = "Basketball"
 CREATE UNIQUE (h)-[:HAS]->(i);
 commit
 
     begin
     MATCH (h:Human)-[:USES]->(m:Machine), (l:Location)
-    WHERE m.type = "phone" AND h.id = 77 AND l.name = "Eastburn"
-    CREATE UNIQUE (m)-[:LOCATED {type: "yelp_review", time: "20140505"}]->(l);  
-    commit
-
-
-    begin
-    MATCH (h:Human)-[:USES]->(m:Machine), (l:Location)
-    WHERE m.type = "phone" AND h.id = 77 AND l.name = "Christina Perri"
-    CREATE UNIQUE (m)-[:LOCATED {type: "yelp_review", time: "20140503"}]->(l);  
+    WHERE m.type = "phone" AND h.id = 77 AND l.name = "EastBurn"
+    CREATE UNIQUE (m)-[:LOCATED {type: "facebook_checkin", time: "20140505"}]->(l);  
     commit
 
 
@@ -8910,85 +9022,50 @@ commit
     CREATE UNIQUE (m)-[:LOCATED {type: "facebook_checkin", time: "20140504"}]->(l);  
     commit
 
-
     begin
-    MATCH (h:Human)-[:USES]->(m:Machine), (l:Location)
-    WHERE m.type = "phone" AND h.id = 77 AND l.name = "Besaws"
-    CREATE UNIQUE (m)-[:LOCATED {type: "photo_tag", time: "20140503"}]->(l);  
-    commit
-
-    begin
-    MERGE (:Human:User { 
-           firstname: "Armani", lastname: "Martin",
-           fullname: "Armani Martin", id: 78, 
-           gender: "male", age: 19});
+    CREATE (:Human:User { 
+           firstname: "Riley", lastname: "Chowdhury",
+           fullname: "Riley Chowdhury", id: 78, 
+           gender: "female", age: 23});
     commit
 
 begin
 MATCH (h:User), (f:User)
-WHERE h.id = 78 AND f.id = 59
+WHERE h.id = 78 AND f.id = 31
 CREATE UNIQUE (h)-[:FRIEND]-(f);
 commit
 
 
 begin
 MATCH (h:User), (f:User)
-WHERE h.id = 78 AND f.id = 11
+WHERE h.id = 78 AND f.id = 58
 CREATE UNIQUE (h)-[:FRIEND]-(f);
 commit
 
 
 begin
 MATCH (h:User), (f:User)
-WHERE h.id = 78 AND f.id = 44
+WHERE h.id = 78 AND f.id = 66
 CREATE UNIQUE (h)-[:FRIEND]-(f);
 commit
 
 
 begin
 MATCH (h:User), (f:User)
-WHERE h.id = 78 AND f.id = 65
-CREATE UNIQUE (h)-[:FRIEND]-(f);
-commit
-
-
-begin
-MATCH (h:User), (f:User)
-WHERE h.id = 78 AND f.id = 70
-CREATE UNIQUE (h)-[:FRIEND]-(f);
-commit
-
-
-begin
-MATCH (h:User), (f:User)
-WHERE h.id = 78 AND f.id = 71
+WHERE h.id = 78 AND f.id = 0
 CREATE UNIQUE (h)-[:FRIEND]-(f);
 commit
 
 begin
 MATCH (h:User), (i:Interest)
-WHERE h.id = 78 AND i.name = "Photography"
+WHERE h.id = 78 AND i.name = "Scuba_Diving"
 CREATE UNIQUE (h)-[:HAS]->(i);
 commit
 
 
 begin
 MATCH (h:User), (i:Interest)
-WHERE h.id = 78 AND i.name = "Rock_Climbing"
-CREATE UNIQUE (h)-[:HAS]->(i);
-commit
-
-
-begin
-MATCH (h:User), (i:Interest)
-WHERE h.id = 78 AND i.name = "Boating"
-CREATE UNIQUE (h)-[:HAS]->(i);
-commit
-
-
-begin
-MATCH (h:User), (i:Interest)
-WHERE h.id = 78 AND i.name = "River_Rafting"
+WHERE h.id = 78 AND i.name = "Hiking"
 CREATE UNIQUE (h)-[:HAS]->(i);
 commit
 
@@ -9002,7 +9079,7 @@ commit
 
 begin
 MATCH (h:User), (i:Interest)
-WHERE h.id = 78 AND i.name = "Baseball"
+WHERE h.id = 78 AND i.name = "Bungee_Jumping"
 CREATE UNIQUE (h)-[:HAS]->(i);
 commit
 
@@ -9013,63 +9090,98 @@ WHERE h.id = 78 AND i.name = "Horse_Riding"
 CREATE UNIQUE (h)-[:HAS]->(i);
 commit
 
-    begin
-    MATCH (h:Human)-[:USES]->(m:Machine), (l:Location)
-    WHERE m.type = "phone" AND h.id = 78 AND l.name = "Nordstroms"
-    CREATE UNIQUE (m)-[:LOCATED {type: "photo_tag", time: "20140501"}]->(l);  
-    commit
-
-
-    begin
-    MATCH (h:Human)-[:USES]->(m:Machine), (l:Location)
-    WHERE m.type = "phone" AND h.id = 78 AND l.name = "Warpaint"
-    CREATE UNIQUE (m)-[:LOCATED {type: "yelp_review", time: "20140502"}]->(l);  
-    commit
-
-
-    begin
-    MATCH (h:Human)-[:USES]->(m:Machine), (l:Location)
-    WHERE m.type = "phone" AND h.id = 78 AND l.name = "Foster The People"
-    CREATE UNIQUE (m)-[:LOCATED {type: "facebook_checkin", time: "20140503"}]->(l);  
-    commit
-
-
-    begin
-    MATCH (h:Human)-[:USES]->(m:Machine), (l:Location)
-    WHERE m.type = "phone" AND h.id = 78 AND l.name = "The Fray"
-    CREATE UNIQUE (m)-[:LOCATED {type: "facebook_checkin", time: "20140503"}]->(l);  
-    commit
-
-    begin
-    MERGE (:Human:User { 
-           firstname: "Reagan", lastname: "Ross",
-           fullname: "Reagan Ross", id: 79, 
-           gender: "female", age: 31});
-    commit
-
-begin
-MATCH (h:User), (f:User)
-WHERE h.id = 79 AND f.id = 37
-CREATE UNIQUE (h)-[:FRIEND]-(f);
-commit
-
-
-begin
-MATCH (h:User), (f:User)
-WHERE h.id = 79 AND f.id = 29
-CREATE UNIQUE (h)-[:FRIEND]-(f);
-commit
 
 begin
 MATCH (h:User), (i:Interest)
-WHERE h.id = 79 AND i.name = "Photography"
+WHERE h.id = 78 AND i.name = "Baseball"
 CREATE UNIQUE (h)-[:HAS]->(i);
 commit
 
 
 begin
 MATCH (h:User), (i:Interest)
+WHERE h.id = 78 AND i.name = "Volleyball"
+CREATE UNIQUE (h)-[:HAS]->(i);
+commit
+
+
+begin
+MATCH (h:User), (i:Interest)
+WHERE h.id = 78 AND i.name = "River_Rafting"
+CREATE UNIQUE (h)-[:HAS]->(i);
+commit
+
+    begin
+    MATCH (h:Human)-[:USES]->(m:Machine), (l:Location)
+    WHERE m.type = "phone" AND h.id = 78 AND l.name = "EastBurn"
+    CREATE UNIQUE (m)-[:LOCATED {type: "photo_tag", time: "20140502"}]->(l);  
+    commit
+
+    begin
+    CREATE (:Human:User { 
+           firstname: "Ryan", lastname: "Jenkins",
+           fullname: "Ryan Jenkins", id: 79, 
+           gender: "female", age: 35});
+    commit
+
+begin
+MATCH (h:User), (f:User)
+WHERE h.id = 79 AND f.id = 52
+CREATE UNIQUE (h)-[:FRIEND]-(f);
+commit
+
+
+begin
+MATCH (h:User), (f:User)
+WHERE h.id = 79 AND f.id = 38
+CREATE UNIQUE (h)-[:FRIEND]-(f);
+commit
+
+
+begin
+MATCH (h:User), (f:User)
+WHERE h.id = 79 AND f.id = 34
+CREATE UNIQUE (h)-[:FRIEND]-(f);
+commit
+
+
+begin
+MATCH (h:User), (f:User)
+WHERE h.id = 79 AND f.id = 67
+CREATE UNIQUE (h)-[:FRIEND]-(f);
+commit
+
+
+begin
+MATCH (h:User), (f:User)
+WHERE h.id = 79 AND f.id = 58
+CREATE UNIQUE (h)-[:FRIEND]-(f);
+commit
+
+
+begin
+MATCH (h:User), (f:User)
+WHERE h.id = 79 AND f.id = 71
+CREATE UNIQUE (h)-[:FRIEND]-(f);
+commit
+
+begin
+MATCH (h:User), (i:Interest)
 WHERE h.id = 79 AND i.name = "Surfing"
+CREATE UNIQUE (h)-[:HAS]->(i);
+commit
+
+
+begin
+MATCH (h:User), (i:Interest)
+WHERE h.id = 79 AND i.name = "Rock_Climbing"
+CREATE UNIQUE (h)-[:HAS]->(i);
+commit
+
+
+begin
+MATCH (h:User), (i:Interest)
+WHERE h.id = 79 AND i.name = "Horse_Riding"
 CREATE UNIQUE (h)-[:HAS]->(i);
 commit
 
@@ -9083,88 +9195,88 @@ commit
 
 begin
 MATCH (h:User), (i:Interest)
-WHERE h.id = 79 AND i.name = "Baseball"
+WHERE h.id = 79 AND i.name = "Scuba_Diving"
+CREATE UNIQUE (h)-[:HAS]->(i);
+commit
+
+
+begin
+MATCH (h:User), (i:Interest)
+WHERE h.id = 79 AND i.name = "Volleyball"
+CREATE UNIQUE (h)-[:HAS]->(i);
+commit
+
+
+begin
+MATCH (h:User), (i:Interest)
+WHERE h.id = 79 AND i.name = "River_Rafting"
 CREATE UNIQUE (h)-[:HAS]->(i);
 commit
 
     begin
     MATCH (h:Human)-[:USES]->(m:Machine), (l:Location)
-    WHERE m.type = "phone" AND h.id = 79 AND l.name = "The Fray"
-    CREATE UNIQUE (m)-[:LOCATED {type: "yelp_review", time: "20140504"}]->(l);  
-    commit
-
-
-    begin
-    MATCH (h:Human)-[:USES]->(m:Machine), (l:Location)
-    WHERE m.type = "phone" AND h.id = 79 AND l.name = "Eastburn"
-    CREATE UNIQUE (m)-[:LOCATED {type: "facebook_checkin", time: "20140505"}]->(l);  
-    commit
-
-
-    begin
-    MATCH (h:Human)-[:USES]->(m:Machine), (l:Location)
     WHERE m.type = "phone" AND h.id = 79 AND l.name = "Starbucks"
+    CREATE UNIQUE (m)-[:LOCATED {type: "yelp_review", time: "20140505"}]->(l);  
+    commit
+
+
+    begin
+    MATCH (h:Human)-[:USES]->(m:Machine), (l:Location)
+    WHERE m.type = "phone" AND h.id = 79 AND l.name = "Besaws"
+    CREATE UNIQUE (m)-[:LOCATED {type: "yelp_review", time: "20140503"}]->(l);  
+    commit
+
+
+    begin
+    MATCH (h:Human)-[:USES]->(m:Machine), (l:Location)
+    WHERE m.type = "phone" AND h.id = 79 AND l.name = "Foster The People"
     CREATE UNIQUE (m)-[:LOCATED {type: "photo_tag", time: "20140502"}]->(l);  
     commit
 
 
     begin
     MATCH (h:Human)-[:USES]->(m:Machine), (l:Location)
-    WHERE m.type = "phone" AND h.id = 79 AND l.name = "Nike"
-    CREATE UNIQUE (m)-[:LOCATED {type: "facebook_checkin", time: "20140502"}]->(l);  
-    commit
-
-
-    begin
-    MATCH (h:Human)-[:USES]->(m:Machine), (l:Location)
-    WHERE m.type = "phone" AND h.id = 79 AND l.name = "Robotaco"
-    CREATE UNIQUE (m)-[:LOCATED {type: "yelp_review", time: "20140502"}]->(l);  
+    WHERE m.type = "phone" AND h.id = 79 AND l.name = "Caffe Umbria"
+    CREATE UNIQUE (m)-[:LOCATED {type: "yelp_review", time: "20140503"}]->(l);  
     commit
 
     begin
-    MERGE (:Human:User { 
-           firstname: "Lyric", lastname: "Ward",
-           fullname: "Lyric Ward", id: 80, 
-           gender: "female", age: 29});
+    CREATE (:Human:User { 
+           firstname: "Jessie", lastname: "Bailey",
+           fullname: "Jessie Bailey", id: 80, 
+           gender: "female", age: 19});
     commit
 
 begin
 MATCH (h:User), (f:User)
-WHERE h.id = 80 AND f.id = 56
+WHERE h.id = 80 AND f.id = 34
+CREATE UNIQUE (h)-[:FRIEND]-(f);
+commit
+
+
+begin
+MATCH (h:User), (f:User)
+WHERE h.id = 80 AND f.id = 15
+CREATE UNIQUE (h)-[:FRIEND]-(f);
+commit
+
+
+begin
+MATCH (h:User), (f:User)
+WHERE h.id = 80 AND f.id = 3
+CREATE UNIQUE (h)-[:FRIEND]-(f);
+commit
+
+
+begin
+MATCH (h:User), (f:User)
+WHERE h.id = 80 AND f.id = 7
 CREATE UNIQUE (h)-[:FRIEND]-(f);
 commit
 
 begin
 MATCH (h:User), (i:Interest)
-WHERE h.id = 80 AND i.name = "Walking"
-CREATE UNIQUE (h)-[:HAS]->(i);
-commit
-
-
-begin
-MATCH (h:User), (i:Interest)
-WHERE h.id = 80 AND i.name = "River_Rafting"
-CREATE UNIQUE (h)-[:HAS]->(i);
-commit
-
-
-begin
-MATCH (h:User), (i:Interest)
-WHERE h.id = 80 AND i.name = "Surfing"
-CREATE UNIQUE (h)-[:HAS]->(i);
-commit
-
-
-begin
-MATCH (h:User), (i:Interest)
-WHERE h.id = 80 AND i.name = "Baseball"
-CREATE UNIQUE (h)-[:HAS]->(i);
-commit
-
-
-begin
-MATCH (h:User), (i:Interest)
-WHERE h.id = 80 AND i.name = "Hiking"
+WHERE h.id = 80 AND i.name = "Cycling"
 CREATE UNIQUE (h)-[:HAS]->(i);
 commit
 
@@ -9178,14 +9290,21 @@ commit
 
 begin
 MATCH (h:User), (i:Interest)
-WHERE h.id = 80 AND i.name = "Golf"
+WHERE h.id = 80 AND i.name = "Walking"
 CREATE UNIQUE (h)-[:HAS]->(i);
 commit
 
 
 begin
 MATCH (h:User), (i:Interest)
-WHERE h.id = 80 AND i.name = "Fishing"
+WHERE h.id = 80 AND i.name = "Rock_Climbing"
+CREATE UNIQUE (h)-[:HAS]->(i);
+commit
+
+
+begin
+MATCH (h:User), (i:Interest)
+WHERE h.id = 80 AND i.name = "Swimming"
 CREATE UNIQUE (h)-[:HAS]->(i);
 commit
 
@@ -9196,70 +9315,119 @@ WHERE h.id = 80 AND i.name = "Bungee_Jumping"
 CREATE UNIQUE (h)-[:HAS]->(i);
 commit
 
-    begin
-    MATCH (h:Human)-[:USES]->(m:Machine), (l:Location)
-    WHERE m.type = "phone" AND h.id = 80 AND l.name = "Eastburn"
-    CREATE UNIQUE (m)-[:LOCATED {type: "yelp_review", time: "20140505"}]->(l);  
-    commit
-
-
-    begin
-    MATCH (h:Human)-[:USES]->(m:Machine), (l:Location)
-    WHERE m.type = "phone" AND h.id = 80 AND l.name = "McMenamins"
-    CREATE UNIQUE (m)-[:LOCATED {type: "facebook_checkin", time: "20140502"}]->(l);  
-    commit
-
-    begin
-    MERGE (:Human:User { 
-           firstname: "Amari", lastname: "Cohen",
-           fullname: "Amari Cohen", id: 81, 
-           gender: "female", age: 30});
-    commit
-
-begin
-MATCH (h:User), (f:User)
-WHERE h.id = 81 AND f.id = 68
-CREATE UNIQUE (h)-[:FRIEND]-(f);
-commit
-
-
-begin
-MATCH (h:User), (f:User)
-WHERE h.id = 81 AND f.id = 3
-CREATE UNIQUE (h)-[:FRIEND]-(f);
-commit
-
-
-begin
-MATCH (h:User), (f:User)
-WHERE h.id = 81 AND f.id = 23
-CREATE UNIQUE (h)-[:FRIEND]-(f);
-commit
-
-
-begin
-MATCH (h:User), (f:User)
-WHERE h.id = 81 AND f.id = 59
-CREATE UNIQUE (h)-[:FRIEND]-(f);
-commit
 
 begin
 MATCH (h:User), (i:Interest)
-WHERE h.id = 81 AND i.name = "Basketball"
+WHERE h.id = 80 AND i.name = "Volleyball"
 CREATE UNIQUE (h)-[:HAS]->(i);
 commit
 
 
 begin
 MATCH (h:User), (i:Interest)
-WHERE h.id = 81 AND i.name = "Golf"
+WHERE h.id = 80 AND i.name = "Horse_Riding"
 CREATE UNIQUE (h)-[:HAS]->(i);
 commit
 
 
 begin
 MATCH (h:User), (i:Interest)
-WHERE h.id = 81 AND i.name = "Swimming"
+WHERE h.id = 80 AND i.name = "Basketball"
+CREATE UNIQUE (h)-[:HAS]->(i);
+commit
+
+    begin
+    MATCH (h:Human)-[:USES]->(m:Machine), (l:Location)
+    WHERE m.type = "phone" AND h.id = 80 AND l.name = "Hollywood Theatre"
+    CREATE UNIQUE (m)-[:LOCATED {type: "facebook_checkin", time: "20140501"}]->(l);  
+    commit
+
+
+    begin
+    MATCH (h:Human)-[:USES]->(m:Machine), (l:Location)
+    WHERE m.type = "phone" AND h.id = 80 AND l.name = "Besaws"
+    CREATE UNIQUE (m)-[:LOCATED {type: "facebook_checkin", time: "20140503"}]->(l);  
+    commit
+
+    begin
+    CREATE (:Human:User { 
+           firstname: "Rylee", lastname: "Thomas",
+           fullname: "Rylee Thomas", id: 81, 
+           gender: "male", age: 33});
+    commit
+
+begin
+MATCH (h:User), (f:User)
+WHERE h.id = 81 AND f.id = 19
+CREATE UNIQUE (h)-[:FRIEND]-(f);
+commit
+
+
+begin
+MATCH (h:User), (f:User)
+WHERE h.id = 81 AND f.id = 0
+CREATE UNIQUE (h)-[:FRIEND]-(f);
+commit
+
+
+begin
+MATCH (h:User), (f:User)
+WHERE h.id = 81 AND f.id = 25
+CREATE UNIQUE (h)-[:FRIEND]-(f);
+commit
+
+
+begin
+MATCH (h:User), (f:User)
+WHERE h.id = 81 AND f.id = 47
+CREATE UNIQUE (h)-[:FRIEND]-(f);
+commit
+
+begin
+MATCH (h:User), (i:Interest)
+WHERE h.id = 81 AND i.name = "Cycling"
+CREATE UNIQUE (h)-[:HAS]->(i);
+commit
+
+
+begin
+MATCH (h:User), (i:Interest)
+WHERE h.id = 81 AND i.name = "Volleyball"
+CREATE UNIQUE (h)-[:HAS]->(i);
+commit
+
+
+begin
+MATCH (h:User), (i:Interest)
+WHERE h.id = 81 AND i.name = "Baseball"
+CREATE UNIQUE (h)-[:HAS]->(i);
+commit
+
+
+begin
+MATCH (h:User), (i:Interest)
+WHERE h.id = 81 AND i.name = "Bungee_Jumping"
+CREATE UNIQUE (h)-[:HAS]->(i);
+commit
+
+
+begin
+MATCH (h:User), (i:Interest)
+WHERE h.id = 81 AND i.name = "Photography"
+CREATE UNIQUE (h)-[:HAS]->(i);
+commit
+
+
+begin
+MATCH (h:User), (i:Interest)
+WHERE h.id = 81 AND i.name = "Fishing"
+CREATE UNIQUE (h)-[:HAS]->(i);
+commit
+
+
+begin
+MATCH (h:User), (i:Interest)
+WHERE h.id = 81 AND i.name = "Walking"
 CREATE UNIQUE (h)-[:HAS]->(i);
 commit
 
@@ -9273,60 +9441,88 @@ commit
 
 begin
 MATCH (h:User), (i:Interest)
-WHERE h.id = 81 AND i.name = "Volleyball"
+WHERE h.id = 81 AND i.name = "Basketball"
 CREATE UNIQUE (h)-[:HAS]->(i);
 commit
 
     begin
     MATCH (h:Human)-[:USES]->(m:Machine), (l:Location)
+    WHERE m.type = "phone" AND h.id = 81 AND l.name = "Nike"
+    CREATE UNIQUE (m)-[:LOCATED {type: "yelp_review", time: "20140502"}]->(l);  
+    commit
+
+
+    begin
+    MATCH (h:Human)-[:USES]->(m:Machine), (l:Location)
     WHERE m.type = "phone" AND h.id = 81 AND l.name = "Starbucks"
-    CREATE UNIQUE (m)-[:LOCATED {type: "photo_tag", time: "20140504"}]->(l);  
+    CREATE UNIQUE (m)-[:LOCATED {type: "yelp_review", time: "20140503"}]->(l);  
     commit
 
 
     begin
     MATCH (h:Human)-[:USES]->(m:Machine), (l:Location)
-    WHERE m.type = "phone" AND h.id = 81 AND l.name = "Nordstroms"
-    CREATE UNIQUE (m)-[:LOCATED {type: "facebook_checkin", time: "20140505"}]->(l);  
-    commit
-
-
-    begin
-    MATCH (h:Human)-[:USES]->(m:Machine), (l:Location)
-    WHERE m.type = "phone" AND h.id = 81 AND l.name = "McMenamins"
-    CREATE UNIQUE (m)-[:LOCATED {type: "yelp_review", time: "20140501"}]->(l);  
-    commit
-
-
-    begin
-    MATCH (h:Human)-[:USES]->(m:Machine), (l:Location)
-    WHERE m.type = "phone" AND h.id = 81 AND l.name = "Eastburn"
-    CREATE UNIQUE (m)-[:LOCATED {type: "photo_tag", time: "20140504"}]->(l);  
+    WHERE m.type = "phone" AND h.id = 81 AND l.name = "Hollywood Theatre"
+    CREATE UNIQUE (m)-[:LOCATED {type: "photo_tag", time: "20140505"}]->(l);  
     commit
 
     begin
-    MERGE (:Human:User { 
-           firstname: "Zion", lastname: "Lee",
-           fullname: "Zion Lee", id: 82, 
-           gender: "male", age: 20});
+    CREATE (:Human:User { 
+           firstname: "Dakota", lastname: "Wood",
+           fullname: "Dakota Wood", id: 82, 
+           gender: "male", age: 27});
     commit
 
 begin
 MATCH (h:User), (f:User)
-WHERE h.id = 82 AND f.id = 23
+WHERE h.id = 82 AND f.id = 34
 CREATE UNIQUE (h)-[:FRIEND]-(f);
 commit
 
 
 begin
 MATCH (h:User), (f:User)
-WHERE h.id = 82 AND f.id = 57
+WHERE h.id = 82 AND f.id = 5
+CREATE UNIQUE (h)-[:FRIEND]-(f);
+commit
+
+
+begin
+MATCH (h:User), (f:User)
+WHERE h.id = 82 AND f.id = 71
+CREATE UNIQUE (h)-[:FRIEND]-(f);
+commit
+
+
+begin
+MATCH (h:User), (f:User)
+WHERE h.id = 82 AND f.id = 38
 CREATE UNIQUE (h)-[:FRIEND]-(f);
 commit
 
 begin
 MATCH (h:User), (i:Interest)
 WHERE h.id = 82 AND i.name = "Basketball"
+CREATE UNIQUE (h)-[:HAS]->(i);
+commit
+
+
+begin
+MATCH (h:User), (i:Interest)
+WHERE h.id = 82 AND i.name = "Photography"
+CREATE UNIQUE (h)-[:HAS]->(i);
+commit
+
+
+begin
+MATCH (h:User), (i:Interest)
+WHERE h.id = 82 AND i.name = "Golf"
+CREATE UNIQUE (h)-[:HAS]->(i);
+commit
+
+
+begin
+MATCH (h:User), (i:Interest)
+WHERE h.id = 82 AND i.name = "Baseball"
 CREATE UNIQUE (h)-[:HAS]->(i);
 commit
 
@@ -9340,60 +9536,95 @@ commit
 
 begin
 MATCH (h:User), (i:Interest)
-WHERE h.id = 82 AND i.name = "Volleyball"
+WHERE h.id = 82 AND i.name = "Hiking"
 CREATE UNIQUE (h)-[:HAS]->(i);
 commit
 
 
 begin
 MATCH (h:User), (i:Interest)
-WHERE h.id = 82 AND i.name = "Boating"
+WHERE h.id = 82 AND i.name = "Walking"
+CREATE UNIQUE (h)-[:HAS]->(i);
+commit
+
+
+begin
+MATCH (h:User), (i:Interest)
+WHERE h.id = 82 AND i.name = "Surfing"
 CREATE UNIQUE (h)-[:HAS]->(i);
 commit
 
     begin
     MATCH (h:Human)-[:USES]->(m:Machine), (l:Location)
-    WHERE m.type = "phone" AND h.id = 82 AND l.name = "Warpaint"
-    CREATE UNIQUE (m)-[:LOCATED {type: "photo_tag", time: "20140503"}]->(l);  
+    WHERE m.type = "phone" AND h.id = 82 AND l.name = "McMenamins"
+    CREATE UNIQUE (m)-[:LOCATED {type: "facebook_checkin", time: "20140505"}]->(l);  
     commit
 
 
     begin
     MATCH (h:Human)-[:USES]->(m:Machine), (l:Location)
-    WHERE m.type = "phone" AND h.id = 82 AND l.name = "Caffe Umbria"
-    CREATE UNIQUE (m)-[:LOCATED {type: "facebook_checkin", time: "20140504"}]->(l);  
+    WHERE m.type = "phone" AND h.id = 82 AND l.name = "The Fray"
+    CREATE UNIQUE (m)-[:LOCATED {type: "yelp_review", time: "20140505"}]->(l);  
+    commit
+
+
+    begin
+    MATCH (h:Human)-[:USES]->(m:Machine), (l:Location)
+    WHERE m.type = "phone" AND h.id = 82 AND l.name = "Hollywood Theatre"
+    CREATE UNIQUE (m)-[:LOCATED {type: "photo_tag", time: "20140501"}]->(l);  
+    commit
+
+
+    begin
+    MATCH (h:Human)-[:USES]->(m:Machine), (l:Location)
+    WHERE m.type = "phone" AND h.id = 82 AND l.name = "Nordstroms"
+    CREATE UNIQUE (m)-[:LOCATED {type: "yelp_review", time: "20140501"}]->(l);  
+    commit
+
+
+    begin
+    MATCH (h:Human)-[:USES]->(m:Machine), (l:Location)
+    WHERE m.type = "phone" AND h.id = 82 AND l.name = "Starbucks"
+    CREATE UNIQUE (m)-[:LOCATED {type: "facebook_checkin", time: "20140505"}]->(l);  
     commit
 
     begin
-    MERGE (:Human:User { 
-           firstname: "Kamryn", lastname: "Moore",
-           fullname: "Kamryn Moore", id: 83, 
-           gender: "female", age: 23});
+    CREATE (:Human:User { 
+           firstname: "Skylar", lastname: "Gómez",
+           fullname: "Skylar Gómez", id: 83, 
+           gender: "male", age: 24});
     commit
 
 begin
 MATCH (h:User), (f:User)
-WHERE h.id = 83 AND f.id = 15
+WHERE h.id = 83 AND f.id = 30
 CREATE UNIQUE (h)-[:FRIEND]-(f);
 commit
 
 
 begin
 MATCH (h:User), (f:User)
-WHERE h.id = 83 AND f.id = 22
-CREATE UNIQUE (h)-[:FRIEND]-(f);
-commit
-
-
-begin
-MATCH (h:User), (f:User)
-WHERE h.id = 83 AND f.id = 18
+WHERE h.id = 83 AND f.id = 46
 CREATE UNIQUE (h)-[:FRIEND]-(f);
 commit
 
 begin
 MATCH (h:User), (i:Interest)
-WHERE h.id = 83 AND i.name = "Basketball"
+WHERE h.id = 83 AND i.name = "Scuba_Diving"
+CREATE UNIQUE (h)-[:HAS]->(i);
+commit
+
+
+begin
+MATCH (h:User), (i:Interest)
+WHERE h.id = 83 AND i.name = "Cycling"
+CREATE UNIQUE (h)-[:HAS]->(i);
+commit
+
+
+begin
+MATCH (h:User), (i:Interest)
+WHERE h.id = 83 AND i.name = "Hiking"
 CREATE UNIQUE (h)-[:HAS]->(i);
 commit
 
@@ -9414,56 +9645,140 @@ commit
 
 begin
 MATCH (h:User), (i:Interest)
+WHERE h.id = 83 AND i.name = "Horse_Riding"
+CREATE UNIQUE (h)-[:HAS]->(i);
+commit
+
+
+begin
+MATCH (h:User), (i:Interest)
+WHERE h.id = 83 AND i.name = "River_Rafting"
+CREATE UNIQUE (h)-[:HAS]->(i);
+commit
+
+
+begin
+MATCH (h:User), (i:Interest)
+WHERE h.id = 83 AND i.name = "Baseball"
+CREATE UNIQUE (h)-[:HAS]->(i);
+commit
+
+
+begin
+MATCH (h:User), (i:Interest)
+WHERE h.id = 83 AND i.name = "Golf"
+CREATE UNIQUE (h)-[:HAS]->(i);
+commit
+
+
+begin
+MATCH (h:User), (i:Interest)
 WHERE h.id = 83 AND i.name = "Surfing"
-CREATE UNIQUE (h)-[:HAS]->(i);
-commit
-
-
-begin
-MATCH (h:User), (i:Interest)
-WHERE h.id = 83 AND i.name = "Photography"
-CREATE UNIQUE (h)-[:HAS]->(i);
-commit
-
-
-begin
-MATCH (h:User), (i:Interest)
-WHERE h.id = 83 AND i.name = "Rock_Climbing"
-CREATE UNIQUE (h)-[:HAS]->(i);
-commit
-
-
-begin
-MATCH (h:User), (i:Interest)
-WHERE h.id = 83 AND i.name = "Fishing"
 CREATE UNIQUE (h)-[:HAS]->(i);
 commit
 
     begin
     MATCH (h:Human)-[:USES]->(m:Machine), (l:Location)
-    WHERE m.type = "phone" AND h.id = 83 AND l.name = "McMenamins"
-    CREATE UNIQUE (m)-[:LOCATED {type: "facebook_checkin", time: "20140505"}]->(l);  
+    WHERE m.type = "phone" AND h.id = 83 AND l.name = "Nordstroms"
+    CREATE UNIQUE (m)-[:LOCATED {type: "photo_tag", time: "20140505"}]->(l);  
+    commit
+
+
+    begin
+    MATCH (h:Human)-[:USES]->(m:Machine), (l:Location)
+    WHERE m.type = "phone" AND h.id = 83 AND l.name = "Warpaint"
+    CREATE UNIQUE (m)-[:LOCATED {type: "photo_tag", time: "20140502"}]->(l);  
+    commit
+
+
+    begin
+    MATCH (h:Human)-[:USES]->(m:Machine), (l:Location)
+    WHERE m.type = "phone" AND h.id = 83 AND l.name = "Foster The People"
+    CREATE UNIQUE (m)-[:LOCATED {type: "photo_tag", time: "20140505"}]->(l);  
+    commit
+
+
+    begin
+    MATCH (h:Human)-[:USES]->(m:Machine), (l:Location)
+    WHERE m.type = "phone" AND h.id = 83 AND l.name = "Nike"
+    CREATE UNIQUE (m)-[:LOCATED {type: "photo_tag", time: "20140501"}]->(l);  
+    commit
+
+
+    begin
+    MATCH (h:Human)-[:USES]->(m:Machine), (l:Location)
+    WHERE m.type = "phone" AND h.id = 83 AND l.name = "EastBurn"
+    CREATE UNIQUE (m)-[:LOCATED {type: "photo_tag", time: "20140501"}]->(l);  
     commit
 
     begin
-    MERGE (:Human:User { 
-           firstname: "Payton", lastname: "Rodríguez",
-           fullname: "Payton Rodríguez", id: 84, 
-           gender: "male", age: 32});
+    CREATE (:Human:User { 
+           firstname: "Sidney", lastname: "Young",
+           fullname: "Sidney Young", id: 84, 
+           gender: "male", age: 25});
     commit
 
 begin
 MATCH (h:User), (f:User)
-WHERE h.id = 84 AND f.id = 9
+WHERE h.id = 84 AND f.id = 77
 CREATE UNIQUE (h)-[:FRIEND]-(f);
 commit
 
 
 begin
 MATCH (h:User), (f:User)
-WHERE h.id = 84 AND f.id = 39
+WHERE h.id = 84 AND f.id = 69
 CREATE UNIQUE (h)-[:FRIEND]-(f);
 commit
+
+
+begin
+MATCH (h:User), (f:User)
+WHERE h.id = 84 AND f.id = 38
+CREATE UNIQUE (h)-[:FRIEND]-(f);
+commit
+
+
+begin
+MATCH (h:User), (f:User)
+WHERE h.id = 84 AND f.id = 24
+CREATE UNIQUE (h)-[:FRIEND]-(f);
+commit
+
+
+begin
+MATCH (h:User), (f:User)
+WHERE h.id = 84 AND f.id = 11
+CREATE UNIQUE (h)-[:FRIEND]-(f);
+commit
+
+begin
+MATCH (h:User), (i:Interest)
+WHERE h.id = 84 AND i.name = "Horse_Riding"
+CREATE UNIQUE (h)-[:HAS]->(i);
+commit
+
+
+begin
+MATCH (h:User), (i:Interest)
+WHERE h.id = 84 AND i.name = "Volleyball"
+CREATE UNIQUE (h)-[:HAS]->(i);
+commit
+
+
+begin
+MATCH (h:User), (i:Interest)
+WHERE h.id = 84 AND i.name = "Cycling"
+CREATE UNIQUE (h)-[:HAS]->(i);
+commit
+
+
+begin
+MATCH (h:User), (i:Interest)
+WHERE h.id = 84 AND i.name = "Baseball"
+CREATE UNIQUE (h)-[:HAS]->(i);
+commit
+
 
 begin
 MATCH (h:User), (i:Interest)
@@ -9474,81 +9789,67 @@ commit
 
 begin
 MATCH (h:User), (i:Interest)
-WHERE h.id = 84 AND i.name = "Basketball"
+WHERE h.id = 84 AND i.name = "River_Rafting"
+CREATE UNIQUE (h)-[:HAS]->(i);
+commit
+
+
+begin
+MATCH (h:User), (i:Interest)
+WHERE h.id = 84 AND i.name = "Surfing"
+CREATE UNIQUE (h)-[:HAS]->(i);
+commit
+
+
+begin
+MATCH (h:User), (i:Interest)
+WHERE h.id = 84 AND i.name = "Swimming"
+CREATE UNIQUE (h)-[:HAS]->(i);
+commit
+
+
+begin
+MATCH (h:User), (i:Interest)
+WHERE h.id = 84 AND i.name = "Boating"
 CREATE UNIQUE (h)-[:HAS]->(i);
 commit
 
     begin
     MATCH (h:Human)-[:USES]->(m:Machine), (l:Location)
-    WHERE m.type = "phone" AND h.id = 84 AND l.name = "Nordstroms"
-    CREATE UNIQUE (m)-[:LOCATED {type: "facebook_checkin", time: "20140503"}]->(l);  
+    WHERE m.type = "phone" AND h.id = 84 AND l.name = "Besaws"
+    CREATE UNIQUE (m)-[:LOCATED {type: "yelp_review", time: "20140502"}]->(l);  
     commit
 
 
     begin
     MATCH (h:Human)-[:USES]->(m:Machine), (l:Location)
-    WHERE m.type = "phone" AND h.id = 84 AND l.name = "Foster The People"
-    CREATE UNIQUE (m)-[:LOCATED {type: "yelp_review", time: "20140501"}]->(l);  
+    WHERE m.type = "phone" AND h.id = 84 AND l.name = "The Fray"
+    CREATE UNIQUE (m)-[:LOCATED {type: "yelp_review", time: "20140504"}]->(l);  
     commit
 
     begin
-    MERGE (:Human:User { 
-           firstname: "Ryan", lastname: "Sullivan",
-           fullname: "Ryan Sullivan", id: 85, 
-           gender: "female", age: 19});
+    CREATE (:Human:User { 
+           firstname: "Skylar", lastname: "Price",
+           fullname: "Skylar Price", id: 85, 
+           gender: "female", age: 18});
     commit
 
 begin
 MATCH (h:User), (f:User)
-WHERE h.id = 85 AND f.id = 60
-CREATE UNIQUE (h)-[:FRIEND]-(f);
-commit
-
-
-begin
-MATCH (h:User), (f:User)
-WHERE h.id = 85 AND f.id = 31
-CREATE UNIQUE (h)-[:FRIEND]-(f);
-commit
-
-
-begin
-MATCH (h:User), (f:User)
-WHERE h.id = 85 AND f.id = 33
+WHERE h.id = 85 AND f.id = 67
 CREATE UNIQUE (h)-[:FRIEND]-(f);
 commit
 
 begin
 MATCH (h:User), (i:Interest)
-WHERE h.id = 85 AND i.name = "Basketball"
+WHERE h.id = 85 AND i.name = "Baseball"
 CREATE UNIQUE (h)-[:HAS]->(i);
 commit
 
 
 begin
 MATCH (h:User), (i:Interest)
-WHERE h.id = 85 AND i.name = "Swimming"
-CREATE UNIQUE (h)-[:HAS]->(i);
-commit
-
-
-begin
-MATCH (h:User), (i:Interest)
-WHERE h.id = 85 AND i.name = "Cycling"
-CREATE UNIQUE (h)-[:HAS]->(i);
-commit
-
-
-begin
-MATCH (h:User), (i:Interest)
-WHERE h.id = 85 AND i.name = "Photography"
-CREATE UNIQUE (h)-[:HAS]->(i);
-commit
-
-
-begin
-MATCH (h:User), (i:Interest)
-WHERE h.id = 85 AND i.name = "Volleyball"
+WHERE h.id = 85 AND i.name = "Golf"
 CREATE UNIQUE (h)-[:HAS]->(i);
 commit
 
@@ -9562,73 +9863,108 @@ commit
 
 begin
 MATCH (h:User), (i:Interest)
-WHERE h.id = 85 AND i.name = "Baseball"
+WHERE h.id = 85 AND i.name = "Walking"
+CREATE UNIQUE (h)-[:HAS]->(i);
+commit
+
+
+begin
+MATCH (h:User), (i:Interest)
+WHERE h.id = 85 AND i.name = "Swimming"
 CREATE UNIQUE (h)-[:HAS]->(i);
 commit
 
     begin
     MATCH (h:Human)-[:USES]->(m:Machine), (l:Location)
-    WHERE m.type = "phone" AND h.id = 85 AND l.name = "Christina Perri"
-    CREATE UNIQUE (m)-[:LOCATED {type: "facebook_checkin", time: "20140504"}]->(l);  
+    WHERE m.type = "phone" AND h.id = 85 AND l.name = "Foster The People"
+    CREATE UNIQUE (m)-[:LOCATED {type: "yelp_review", time: "20140505"}]->(l);  
     commit
 
 
     begin
     MATCH (h:Human)-[:USES]->(m:Machine), (l:Location)
     WHERE m.type = "phone" AND h.id = 85 AND l.name = "Besaws"
-    CREATE UNIQUE (m)-[:LOCATED {type: "photo_tag", time: "20140504"}]->(l);  
+    CREATE UNIQUE (m)-[:LOCATED {type: "facebook_checkin", time: "20140504"}]->(l);  
     commit
 
 
     begin
     MATCH (h:Human)-[:USES]->(m:Machine), (l:Location)
-    WHERE m.type = "phone" AND h.id = 85 AND l.name = "McMenamins"
-    CREATE UNIQUE (m)-[:LOCATED {type: "photo_tag", time: "20140502"}]->(l);  
+    WHERE m.type = "phone" AND h.id = 85 AND l.name = "Hollywood Theatre"
+    CREATE UNIQUE (m)-[:LOCATED {type: "photo_tag", time: "20140503"}]->(l);  
+    commit
+
+
+    begin
+    MATCH (h:Human)-[:USES]->(m:Machine), (l:Location)
+    WHERE m.type = "phone" AND h.id = 85 AND l.name = "EastBurn"
+    CREATE UNIQUE (m)-[:LOCATED {type: "photo_tag", time: "20140501"}]->(l);  
+    commit
+
+
+    begin
+    MATCH (h:Human)-[:USES]->(m:Machine), (l:Location)
+    WHERE m.type = "phone" AND h.id = 85 AND l.name = "Starbucks"
+    CREATE UNIQUE (m)-[:LOCATED {type: "facebook_checkin", time: "20140504"}]->(l);  
     commit
 
     begin
-    MERGE (:Human:User { 
-           firstname: "Kamryn", lastname: "Price",
-           fullname: "Kamryn Price", id: 86, 
-           gender: "male", age: 34});
+    CREATE (:Human:User { 
+           firstname: "Dylan", lastname: "Cox",
+           fullname: "Dylan Cox", id: 86, 
+           gender: "male", age: 23});
     commit
 
 begin
 MATCH (h:User), (f:User)
-WHERE h.id = 86 AND f.id = 46
+WHERE h.id = 86 AND f.id = 66
 CREATE UNIQUE (h)-[:FRIEND]-(f);
 commit
 
 
 begin
 MATCH (h:User), (f:User)
-WHERE h.id = 86 AND f.id = 61
-CREATE UNIQUE (h)-[:FRIEND]-(f);
-commit
-
-
-begin
-MATCH (h:User), (f:User)
-WHERE h.id = 86 AND f.id = 77
-CREATE UNIQUE (h)-[:FRIEND]-(f);
-commit
-
-
-begin
-MATCH (h:User), (f:User)
-WHERE h.id = 86 AND f.id = 43
+WHERE h.id = 86 AND f.id = 71
 CREATE UNIQUE (h)-[:FRIEND]-(f);
 commit
 
 begin
 MATCH (h:User), (i:Interest)
-WHERE h.id = 86 AND i.name = "Swimming"
+WHERE h.id = 86 AND i.name = "Horse_Riding"
+CREATE UNIQUE (h)-[:HAS]->(i);
+commit
+
+
+begin
+MATCH (h:User), (i:Interest)
+WHERE h.id = 86 AND i.name = "Volleyball"
+CREATE UNIQUE (h)-[:HAS]->(i);
+commit
+
+
+begin
+MATCH (h:User), (i:Interest)
+WHERE h.id = 86 AND i.name = "Boating"
 CREATE UNIQUE (h)-[:HAS]->(i);
 commit
 
     begin
     MATCH (h:Human)-[:USES]->(m:Machine), (l:Location)
-    WHERE m.type = "phone" AND h.id = 86 AND l.name = "Foster The People"
+    WHERE m.type = "phone" AND h.id = 86 AND l.name = "The Fray"
+    CREATE UNIQUE (m)-[:LOCATED {type: "photo_tag", time: "20140501"}]->(l);  
+    commit
+
+
+    begin
+    MATCH (h:Human)-[:USES]->(m:Machine), (l:Location)
+    WHERE m.type = "phone" AND h.id = 86 AND l.name = "EastBurn"
+    CREATE UNIQUE (m)-[:LOCATED {type: "photo_tag", time: "20140503"}]->(l);  
+    commit
+
+
+    begin
+    MATCH (h:Human)-[:USES]->(m:Machine), (l:Location)
+    WHERE m.type = "phone" AND h.id = 86 AND l.name = "Hollywood Theatre"
     CREATE UNIQUE (m)-[:LOCATED {type: "facebook_checkin", time: "20140503"}]->(l);  
     commit
 
@@ -9636,63 +9972,70 @@ commit
     begin
     MATCH (h:Human)-[:USES]->(m:Machine), (l:Location)
     WHERE m.type = "phone" AND h.id = 86 AND l.name = "Starbucks"
-    CREATE UNIQUE (m)-[:LOCATED {type: "yelp_review", time: "20140505"}]->(l);  
-    commit
-
-
-    begin
-    MATCH (h:Human)-[:USES]->(m:Machine), (l:Location)
-    WHERE m.type = "phone" AND h.id = 86 AND l.name = "Christina Perri"
-    CREATE UNIQUE (m)-[:LOCATED {type: "facebook_checkin", time: "20140503"}]->(l);  
-    commit
-
-
-    begin
-    MATCH (h:Human)-[:USES]->(m:Machine), (l:Location)
-    WHERE m.type = "phone" AND h.id = 86 AND l.name = "Besaws"
-    CREATE UNIQUE (m)-[:LOCATED {type: "yelp_review", time: "20140502"}]->(l);  
+    CREATE UNIQUE (m)-[:LOCATED {type: "photo_tag", time: "20140501"}]->(l);  
     commit
 
     begin
-    MERGE (:Human:User { 
-           firstname: "River", lastname: "Butler",
-           fullname: "River Butler", id: 87, 
-           gender: "male", age: 33});
+    CREATE (:Human:User { 
+           firstname: "Ariel", lastname: "Cruz",
+           fullname: "Ariel Cruz", id: 87, 
+           gender: "male", age: 19});
     commit
 
 begin
 MATCH (h:User), (f:User)
-WHERE h.id = 87 AND f.id = 10
+WHERE h.id = 87 AND f.id = 65
 CREATE UNIQUE (h)-[:FRIEND]-(f);
 commit
 
 
 begin
 MATCH (h:User), (f:User)
-WHERE h.id = 87 AND f.id = 16
+WHERE h.id = 87 AND f.id = 72
 CREATE UNIQUE (h)-[:FRIEND]-(f);
 commit
 
 
 begin
 MATCH (h:User), (f:User)
-WHERE h.id = 87 AND f.id = 32
+WHERE h.id = 87 AND f.id = 51
 CREATE UNIQUE (h)-[:FRIEND]-(f);
 commit
 
 
 begin
 MATCH (h:User), (f:User)
-WHERE h.id = 87 AND f.id = 21
+WHERE h.id = 87 AND f.id = 29
 CREATE UNIQUE (h)-[:FRIEND]-(f);
 commit
 
 
 begin
 MATCH (h:User), (f:User)
-WHERE h.id = 87 AND f.id = 3
+WHERE h.id = 87 AND f.id = 77
 CREATE UNIQUE (h)-[:FRIEND]-(f);
 commit
+
+
+begin
+MATCH (h:User), (f:User)
+WHERE h.id = 87 AND f.id = 26
+CREATE UNIQUE (h)-[:FRIEND]-(f);
+commit
+
+begin
+MATCH (h:User), (i:Interest)
+WHERE h.id = 87 AND i.name = "Horse_Riding"
+CREATE UNIQUE (h)-[:HAS]->(i);
+commit
+
+
+begin
+MATCH (h:User), (i:Interest)
+WHERE h.id = 87 AND i.name = "Rock_Climbing"
+CREATE UNIQUE (h)-[:HAS]->(i);
+commit
+
 
 begin
 MATCH (h:User), (i:Interest)
@@ -9700,145 +10043,138 @@ WHERE h.id = 87 AND i.name = "River_Rafting"
 CREATE UNIQUE (h)-[:HAS]->(i);
 commit
 
-    begin
-    MATCH (h:Human)-[:USES]->(m:Machine), (l:Location)
-    WHERE m.type = "phone" AND h.id = 87 AND l.name = "Robotaco"
-    CREATE UNIQUE (m)-[:LOCATED {type: "yelp_review", time: "20140502"}]->(l);  
-    commit
+
+begin
+MATCH (h:User), (i:Interest)
+WHERE h.id = 87 AND i.name = "Bungee_Jumping"
+CREATE UNIQUE (h)-[:HAS]->(i);
+commit
 
 
+begin
+MATCH (h:User), (i:Interest)
+WHERE h.id = 87 AND i.name = "Hiking"
+CREATE UNIQUE (h)-[:HAS]->(i);
+commit
+
+
+begin
+MATCH (h:User), (i:Interest)
+WHERE h.id = 87 AND i.name = "Scuba_Diving"
+CREATE UNIQUE (h)-[:HAS]->(i);
+commit
+
+
+begin
+MATCH (h:User), (i:Interest)
+WHERE h.id = 87 AND i.name = "Photography"
+CREATE UNIQUE (h)-[:HAS]->(i);
+commit
+
+
+begin
+MATCH (h:User), (i:Interest)
+WHERE h.id = 87 AND i.name = "Boating"
+CREATE UNIQUE (h)-[:HAS]->(i);
+commit
+
+
+begin
+MATCH (h:User), (i:Interest)
+WHERE h.id = 87 AND i.name = "Cycling"
+CREATE UNIQUE (h)-[:HAS]->(i);
+commit
+
+
+begin
+MATCH (h:User), (i:Interest)
+WHERE h.id = 87 AND i.name = "Surfing"
+CREATE UNIQUE (h)-[:HAS]->(i);
+commit
+
     begin
     MATCH (h:Human)-[:USES]->(m:Machine), (l:Location)
-    WHERE m.type = "phone" AND h.id = 87 AND l.name = "Foster The People"
+    WHERE m.type = "phone" AND h.id = 87 AND l.name = "The Fray"
     CREATE UNIQUE (m)-[:LOCATED {type: "yelp_review", time: "20140504"}]->(l);  
     commit
 
 
     begin
     MATCH (h:Human)-[:USES]->(m:Machine), (l:Location)
-    WHERE m.type = "phone" AND h.id = 87 AND l.name = "Besaws"
-    CREATE UNIQUE (m)-[:LOCATED {type: "yelp_review", time: "20140502"}]->(l);  
+    WHERE m.type = "phone" AND h.id = 87 AND l.name = "Foster The People"
+    CREATE UNIQUE (m)-[:LOCATED {type: "photo_tag", time: "20140501"}]->(l);  
     commit
 
 
     begin
     MATCH (h:Human)-[:USES]->(m:Machine), (l:Location)
-    WHERE m.type = "phone" AND h.id = 87 AND l.name = "Eastburn"
+    WHERE m.type = "phone" AND h.id = 87 AND l.name = "Starbucks"
     CREATE UNIQUE (m)-[:LOCATED {type: "facebook_checkin", time: "20140501"}]->(l);  
     commit
 
     begin
-    MERGE (:Human:User { 
-           firstname: "Avery", lastname: "Roberts",
-           fullname: "Avery Roberts", id: 88, 
-           gender: "male", age: 27});
+    CREATE (:Human:User { 
+           firstname: "Teagan", lastname: "Nakamoto",
+           fullname: "Teagan Nakamoto", id: 88, 
+           gender: "male", age: 33});
     commit
 
 begin
 MATCH (h:User), (f:User)
-WHERE h.id = 88 AND f.id = 58
-CREATE UNIQUE (h)-[:FRIEND]-(f);
-commit
-
-
-begin
-MATCH (h:User), (f:User)
-WHERE h.id = 88 AND f.id = 79
-CREATE UNIQUE (h)-[:FRIEND]-(f);
-commit
-
-
-begin
-MATCH (h:User), (f:User)
-WHERE h.id = 88 AND f.id = 73
-CREATE UNIQUE (h)-[:FRIEND]-(f);
-commit
-
-
-begin
-MATCH (h:User), (f:User)
-WHERE h.id = 88 AND f.id = 87
+WHERE h.id = 88 AND f.id = 40
 CREATE UNIQUE (h)-[:FRIEND]-(f);
 commit
 
 begin
 MATCH (h:User), (i:Interest)
-WHERE h.id = 88 AND i.name = "Rock_Climbing"
-CREATE UNIQUE (h)-[:HAS]->(i);
-commit
-
-
-begin
-MATCH (h:User), (i:Interest)
-WHERE h.id = 88 AND i.name = "Swimming"
-CREATE UNIQUE (h)-[:HAS]->(i);
-commit
-
-
-begin
-MATCH (h:User), (i:Interest)
-WHERE h.id = 88 AND i.name = "River_Rafting"
-CREATE UNIQUE (h)-[:HAS]->(i);
-commit
-
-
-begin
-MATCH (h:User), (i:Interest)
-WHERE h.id = 88 AND i.name = "Hiking"
+WHERE h.id = 88 AND i.name = "Boating"
 CREATE UNIQUE (h)-[:HAS]->(i);
 commit
 
     begin
     MATCH (h:Human)-[:USES]->(m:Machine), (l:Location)
-    WHERE m.type = "phone" AND h.id = 88 AND l.name = "Nike"
-    CREATE UNIQUE (m)-[:LOCATED {type: "photo_tag", time: "20140505"}]->(l);  
-    commit
-
-
-    begin
-    MATCH (h:Human)-[:USES]->(m:Machine), (l:Location)
-    WHERE m.type = "phone" AND h.id = 88 AND l.name = "McMenamins"
-    CREATE UNIQUE (m)-[:LOCATED {type: "photo_tag", time: "20140505"}]->(l);  
-    commit
-
-
-    begin
-    MATCH (h:Human)-[:USES]->(m:Machine), (l:Location)
-    WHERE m.type = "phone" AND h.id = 88 AND l.name = "Warpaint"
-    CREATE UNIQUE (m)-[:LOCATED {type: "yelp_review", time: "20140502"}]->(l);  
+    WHERE m.type = "phone" AND h.id = 88 AND l.name = "Starbucks"
+    CREATE UNIQUE (m)-[:LOCATED {type: "facebook_checkin", time: "20140502"}]->(l);  
     commit
 
 
     begin
     MATCH (h:Human)-[:USES]->(m:Machine), (l:Location)
     WHERE m.type = "phone" AND h.id = 88 AND l.name = "Christina Perri"
-    CREATE UNIQUE (m)-[:LOCATED {type: "photo_tag", time: "20140501"}]->(l);  
+    CREATE UNIQUE (m)-[:LOCATED {type: "photo_tag", time: "20140505"}]->(l);  
     commit
 
 
     begin
     MATCH (h:Human)-[:USES]->(m:Machine), (l:Location)
-    WHERE m.type = "phone" AND h.id = 88 AND l.name = "Starbucks"
-    CREATE UNIQUE (m)-[:LOCATED {type: "photo_tag", time: "20140501"}]->(l);  
+    WHERE m.type = "phone" AND h.id = 88 AND l.name = "EastBurn"
+    CREATE UNIQUE (m)-[:LOCATED {type: "facebook_checkin", time: "20140505"}]->(l);  
     commit
 
     begin
-    MERGE (:Human:User { 
-           firstname: "Cameron", lastname: "Watson",
-           fullname: "Cameron Watson", id: 89, 
-           gender: "male", age: 21});
+    CREATE (:Human:User { 
+           firstname: "Kayden", lastname: "Scott",
+           fullname: "Kayden Scott", id: 89, 
+           gender: "female", age: 32});
     commit
 
 begin
 MATCH (h:User), (f:User)
-WHERE h.id = 89 AND f.id = 22
+WHERE h.id = 89 AND f.id = 37
 CREATE UNIQUE (h)-[:FRIEND]-(f);
 commit
 
 
 begin
 MATCH (h:User), (f:User)
-WHERE h.id = 89 AND f.id = 51
+WHERE h.id = 89 AND f.id = 7
+CREATE UNIQUE (h)-[:FRIEND]-(f);
+commit
+
+
+begin
+MATCH (h:User), (f:User)
+WHERE h.id = 89 AND f.id = 87
 CREATE UNIQUE (h)-[:FRIEND]-(f);
 commit
 
@@ -9852,23 +10188,23 @@ commit
 
 begin
 MATCH (h:User), (f:User)
-WHERE h.id = 89 AND f.id = 52
+WHERE h.id = 89 AND f.id = 79
 CREATE UNIQUE (h)-[:FRIEND]-(f);
 commit
 
 
 begin
 MATCH (h:User), (f:User)
-WHERE h.id = 89 AND f.id = 16
+WHERE h.id = 89 AND f.id = 74
 CREATE UNIQUE (h)-[:FRIEND]-(f);
 commit
-
 
 begin
-MATCH (h:User), (f:User)
-WHERE h.id = 89 AND f.id = 14
-CREATE UNIQUE (h)-[:FRIEND]-(f);
+MATCH (h:User), (i:Interest)
+WHERE h.id = 89 AND i.name = "Boating"
+CREATE UNIQUE (h)-[:HAS]->(i);
 commit
+
 
 begin
 MATCH (h:User), (i:Interest)
@@ -9879,14 +10215,14 @@ commit
 
 begin
 MATCH (h:User), (i:Interest)
-WHERE h.id = 89 AND i.name = "Baseball"
+WHERE h.id = 89 AND i.name = "Scuba_Diving"
 CREATE UNIQUE (h)-[:HAS]->(i);
 commit
 
 
 begin
 MATCH (h:User), (i:Interest)
-WHERE h.id = 89 AND i.name = "Bungee_Jumping"
+WHERE h.id = 89 AND i.name = "Fishing"
 CREATE UNIQUE (h)-[:HAS]->(i);
 commit
 
@@ -9897,36 +10233,78 @@ WHERE h.id = 89 AND i.name = "Photography"
 CREATE UNIQUE (h)-[:HAS]->(i);
 commit
 
+
+begin
+MATCH (h:User), (i:Interest)
+WHERE h.id = 89 AND i.name = "River_Rafting"
+CREATE UNIQUE (h)-[:HAS]->(i);
+commit
+
+
+begin
+MATCH (h:User), (i:Interest)
+WHERE h.id = 89 AND i.name = "Basketball"
+CREATE UNIQUE (h)-[:HAS]->(i);
+commit
+
+
+begin
+MATCH (h:User), (i:Interest)
+WHERE h.id = 89 AND i.name = "Horse_Riding"
+CREATE UNIQUE (h)-[:HAS]->(i);
+commit
+
+
+begin
+MATCH (h:User), (i:Interest)
+WHERE h.id = 89 AND i.name = "Surfing"
+CREATE UNIQUE (h)-[:HAS]->(i);
+commit
+
+
+begin
+MATCH (h:User), (i:Interest)
+WHERE h.id = 89 AND i.name = "Walking"
+CREATE UNIQUE (h)-[:HAS]->(i);
+commit
+
     begin
     MATCH (h:Human)-[:USES]->(m:Machine), (l:Location)
-    WHERE m.type = "phone" AND h.id = 89 AND l.name = "Eastburn"
-    CREATE UNIQUE (m)-[:LOCATED {type: "yelp_review", time: "20140503"}]->(l);  
+    WHERE m.type = "phone" AND h.id = 89 AND l.name = "Starbucks"
+    CREATE UNIQUE (m)-[:LOCATED {type: "facebook_checkin", time: "20140504"}]->(l);  
     commit
 
 
     begin
     MATCH (h:Human)-[:USES]->(m:Machine), (l:Location)
-    WHERE m.type = "phone" AND h.id = 89 AND l.name = "Foster The People"
-    CREATE UNIQUE (m)-[:LOCATED {type: "photo_tag", time: "20140505"}]->(l);  
-    commit
-
-
-    begin
-    MATCH (h:Human)-[:USES]->(m:Machine), (l:Location)
-    WHERE m.type = "phone" AND h.id = 89 AND l.name = "Warpaint"
-    CREATE UNIQUE (m)-[:LOCATED {type: "yelp_review", time: "20140502"}]->(l);  
+    WHERE m.type = "phone" AND h.id = 89 AND l.name = "The Fray"
+    CREATE UNIQUE (m)-[:LOCATED {type: "photo_tag", time: "20140503"}]->(l);  
     commit
 
     begin
-    MERGE (:Human:User { 
-           firstname: "Lyric", lastname: "Bell",
-           fullname: "Lyric Bell", id: 90, 
-           gender: "male", age: 30});
+    CREATE (:Human:User { 
+           firstname: "Parker", lastname: "Davis",
+           fullname: "Parker Davis", id: 90, 
+           gender: "male", age: 22});
     commit
 
 begin
 MATCH (h:User), (f:User)
-WHERE h.id = 90 AND f.id = 16
+WHERE h.id = 90 AND f.id = 18
+CREATE UNIQUE (h)-[:FRIEND]-(f);
+commit
+
+
+begin
+MATCH (h:User), (f:User)
+WHERE h.id = 90 AND f.id = 85
+CREATE UNIQUE (h)-[:FRIEND]-(f);
+commit
+
+
+begin
+MATCH (h:User), (f:User)
+WHERE h.id = 90 AND f.id = 63
 CREATE UNIQUE (h)-[:FRIEND]-(f);
 commit
 
@@ -9946,34 +10324,6 @@ commit
 
 begin
 MATCH (h:User), (i:Interest)
-WHERE h.id = 90 AND i.name = "Swimming"
-CREATE UNIQUE (h)-[:HAS]->(i);
-commit
-
-
-begin
-MATCH (h:User), (i:Interest)
-WHERE h.id = 90 AND i.name = "Cycling"
-CREATE UNIQUE (h)-[:HAS]->(i);
-commit
-
-
-begin
-MATCH (h:User), (i:Interest)
-WHERE h.id = 90 AND i.name = "Volleyball"
-CREATE UNIQUE (h)-[:HAS]->(i);
-commit
-
-
-begin
-MATCH (h:User), (i:Interest)
-WHERE h.id = 90 AND i.name = "Horse_Riding"
-CREATE UNIQUE (h)-[:HAS]->(i);
-commit
-
-
-begin
-MATCH (h:User), (i:Interest)
 WHERE h.id = 90 AND i.name = "Hiking"
 CREATE UNIQUE (h)-[:HAS]->(i);
 commit
@@ -9981,14 +10331,7 @@ commit
 
 begin
 MATCH (h:User), (i:Interest)
-WHERE h.id = 90 AND i.name = "River_Rafting"
-CREATE UNIQUE (h)-[:HAS]->(i);
-commit
-
-
-begin
-MATCH (h:User), (i:Interest)
-WHERE h.id = 90 AND i.name = "Walking"
+WHERE h.id = 90 AND i.name = "Basketball"
 CREATE UNIQUE (h)-[:HAS]->(i);
 commit
 
@@ -10002,126 +10345,84 @@ commit
 
 begin
 MATCH (h:User), (i:Interest)
-WHERE h.id = 90 AND i.name = "Boating"
+WHERE h.id = 90 AND i.name = "Baseball"
+CREATE UNIQUE (h)-[:HAS]->(i);
+commit
+
+
+begin
+MATCH (h:User), (i:Interest)
+WHERE h.id = 90 AND i.name = "Horse_Riding"
+CREATE UNIQUE (h)-[:HAS]->(i);
+commit
+
+
+begin
+MATCH (h:User), (i:Interest)
+WHERE h.id = 90 AND i.name = "Swimming"
+CREATE UNIQUE (h)-[:HAS]->(i);
+commit
+
+
+begin
+MATCH (h:User), (i:Interest)
+WHERE h.id = 90 AND i.name = "Golf"
+CREATE UNIQUE (h)-[:HAS]->(i);
+commit
+
+
+begin
+MATCH (h:User), (i:Interest)
+WHERE h.id = 90 AND i.name = "Rock_Climbing"
 CREATE UNIQUE (h)-[:HAS]->(i);
 commit
 
     begin
     MATCH (h:Human)-[:USES]->(m:Machine), (l:Location)
-    WHERE m.type = "phone" AND h.id = 90 AND l.name = "Warpaint"
-    CREATE UNIQUE (m)-[:LOCATED {type: "facebook_checkin", time: "20140501"}]->(l);  
+    WHERE m.type = "phone" AND h.id = 90 AND l.name = "Besaws"
+    CREATE UNIQUE (m)-[:LOCATED {type: "photo_tag", time: "20140505"}]->(l);  
     commit
 
 
     begin
     MATCH (h:Human)-[:USES]->(m:Machine), (l:Location)
-    WHERE m.type = "phone" AND h.id = 90 AND l.name = "Robotaco"
-    CREATE UNIQUE (m)-[:LOCATED {type: "photo_tag", time: "20140502"}]->(l);  
+    WHERE m.type = "phone" AND h.id = 90 AND l.name = "The Fray"
+    CREATE UNIQUE (m)-[:LOCATED {type: "yelp_review", time: "20140501"}]->(l);  
     commit
 
 
     begin
     MATCH (h:Human)-[:USES]->(m:Machine), (l:Location)
-    WHERE m.type = "phone" AND h.id = 90 AND l.name = "Foster The People"
-    CREATE UNIQUE (m)-[:LOCATED {type: "facebook_checkin", time: "20140501"}]->(l);  
+    WHERE m.type = "phone" AND h.id = 90 AND l.name = "EastBurn"
+    CREATE UNIQUE (m)-[:LOCATED {type: "photo_tag", time: "20140503"}]->(l);  
+    commit
+
+
+    begin
+    MATCH (h:Human)-[:USES]->(m:Machine), (l:Location)
+    WHERE m.type = "phone" AND h.id = 90 AND l.name = "Caffe Umbria"
+    CREATE UNIQUE (m)-[:LOCATED {type: "photo_tag", time: "20140503"}]->(l);  
     commit
 
     begin
-    MERGE (:Human:User { 
-           firstname: "Reagan", lastname: "White",
-           fullname: "Reagan White", id: 91, 
-           gender: "female", age: 30});
+    CREATE (:Human:User { 
+           firstname: "Blake", lastname: "Stewart",
+           fullname: "Blake Stewart", id: 91, 
+           gender: "male", age: 22});
     commit
 
 begin
 MATCH (h:User), (f:User)
-WHERE h.id = 91 AND f.id = 60
+WHERE h.id = 91 AND f.id = 45
 CREATE UNIQUE (h)-[:FRIEND]-(f);
 commit
 
 
 begin
 MATCH (h:User), (f:User)
-WHERE h.id = 91 AND f.id = 15
+WHERE h.id = 91 AND f.id = 34
 CREATE UNIQUE (h)-[:FRIEND]-(f);
 commit
-
-
-begin
-MATCH (h:User), (f:User)
-WHERE h.id = 91 AND f.id = 33
-CREATE UNIQUE (h)-[:FRIEND]-(f);
-commit
-
-
-begin
-MATCH (h:User), (f:User)
-WHERE h.id = 91 AND f.id = 82
-CREATE UNIQUE (h)-[:FRIEND]-(f);
-commit
-
-begin
-MATCH (h:User), (i:Interest)
-WHERE h.id = 91 AND i.name = "Boating"
-CREATE UNIQUE (h)-[:HAS]->(i);
-commit
-
-
-begin
-MATCH (h:User), (i:Interest)
-WHERE h.id = 91 AND i.name = "Surfing"
-CREATE UNIQUE (h)-[:HAS]->(i);
-commit
-
-
-begin
-MATCH (h:User), (i:Interest)
-WHERE h.id = 91 AND i.name = "Scuba_Diving"
-CREATE UNIQUE (h)-[:HAS]->(i);
-commit
-
-
-begin
-MATCH (h:User), (i:Interest)
-WHERE h.id = 91 AND i.name = "Bungee_Jumping"
-CREATE UNIQUE (h)-[:HAS]->(i);
-commit
-
-
-begin
-MATCH (h:User), (i:Interest)
-WHERE h.id = 91 AND i.name = "River_Rafting"
-CREATE UNIQUE (h)-[:HAS]->(i);
-commit
-
-
-begin
-MATCH (h:User), (i:Interest)
-WHERE h.id = 91 AND i.name = "Fishing"
-CREATE UNIQUE (h)-[:HAS]->(i);
-commit
-
-
-begin
-MATCH (h:User), (i:Interest)
-WHERE h.id = 91 AND i.name = "Baseball"
-CREATE UNIQUE (h)-[:HAS]->(i);
-commit
-
-
-begin
-MATCH (h:User), (i:Interest)
-WHERE h.id = 91 AND i.name = "Cycling"
-CREATE UNIQUE (h)-[:HAS]->(i);
-commit
-
-
-begin
-MATCH (h:User), (i:Interest)
-WHERE h.id = 91 AND i.name = "Volleyball"
-CREATE UNIQUE (h)-[:HAS]->(i);
-commit
-
 
 begin
 MATCH (h:User), (i:Interest)
@@ -10129,77 +10430,56 @@ WHERE h.id = 91 AND i.name = "Rock_Climbing"
 CREATE UNIQUE (h)-[:HAS]->(i);
 commit
 
+
+begin
+MATCH (h:User), (i:Interest)
+WHERE h.id = 91 AND i.name = "Golf"
+CREATE UNIQUE (h)-[:HAS]->(i);
+commit
+
+
+begin
+MATCH (h:User), (i:Interest)
+WHERE h.id = 91 AND i.name = "Photography"
+CREATE UNIQUE (h)-[:HAS]->(i);
+commit
+
     begin
     MATCH (h:Human)-[:USES]->(m:Machine), (l:Location)
     WHERE m.type = "phone" AND h.id = 91 AND l.name = "Nordstroms"
-    CREATE UNIQUE (m)-[:LOCATED {type: "facebook_checkin", time: "20140505"}]->(l);  
-    commit
-
-
-    begin
-    MATCH (h:Human)-[:USES]->(m:Machine), (l:Location)
-    WHERE m.type = "phone" AND h.id = 91 AND l.name = "Hollywood Theatre"
-    CREATE UNIQUE (m)-[:LOCATED {type: "facebook_checkin", time: "20140501"}]->(l);  
+    CREATE UNIQUE (m)-[:LOCATED {type: "photo_tag", time: "20140505"}]->(l);  
     commit
 
     begin
-    MERGE (:Human:User { 
-           firstname: "Payton", lastname: "Williams",
-           fullname: "Payton Williams", id: 92, 
-           gender: "female", age: 26});
+    CREATE (:Human:User { 
+           firstname: "Rylee", lastname: "Baker",
+           fullname: "Rylee Baker", id: 92, 
+           gender: "female", age: 27});
     commit
 
 begin
 MATCH (h:User), (f:User)
-WHERE h.id = 92 AND f.id = 26
+WHERE h.id = 92 AND f.id = 52
 CREATE UNIQUE (h)-[:FRIEND]-(f);
 commit
 
 
 begin
 MATCH (h:User), (f:User)
-WHERE h.id = 92 AND f.id = 67
+WHERE h.id = 92 AND f.id = 45
+CREATE UNIQUE (h)-[:FRIEND]-(f);
+commit
+
+
+begin
+MATCH (h:User), (f:User)
+WHERE h.id = 92 AND f.id = 79
 CREATE UNIQUE (h)-[:FRIEND]-(f);
 commit
 
 begin
 MATCH (h:User), (i:Interest)
-WHERE h.id = 92 AND i.name = "Golf"
-CREATE UNIQUE (h)-[:HAS]->(i);
-commit
-
-
-begin
-MATCH (h:User), (i:Interest)
-WHERE h.id = 92 AND i.name = "Cycling"
-CREATE UNIQUE (h)-[:HAS]->(i);
-commit
-
-
-begin
-MATCH (h:User), (i:Interest)
-WHERE h.id = 92 AND i.name = "Baseball"
-CREATE UNIQUE (h)-[:HAS]->(i);
-commit
-
-
-begin
-MATCH (h:User), (i:Interest)
-WHERE h.id = 92 AND i.name = "Surfing"
-CREATE UNIQUE (h)-[:HAS]->(i);
-commit
-
-
-begin
-MATCH (h:User), (i:Interest)
-WHERE h.id = 92 AND i.name = "Volleyball"
-CREATE UNIQUE (h)-[:HAS]->(i);
-commit
-
-
-begin
-MATCH (h:User), (i:Interest)
-WHERE h.id = 92 AND i.name = "Walking"
+WHERE h.id = 92 AND i.name = "Basketball"
 CREATE UNIQUE (h)-[:HAS]->(i);
 commit
 
@@ -10213,112 +10493,140 @@ commit
 
 begin
 MATCH (h:User), (i:Interest)
-WHERE h.id = 92 AND i.name = "Bungee_Jumping"
+WHERE h.id = 92 AND i.name = "Surfing"
+CREATE UNIQUE (h)-[:HAS]->(i);
+commit
+
+
+begin
+MATCH (h:User), (i:Interest)
+WHERE h.id = 92 AND i.name = "Boating"
+CREATE UNIQUE (h)-[:HAS]->(i);
+commit
+
+
+begin
+MATCH (h:User), (i:Interest)
+WHERE h.id = 92 AND i.name = "Hiking"
+CREATE UNIQUE (h)-[:HAS]->(i);
+commit
+
+
+begin
+MATCH (h:User), (i:Interest)
+WHERE h.id = 92 AND i.name = "River_Rafting"
+CREATE UNIQUE (h)-[:HAS]->(i);
+commit
+
+
+begin
+MATCH (h:User), (i:Interest)
+WHERE h.id = 92 AND i.name = "Rock_Climbing"
+CREATE UNIQUE (h)-[:HAS]->(i);
+commit
+
+
+begin
+MATCH (h:User), (i:Interest)
+WHERE h.id = 92 AND i.name = "Volleyball"
+CREATE UNIQUE (h)-[:HAS]->(i);
+commit
+
+
+begin
+MATCH (h:User), (i:Interest)
+WHERE h.id = 92 AND i.name = "Horse_Riding"
+CREATE UNIQUE (h)-[:HAS]->(i);
+commit
+
+
+begin
+MATCH (h:User), (i:Interest)
+WHERE h.id = 92 AND i.name = "Golf"
 CREATE UNIQUE (h)-[:HAS]->(i);
 commit
 
     begin
     MATCH (h:Human)-[:USES]->(m:Machine), (l:Location)
-    WHERE m.type = "phone" AND h.id = 92 AND l.name = "Foster The People"
-    CREATE UNIQUE (m)-[:LOCATED {type: "yelp_review", time: "20140502"}]->(l);  
-    commit
-
-
-    begin
-    MATCH (h:Human)-[:USES]->(m:Machine), (l:Location)
-    WHERE m.type = "phone" AND h.id = 92 AND l.name = "Besaws"
+    WHERE m.type = "phone" AND h.id = 92 AND l.name = "EastBurn"
     CREATE UNIQUE (m)-[:LOCATED {type: "photo_tag", time: "20140503"}]->(l);  
     commit
 
 
     begin
     MATCH (h:Human)-[:USES]->(m:Machine), (l:Location)
-    WHERE m.type = "phone" AND h.id = 92 AND l.name = "Nordstroms"
-    CREATE UNIQUE (m)-[:LOCATED {type: "photo_tag", time: "20140502"}]->(l);  
+    WHERE m.type = "phone" AND h.id = 92 AND l.name = "McMenamins"
+    CREATE UNIQUE (m)-[:LOCATED {type: "yelp_review", time: "20140502"}]->(l);  
     commit
 
 
     begin
     MATCH (h:Human)-[:USES]->(m:Machine), (l:Location)
-    WHERE m.type = "phone" AND h.id = 92 AND l.name = "Caffe Umbria"
-    CREATE UNIQUE (m)-[:LOCATED {type: "photo_tag", time: "20140504"}]->(l);  
+    WHERE m.type = "phone" AND h.id = 92 AND l.name = "Hollywood Theatre"
+    CREATE UNIQUE (m)-[:LOCATED {type: "facebook_checkin", time: "20140503"}]->(l);  
+    commit
+
+
+    begin
+    MATCH (h:Human)-[:USES]->(m:Machine), (l:Location)
+    WHERE m.type = "phone" AND h.id = 92 AND l.name = "Christina Perri"
+    CREATE UNIQUE (m)-[:LOCATED {type: "facebook_checkin", time: "20140503"}]->(l);  
+    commit
+
+
+    begin
+    MATCH (h:Human)-[:USES]->(m:Machine), (l:Location)
+    WHERE m.type = "phone" AND h.id = 92 AND l.name = "The Fray"
+    CREATE UNIQUE (m)-[:LOCATED {type: "facebook_checkin", time: "20140505"}]->(l);  
     commit
 
     begin
-    MERGE (:Human:User { 
-           firstname: "Ali", lastname: "Cruz",
-           fullname: "Ali Cruz", id: 93, 
-           gender: "female", age: 21});
+    CREATE (:Human:User { 
+           firstname: "Rowan", lastname: "Wright",
+           fullname: "Rowan Wright", id: 93, 
+           gender: "female", age: 29});
     commit
 
 begin
 MATCH (h:User), (f:User)
-WHERE h.id = 93 AND f.id = 83
+WHERE h.id = 93 AND f.id = 76
 CREATE UNIQUE (h)-[:FRIEND]-(f);
 commit
 
 
 begin
 MATCH (h:User), (f:User)
-WHERE h.id = 93 AND f.id = 88
+WHERE h.id = 93 AND f.id = 69
 CREATE UNIQUE (h)-[:FRIEND]-(f);
 commit
 
+
 begin
-MATCH (h:User), (i:Interest)
-WHERE h.id = 93 AND i.name = "Baseball"
-CREATE UNIQUE (h)-[:HAS]->(i);
+MATCH (h:User), (f:User)
+WHERE h.id = 93 AND f.id = 73
+CREATE UNIQUE (h)-[:FRIEND]-(f);
 commit
 
 
 begin
-MATCH (h:User), (i:Interest)
-WHERE h.id = 93 AND i.name = "Cycling"
-CREATE UNIQUE (h)-[:HAS]->(i);
+MATCH (h:User), (f:User)
+WHERE h.id = 93 AND f.id = 20
+CREATE UNIQUE (h)-[:FRIEND]-(f);
 commit
 
 
 begin
-MATCH (h:User), (i:Interest)
-WHERE h.id = 93 AND i.name = "River_Rafting"
-CREATE UNIQUE (h)-[:HAS]->(i);
+MATCH (h:User), (f:User)
+WHERE h.id = 93 AND f.id = 47
+CREATE UNIQUE (h)-[:FRIEND]-(f);
 commit
 
 
 begin
-MATCH (h:User), (i:Interest)
-WHERE h.id = 93 AND i.name = "Golf"
-CREATE UNIQUE (h)-[:HAS]->(i);
+MATCH (h:User), (f:User)
+WHERE h.id = 93 AND f.id = 38
+CREATE UNIQUE (h)-[:FRIEND]-(f);
 commit
-
-
-begin
-MATCH (h:User), (i:Interest)
-WHERE h.id = 93 AND i.name = "Fishing"
-CREATE UNIQUE (h)-[:HAS]->(i);
-commit
-
-
-begin
-MATCH (h:User), (i:Interest)
-WHERE h.id = 93 AND i.name = "Photography"
-CREATE UNIQUE (h)-[:HAS]->(i);
-commit
-
-
-begin
-MATCH (h:User), (i:Interest)
-WHERE h.id = 93 AND i.name = "Bungee_Jumping"
-CREATE UNIQUE (h)-[:HAS]->(i);
-commit
-
-
-begin
-MATCH (h:User), (i:Interest)
-WHERE h.id = 93 AND i.name = "Boating"
-CREATE UNIQUE (h)-[:HAS]->(i);
-commit
-
 
 begin
 MATCH (h:User), (i:Interest)
@@ -10329,67 +10637,67 @@ commit
 
 begin
 MATCH (h:User), (i:Interest)
-WHERE h.id = 93 AND i.name = "Volleyball"
+WHERE h.id = 93 AND i.name = "Basketball"
+CREATE UNIQUE (h)-[:HAS]->(i);
+commit
+
+
+begin
+MATCH (h:User), (i:Interest)
+WHERE h.id = 93 AND i.name = "Rock_Climbing"
+CREATE UNIQUE (h)-[:HAS]->(i);
+commit
+
+
+begin
+MATCH (h:User), (i:Interest)
+WHERE h.id = 93 AND i.name = "Horse_Riding"
+CREATE UNIQUE (h)-[:HAS]->(i);
+commit
+
+
+begin
+MATCH (h:User), (i:Interest)
+WHERE h.id = 93 AND i.name = "Boating"
 CREATE UNIQUE (h)-[:HAS]->(i);
 commit
 
     begin
     MATCH (h:Human)-[:USES]->(m:Machine), (l:Location)
-    WHERE m.type = "phone" AND h.id = 93 AND l.name = "The Fray"
-    CREATE UNIQUE (m)-[:LOCATED {type: "yelp_review", time: "20140501"}]->(l);  
-    commit
-
-
-    begin
-    MATCH (h:Human)-[:USES]->(m:Machine), (l:Location)
-    WHERE m.type = "phone" AND h.id = 93 AND l.name = "Robotaco"
-    CREATE UNIQUE (m)-[:LOCATED {type: "photo_tag", time: "20140502"}]->(l);  
-    commit
-
-
-    begin
-    MATCH (h:Human)-[:USES]->(m:Machine), (l:Location)
-    WHERE m.type = "phone" AND h.id = 93 AND l.name = "Starbucks"
-    CREATE UNIQUE (m)-[:LOCATED {type: "facebook_checkin", time: "20140501"}]->(l);  
-    commit
-
-
-    begin
-    MATCH (h:Human)-[:USES]->(m:Machine), (l:Location)
-    WHERE m.type = "phone" AND h.id = 93 AND l.name = "Warpaint"
-    CREATE UNIQUE (m)-[:LOCATED {type: "facebook_checkin", time: "20140505"}]->(l);  
-    commit
-
-
-    begin
-    MATCH (h:Human)-[:USES]->(m:Machine), (l:Location)
-    WHERE m.type = "phone" AND h.id = 93 AND l.name = "Christina Perri"
+    WHERE m.type = "phone" AND h.id = 93 AND l.name = "Caffe Umbria"
     CREATE UNIQUE (m)-[:LOCATED {type: "photo_tag", time: "20140501"}]->(l);  
     commit
 
+
     begin
-    MERGE (:Human:User { 
-           firstname: "Tatum", lastname: "Smith",
-           fullname: "Tatum Smith", id: 94, 
-           gender: "male", age: 19});
+    MATCH (h:Human)-[:USES]->(m:Machine), (l:Location)
+    WHERE m.type = "phone" AND h.id = 93 AND l.name = "McMenamins"
+    CREATE UNIQUE (m)-[:LOCATED {type: "photo_tag", time: "20140505"}]->(l);  
+    commit
+
+    begin
+    CREATE (:Human:User { 
+           firstname: "Jordyn", lastname: "Fisher",
+           fullname: "Jordyn Fisher", id: 94, 
+           gender: "male", age: 29});
     commit
 
 begin
 MATCH (h:User), (f:User)
-WHERE h.id = 94 AND f.id = 49
-CREATE UNIQUE (h)-[:FRIEND]-(f);
-commit
-
-
-begin
-MATCH (h:User), (f:User)
-WHERE h.id = 94 AND f.id = 3
+WHERE h.id = 94 AND f.id = 52
 CREATE UNIQUE (h)-[:FRIEND]-(f);
 commit
 
 begin
 MATCH (h:User), (i:Interest)
-WHERE h.id = 94 AND i.name = "Fishing"
+WHERE h.id = 94 AND i.name = "Photography"
+CREATE UNIQUE (h)-[:HAS]->(i);
+commit
+
+
+begin
+MATCH (h:User), (i:Interest)
+WHERE h.id = 94 AND i.name = "Basketball"
 CREATE UNIQUE (h)-[:HAS]->(i);
 commit
 
@@ -10403,109 +10711,88 @@ commit
 
 begin
 MATCH (h:User), (i:Interest)
-WHERE h.id = 94 AND i.name = "Photography"
+WHERE h.id = 94 AND i.name = "Golf"
 CREATE UNIQUE (h)-[:HAS]->(i);
 commit
 
 
 begin
 MATCH (h:User), (i:Interest)
-WHERE h.id = 94 AND i.name = "Surfing"
+WHERE h.id = 94 AND i.name = "Bungee_Jumping"
 CREATE UNIQUE (h)-[:HAS]->(i);
 commit
 
 
 begin
 MATCH (h:User), (i:Interest)
-WHERE h.id = 94 AND i.name = "Boating"
+WHERE h.id = 94 AND i.name = "Fishing"
 CREATE UNIQUE (h)-[:HAS]->(i);
 commit
 
 
 begin
 MATCH (h:User), (i:Interest)
-WHERE h.id = 94 AND i.name = "Rock_Climbing"
+WHERE h.id = 94 AND i.name = "Scuba_Diving"
 CREATE UNIQUE (h)-[:HAS]->(i);
 commit
 
 
 begin
 MATCH (h:User), (i:Interest)
-WHERE h.id = 94 AND i.name = "Hiking"
-CREATE UNIQUE (h)-[:HAS]->(i);
-commit
-
-
-begin
-MATCH (h:User), (i:Interest)
-WHERE h.id = 94 AND i.name = "Horse_Riding"
+WHERE h.id = 94 AND i.name = "Walking"
 CREATE UNIQUE (h)-[:HAS]->(i);
 commit
 
     begin
     MATCH (h:Human)-[:USES]->(m:Machine), (l:Location)
-    WHERE m.type = "phone" AND h.id = 94 AND l.name = "Hollywood Theatre"
-    CREATE UNIQUE (m)-[:LOCATED {type: "facebook_checkin", time: "20140504"}]->(l);  
-    commit
-
-
-    begin
-    MATCH (h:Human)-[:USES]->(m:Machine), (l:Location)
-    WHERE m.type = "phone" AND h.id = 94 AND l.name = "Christina Perri"
+    WHERE m.type = "phone" AND h.id = 94 AND l.name = "Besaws"
     CREATE UNIQUE (m)-[:LOCATED {type: "facebook_checkin", time: "20140502"}]->(l);  
     commit
 
 
     begin
     MATCH (h:Human)-[:USES]->(m:Machine), (l:Location)
-    WHERE m.type = "phone" AND h.id = 94 AND l.name = "Caffe Umbria"
-    CREATE UNIQUE (m)-[:LOCATED {type: "facebook_checkin", time: "20140504"}]->(l);  
+    WHERE m.type = "phone" AND h.id = 94 AND l.name = "Robo Taco"
+    CREATE UNIQUE (m)-[:LOCATED {type: "facebook_checkin", time: "20140501"}]->(l);  
     commit
 
     begin
-    MERGE (:Human:User { 
-           firstname: "River", lastname: "Edwards",
-           fullname: "River Edwards", id: 95, 
-           gender: "male", age: 31});
+    CREATE (:Human:User { 
+           firstname: "Tatum", lastname: "Cooper",
+           fullname: "Tatum Cooper", id: 95, 
+           gender: "female", age: 29});
     commit
 
 begin
 MATCH (h:User), (f:User)
-WHERE h.id = 95 AND f.id = 40
+WHERE h.id = 95 AND f.id = 28
+CREATE UNIQUE (h)-[:FRIEND]-(f);
+commit
+
+
+begin
+MATCH (h:User), (f:User)
+WHERE h.id = 95 AND f.id = 39
 CREATE UNIQUE (h)-[:FRIEND]-(f);
 commit
 
 begin
 MATCH (h:User), (i:Interest)
-WHERE h.id = 95 AND i.name = "Rock_Climbing"
+WHERE h.id = 95 AND i.name = "Boating"
 CREATE UNIQUE (h)-[:HAS]->(i);
 commit
 
 
 begin
 MATCH (h:User), (i:Interest)
-WHERE h.id = 95 AND i.name = "Walking"
+WHERE h.id = 95 AND i.name = "Volleyball"
 CREATE UNIQUE (h)-[:HAS]->(i);
 commit
 
 
 begin
 MATCH (h:User), (i:Interest)
-WHERE h.id = 95 AND i.name = "Swimming"
-CREATE UNIQUE (h)-[:HAS]->(i);
-commit
-
-
-begin
-MATCH (h:User), (i:Interest)
-WHERE h.id = 95 AND i.name = "Fishing"
-CREATE UNIQUE (h)-[:HAS]->(i);
-commit
-
-
-begin
-MATCH (h:User), (i:Interest)
-WHERE h.id = 95 AND i.name = "Golf"
+WHERE h.id = 95 AND i.name = "River_Rafting"
 CREATE UNIQUE (h)-[:HAS]->(i);
 commit
 
@@ -10519,91 +10806,56 @@ commit
 
 begin
 MATCH (h:User), (i:Interest)
-WHERE h.id = 95 AND i.name = "Horse_Riding"
-CREATE UNIQUE (h)-[:HAS]->(i);
-commit
-
-
-begin
-MATCH (h:User), (i:Interest)
 WHERE h.id = 95 AND i.name = "Bungee_Jumping"
 CREATE UNIQUE (h)-[:HAS]->(i);
 commit
 
-
-begin
-MATCH (h:User), (i:Interest)
-WHERE h.id = 95 AND i.name = "Cycling"
-CREATE UNIQUE (h)-[:HAS]->(i);
-commit
-
     begin
     MATCH (h:Human)-[:USES]->(m:Machine), (l:Location)
-    WHERE m.type = "phone" AND h.id = 95 AND l.name = "Eastburn"
-    CREATE UNIQUE (m)-[:LOCATED {type: "yelp_review", time: "20140501"}]->(l);  
-    commit
-
-
-    begin
-    MATCH (h:Human)-[:USES]->(m:Machine), (l:Location)
-    WHERE m.type = "phone" AND h.id = 95 AND l.name = "Robotaco"
-    CREATE UNIQUE (m)-[:LOCATED {type: "facebook_checkin", time: "20140505"}]->(l);  
-    commit
-
-
-    begin
-    MATCH (h:Human)-[:USES]->(m:Machine), (l:Location)
-    WHERE m.type = "phone" AND h.id = 95 AND l.name = "McMenamins"
-    CREATE UNIQUE (m)-[:LOCATED {type: "yelp_review", time: "20140502"}]->(l);  
+    WHERE m.type = "phone" AND h.id = 95 AND l.name = "Warpaint"
+    CREATE UNIQUE (m)-[:LOCATED {type: "yelp_review", time: "20140505"}]->(l);  
     commit
 
     begin
-    MERGE (:Human:User { 
-           firstname: "Angel", lastname: "Nelson",
-           fullname: "Angel Nelson", id: 96, 
-           gender: "male", age: 21});
+    CREATE (:Human:User { 
+           firstname: "Harper", lastname: "Clark",
+           fullname: "Harper Clark", id: 96, 
+           gender: "female", age: 30});
     commit
 
 begin
 MATCH (h:User), (f:User)
-WHERE h.id = 96 AND f.id = 0
+WHERE h.id = 96 AND f.id = 90
 CREATE UNIQUE (h)-[:FRIEND]-(f);
 commit
 
 
 begin
 MATCH (h:User), (f:User)
-WHERE h.id = 96 AND f.id = 86
+WHERE h.id = 96 AND f.id = 88
 CREATE UNIQUE (h)-[:FRIEND]-(f);
 commit
 
 
 begin
 MATCH (h:User), (f:User)
-WHERE h.id = 96 AND f.id = 45
+WHERE h.id = 96 AND f.id = 20
 CREATE UNIQUE (h)-[:FRIEND]-(f);
 commit
 
 
 begin
 MATCH (h:User), (f:User)
-WHERE h.id = 96 AND f.id = 54
+WHERE h.id = 96 AND f.id = 92
 CREATE UNIQUE (h)-[:FRIEND]-(f);
 commit
 
-begin
-MATCH (h:User), (i:Interest)
-WHERE h.id = 96 AND i.name = "Surfing"
-CREATE UNIQUE (h)-[:HAS]->(i);
-commit
-
 
 begin
-MATCH (h:User), (i:Interest)
-WHERE h.id = 96 AND i.name = "Baseball"
-CREATE UNIQUE (h)-[:HAS]->(i);
+MATCH (h:User), (f:User)
+WHERE h.id = 96 AND f.id = 26
+CREATE UNIQUE (h)-[:FRIEND]-(f);
 commit
-
 
 begin
 MATCH (h:User), (i:Interest)
@@ -10614,71 +10866,22 @@ commit
 
 begin
 MATCH (h:User), (i:Interest)
-WHERE h.id = 96 AND i.name = "Golf"
-CREATE UNIQUE (h)-[:HAS]->(i);
-commit
-
-
-begin
-MATCH (h:User), (i:Interest)
-WHERE h.id = 96 AND i.name = "Bungee_Jumping"
+WHERE h.id = 96 AND i.name = "Basketball"
 CREATE UNIQUE (h)-[:HAS]->(i);
 commit
 
     begin
     MATCH (h:Human)-[:USES]->(m:Machine), (l:Location)
-    WHERE m.type = "phone" AND h.id = 96 AND l.name = "Nike"
-    CREATE UNIQUE (m)-[:LOCATED {type: "photo_tag", time: "20140505"}]->(l);  
-    commit
-
-
-    begin
-    MATCH (h:Human)-[:USES]->(m:Machine), (l:Location)
-    WHERE m.type = "phone" AND h.id = 96 AND l.name = "Warpaint"
-    CREATE UNIQUE (m)-[:LOCATED {type: "yelp_review", time: "20140503"}]->(l);  
-    commit
-
-
-    begin
-    MATCH (h:Human)-[:USES]->(m:Machine), (l:Location)
-    WHERE m.type = "phone" AND h.id = 96 AND l.name = "McMenamins"
-    CREATE UNIQUE (m)-[:LOCATED {type: "facebook_checkin", time: "20140505"}]->(l);  
-    commit
-
-
-    begin
-    MATCH (h:Human)-[:USES]->(m:Machine), (l:Location)
-    WHERE m.type = "phone" AND h.id = 96 AND l.name = "Hollywood Theatre"
-    CREATE UNIQUE (m)-[:LOCATED {type: "facebook_checkin", time: "20140502"}]->(l);  
+    WHERE m.type = "phone" AND h.id = 96 AND l.name = "EastBurn"
+    CREATE UNIQUE (m)-[:LOCATED {type: "photo_tag", time: "20140501"}]->(l);  
     commit
 
     begin
-    MERGE (:Human:User { 
-           firstname: "Lyric", lastname: "Powell",
-           fullname: "Lyric Powell", id: 97, 
-           gender: "male", age: 21});
+    CREATE (:Human:User { 
+           firstname: "Kendall", lastname: "Parker",
+           fullname: "Kendall Parker", id: 97, 
+           gender: "female", age: 28});
     commit
-
-begin
-MATCH (h:User), (f:User)
-WHERE h.id = 97 AND f.id = 84
-CREATE UNIQUE (h)-[:FRIEND]-(f);
-commit
-
-
-begin
-MATCH (h:User), (f:User)
-WHERE h.id = 97 AND f.id = 80
-CREATE UNIQUE (h)-[:FRIEND]-(f);
-commit
-
-
-begin
-MATCH (h:User), (f:User)
-WHERE h.id = 97 AND f.id = 9
-CREATE UNIQUE (h)-[:FRIEND]-(f);
-commit
-
 
 begin
 MATCH (h:User), (f:User)
@@ -10689,16 +10892,79 @@ commit
 
 begin
 MATCH (h:User), (f:User)
-WHERE h.id = 97 AND f.id = 55
+WHERE h.id = 97 AND f.id = 16
 CREATE UNIQUE (h)-[:FRIEND]-(f);
 commit
 
 
 begin
 MATCH (h:User), (f:User)
-WHERE h.id = 97 AND f.id = 51
+WHERE h.id = 97 AND f.id = 68
 CREATE UNIQUE (h)-[:FRIEND]-(f);
 commit
+
+
+begin
+MATCH (h:User), (f:User)
+WHERE h.id = 97 AND f.id = 54
+CREATE UNIQUE (h)-[:FRIEND]-(f);
+commit
+
+begin
+MATCH (h:User), (i:Interest)
+WHERE h.id = 97 AND i.name = "Boating"
+CREATE UNIQUE (h)-[:HAS]->(i);
+commit
+
+
+begin
+MATCH (h:User), (i:Interest)
+WHERE h.id = 97 AND i.name = "Rock_Climbing"
+CREATE UNIQUE (h)-[:HAS]->(i);
+commit
+
+
+begin
+MATCH (h:User), (i:Interest)
+WHERE h.id = 97 AND i.name = "Walking"
+CREATE UNIQUE (h)-[:HAS]->(i);
+commit
+
+
+begin
+MATCH (h:User), (i:Interest)
+WHERE h.id = 97 AND i.name = "Hiking"
+CREATE UNIQUE (h)-[:HAS]->(i);
+commit
+
+
+begin
+MATCH (h:User), (i:Interest)
+WHERE h.id = 97 AND i.name = "Golf"
+CREATE UNIQUE (h)-[:HAS]->(i);
+commit
+
+
+begin
+MATCH (h:User), (i:Interest)
+WHERE h.id = 97 AND i.name = "Photography"
+CREATE UNIQUE (h)-[:HAS]->(i);
+commit
+
+
+begin
+MATCH (h:User), (i:Interest)
+WHERE h.id = 97 AND i.name = "Bungee_Jumping"
+CREATE UNIQUE (h)-[:HAS]->(i);
+commit
+
+
+begin
+MATCH (h:User), (i:Interest)
+WHERE h.id = 97 AND i.name = "Surfing"
+CREATE UNIQUE (h)-[:HAS]->(i);
+commit
+
 
 begin
 MATCH (h:User), (i:Interest)
@@ -10713,200 +10979,193 @@ WHERE h.id = 97 AND i.name = "Cycling"
 CREATE UNIQUE (h)-[:HAS]->(i);
 commit
 
-
-begin
-MATCH (h:User), (i:Interest)
-WHERE h.id = 97 AND i.name = "Golf"
-CREATE UNIQUE (h)-[:HAS]->(i);
-commit
-
-
-begin
-MATCH (h:User), (i:Interest)
-WHERE h.id = 97 AND i.name = "Horse_Riding"
-CREATE UNIQUE (h)-[:HAS]->(i);
-commit
-
-
-begin
-MATCH (h:User), (i:Interest)
-WHERE h.id = 97 AND i.name = "Surfing"
-CREATE UNIQUE (h)-[:HAS]->(i);
-commit
-
-
-begin
-MATCH (h:User), (i:Interest)
-WHERE h.id = 97 AND i.name = "Scuba_Diving"
-CREATE UNIQUE (h)-[:HAS]->(i);
-commit
-
-
-begin
-MATCH (h:User), (i:Interest)
-WHERE h.id = 97 AND i.name = "Swimming"
-CREATE UNIQUE (h)-[:HAS]->(i);
-commit
-
-
-begin
-MATCH (h:User), (i:Interest)
-WHERE h.id = 97 AND i.name = "River_Rafting"
-CREATE UNIQUE (h)-[:HAS]->(i);
-commit
-
     begin
     MATCH (h:Human)-[:USES]->(m:Machine), (l:Location)
-    WHERE m.type = "phone" AND h.id = 97 AND l.name = "Foster The People"
-    CREATE UNIQUE (m)-[:LOCATED {type: "facebook_checkin", time: "20140504"}]->(l);  
+    WHERE m.type = "phone" AND h.id = 97 AND l.name = "Besaws"
+    CREATE UNIQUE (m)-[:LOCATED {type: "facebook_checkin", time: "20140505"}]->(l);  
     commit
 
 
     begin
     MATCH (h:Human)-[:USES]->(m:Machine), (l:Location)
-    WHERE m.type = "phone" AND h.id = 97 AND l.name = "The Fray"
-    CREATE UNIQUE (m)-[:LOCATED {type: "photo_tag", time: "20140502"}]->(l);  
+    WHERE m.type = "phone" AND h.id = 97 AND l.name = "Robo Taco"
+    CREATE UNIQUE (m)-[:LOCATED {type: "facebook_checkin", time: "20140502"}]->(l);  
+    commit
+
+    begin
+    CREATE (:Human:User { 
+           firstname: "Jayden", lastname: "Wong",
+           fullname: "Jayden Wong", id: 98, 
+           gender: "male", age: 32});
+    commit
+
+begin
+MATCH (h:User), (f:User)
+WHERE h.id = 98 AND f.id = 96
+CREATE UNIQUE (h)-[:FRIEND]-(f);
+commit
+
+
+begin
+MATCH (h:User), (f:User)
+WHERE h.id = 98 AND f.id = 90
+CREATE UNIQUE (h)-[:FRIEND]-(f);
+commit
+
+
+begin
+MATCH (h:User), (f:User)
+WHERE h.id = 98 AND f.id = 0
+CREATE UNIQUE (h)-[:FRIEND]-(f);
+commit
+
+
+begin
+MATCH (h:User), (f:User)
+WHERE h.id = 98 AND f.id = 94
+CREATE UNIQUE (h)-[:FRIEND]-(f);
+commit
+
+
+begin
+MATCH (h:User), (f:User)
+WHERE h.id = 98 AND f.id = 73
+CREATE UNIQUE (h)-[:FRIEND]-(f);
+commit
+
+begin
+MATCH (h:User), (i:Interest)
+WHERE h.id = 98 AND i.name = "Hiking"
+CREATE UNIQUE (h)-[:HAS]->(i);
+commit
+
+
+begin
+MATCH (h:User), (i:Interest)
+WHERE h.id = 98 AND i.name = "Photography"
+CREATE UNIQUE (h)-[:HAS]->(i);
+commit
+
+
+begin
+MATCH (h:User), (i:Interest)
+WHERE h.id = 98 AND i.name = "Golf"
+CREATE UNIQUE (h)-[:HAS]->(i);
+commit
+
+
+begin
+MATCH (h:User), (i:Interest)
+WHERE h.id = 98 AND i.name = "Fishing"
+CREATE UNIQUE (h)-[:HAS]->(i);
+commit
+
+
+begin
+MATCH (h:User), (i:Interest)
+WHERE h.id = 98 AND i.name = "Scuba_Diving"
+CREATE UNIQUE (h)-[:HAS]->(i);
+commit
+
+    begin
+    MATCH (h:Human)-[:USES]->(m:Machine), (l:Location)
+    WHERE m.type = "phone" AND h.id = 98 AND l.name = "Robo Taco"
+    CREATE UNIQUE (m)-[:LOCATED {type: "photo_tag", time: "20140504"}]->(l);  
     commit
 
 
     begin
     MATCH (h:Human)-[:USES]->(m:Machine), (l:Location)
-    WHERE m.type = "phone" AND h.id = 97 AND l.name = "Starbucks"
+    WHERE m.type = "phone" AND h.id = 98 AND l.name = "Warpaint"
+    CREATE UNIQUE (m)-[:LOCATED {type: "yelp_review", time: "20140504"}]->(l);  
+    commit
+
+
+    begin
+    MATCH (h:Human)-[:USES]->(m:Machine), (l:Location)
+    WHERE m.type = "phone" AND h.id = 98 AND l.name = "Starbucks"
+    CREATE UNIQUE (m)-[:LOCATED {type: "facebook_checkin", time: "20140502"}]->(l);  
+    commit
+
+
+    begin
+    MATCH (h:Human)-[:USES]->(m:Machine), (l:Location)
+    WHERE m.type = "phone" AND h.id = 98 AND l.name = "Nike"
+    CREATE UNIQUE (m)-[:LOCATED {type: "photo_tag", time: "20140504"}]->(l);  
+    commit
+
+
+    begin
+    MATCH (h:Human)-[:USES]->(m:Machine), (l:Location)
+    WHERE m.type = "phone" AND h.id = 98 AND l.name = "Christina Perri"
     CREATE UNIQUE (m)-[:LOCATED {type: "photo_tag", time: "20140503"}]->(l);  
     commit
 
     begin
-    MERGE (:Human:User { 
-           firstname: "Morgan", lastname: "Gray",
-           fullname: "Morgan Gray", id: 98, 
-           gender: "female", age: 29});
+    CREATE (:Human:User { 
+           firstname: "Jaylin", lastname: "Sánchez",
+           fullname: "Jaylin Sánchez", id: 99, 
+           gender: "female", age: 34});
     commit
 
 begin
 MATCH (h:User), (f:User)
-WHERE h.id = 98 AND f.id = 10
+WHERE h.id = 99 AND f.id = 26
 CREATE UNIQUE (h)-[:FRIEND]-(f);
 commit
 
 
 begin
 MATCH (h:User), (f:User)
-WHERE h.id = 98 AND f.id = 80
+WHERE h.id = 99 AND f.id = 69
 CREATE UNIQUE (h)-[:FRIEND]-(f);
 commit
 
 
 begin
 MATCH (h:User), (f:User)
-WHERE h.id = 98 AND f.id = 57
-CREATE UNIQUE (h)-[:FRIEND]-(f);
-commit
-
-begin
-MATCH (h:User), (i:Interest)
-WHERE h.id = 98 AND i.name = "Basketball"
-CREATE UNIQUE (h)-[:HAS]->(i);
-commit
-
-
-begin
-MATCH (h:User), (i:Interest)
-WHERE h.id = 98 AND i.name = "Swimming"
-CREATE UNIQUE (h)-[:HAS]->(i);
-commit
-
-
-begin
-MATCH (h:User), (i:Interest)
-WHERE h.id = 98 AND i.name = "Walking"
-CREATE UNIQUE (h)-[:HAS]->(i);
-commit
-
-
-begin
-MATCH (h:User), (i:Interest)
-WHERE h.id = 98 AND i.name = "Surfing"
-CREATE UNIQUE (h)-[:HAS]->(i);
-commit
-
-
-begin
-MATCH (h:User), (i:Interest)
-WHERE h.id = 98 AND i.name = "River_Rafting"
-CREATE UNIQUE (h)-[:HAS]->(i);
-commit
-
-
-begin
-MATCH (h:User), (i:Interest)
-WHERE h.id = 98 AND i.name = "Horse_Riding"
-CREATE UNIQUE (h)-[:HAS]->(i);
-commit
-
-    begin
-    MATCH (h:Human)-[:USES]->(m:Machine), (l:Location)
-    WHERE m.type = "phone" AND h.id = 98 AND l.name = "Foster The People"
-    CREATE UNIQUE (m)-[:LOCATED {type: "facebook_checkin", time: "20140504"}]->(l);  
-    commit
-
-
-    begin
-    MATCH (h:Human)-[:USES]->(m:Machine), (l:Location)
-    WHERE m.type = "phone" AND h.id = 98 AND l.name = "Eastburn"
-    CREATE UNIQUE (m)-[:LOCATED {type: "facebook_checkin", time: "20140501"}]->(l);  
-    commit
-
-
-    begin
-    MATCH (h:Human)-[:USES]->(m:Machine), (l:Location)
-    WHERE m.type = "phone" AND h.id = 98 AND l.name = "Caffe Umbria"
-    CREATE UNIQUE (m)-[:LOCATED {type: "yelp_review", time: "20140502"}]->(l);  
-    commit
-
-
-    begin
-    MATCH (h:Human)-[:USES]->(m:Machine), (l:Location)
-    WHERE m.type = "phone" AND h.id = 98 AND l.name = "Besaws"
-    CREATE UNIQUE (m)-[:LOCATED {type: "yelp_review", time: "20140502"}]->(l);  
-    commit
-
-    begin
-    MERGE (:Human:User { 
-           firstname: "Sidney", lastname: "Peterson",
-           fullname: "Sidney Peterson", id: 99, 
-           gender: "male", age: 19});
-    commit
-
-begin
-MATCH (h:User), (f:User)
-WHERE h.id = 99 AND f.id = 6
+WHERE h.id = 99 AND f.id = 93
 CREATE UNIQUE (h)-[:FRIEND]-(f);
 commit
 
 
 begin
 MATCH (h:User), (f:User)
-WHERE h.id = 99 AND f.id = 97
+WHERE h.id = 99 AND f.id = 46
 CREATE UNIQUE (h)-[:FRIEND]-(f);
 commit
 
 
 begin
 MATCH (h:User), (f:User)
-WHERE h.id = 99 AND f.id = 16
+WHERE h.id = 99 AND f.id = 8
+CREATE UNIQUE (h)-[:FRIEND]-(f);
+commit
+
+
+begin
+MATCH (h:User), (f:User)
+WHERE h.id = 99 AND f.id = 80
 CREATE UNIQUE (h)-[:FRIEND]-(f);
 commit
 
 begin
 MATCH (h:User), (i:Interest)
-WHERE h.id = 99 AND i.name = "Cycling"
+WHERE h.id = 99 AND i.name = "Scuba_Diving"
 CREATE UNIQUE (h)-[:HAS]->(i);
 commit
 
 
 begin
 MATCH (h:User), (i:Interest)
-WHERE h.id = 99 AND i.name = "Hiking"
+WHERE h.id = 99 AND i.name = "Surfing"
+CREATE UNIQUE (h)-[:HAS]->(i);
+commit
+
+
+begin
+MATCH (h:User), (i:Interest)
+WHERE h.id = 99 AND i.name = "Baseball"
 CREATE UNIQUE (h)-[:HAS]->(i);
 commit
 
@@ -10917,176 +11176,155 @@ WHERE h.id = 99 AND i.name = "Boating"
 CREATE UNIQUE (h)-[:HAS]->(i);
 commit
 
+
+begin
+MATCH (h:User), (i:Interest)
+WHERE h.id = 99 AND i.name = "Volleyball"
+CREATE UNIQUE (h)-[:HAS]->(i);
+commit
+
+
+begin
+MATCH (h:User), (i:Interest)
+WHERE h.id = 99 AND i.name = "Rock_Climbing"
+CREATE UNIQUE (h)-[:HAS]->(i);
+commit
+
+
+begin
+MATCH (h:User), (i:Interest)
+WHERE h.id = 99 AND i.name = "Bungee_Jumping"
+CREATE UNIQUE (h)-[:HAS]->(i);
+commit
+
     begin
     MATCH (h:Human)-[:USES]->(m:Machine), (l:Location)
-    WHERE m.type = "phone" AND h.id = 99 AND l.name = "The Fray"
-    CREATE UNIQUE (m)-[:LOCATED {type: "photo_tag", time: "20140504"}]->(l);  
+    WHERE m.type = "phone" AND h.id = 99 AND l.name = "Robo Taco"
+    CREATE UNIQUE (m)-[:LOCATED {type: "photo_tag", time: "20140503"}]->(l);  
     commit
 
 
     begin
     MATCH (h:Human)-[:USES]->(m:Machine), (l:Location)
-    WHERE m.type = "phone" AND h.id = 99 AND l.name = "Christina Perri"
-    CREATE UNIQUE (m)-[:LOCATED {type: "yelp_review", time: "20140504"}]->(l);  
-    commit
-
-
-    begin
-    MATCH (h:Human)-[:USES]->(m:Machine), (l:Location)
-    WHERE m.type = "phone" AND h.id = 99 AND l.name = "McMenamins"
-    CREATE UNIQUE (m)-[:LOCATED {type: "yelp_review", time: "20140502"}]->(l);  
-    commit
-
-
-    begin
-    MATCH (h:Human)-[:USES]->(m:Machine), (l:Location)
-    WHERE m.type = "phone" AND h.id = 99 AND l.name = "Caffe Umbria"
+    WHERE m.type = "phone" AND h.id = 99 AND l.name = "Warpaint"
     CREATE UNIQUE (m)-[:LOCATED {type: "photo_tag", time: "20140501"}]->(l);  
     commit
 
 
     begin
-    MATCH (h:Human)-[:USES]->(m:Machine), (l:Location)
-    WHERE m.type = "phone" AND h.id = 99 AND l.name = "Starbucks"
-    CREATE UNIQUE (m)-[:LOCATED {type: "photo_tag", time: "20140505"}]->(l);  
-    commit
-
-
-    begin
-    MERGE (:User { 
-           firstname: "Reese", lastname: "Sánchez",
-           fullname: "Reese Sánchez", id: 0, 
-           gender: "male", age: 24});
+    CREATE (:User { 
+           firstname: "Taylor", lastname: "Martínez",
+           fullname: "Taylor Martínez", id: 0, 
+           gender: "female", age: 35});
     commit
 
 begin
 MATCH (h:User), (f:User)
-WHERE h.id = 0 AND f.id = 68
+WHERE h.id = 0 AND f.id = 92
 CREATE UNIQUE (h)-[:FRIEND]-(f);
 commit
 
 
 begin
 MATCH (h:User), (f:User)
-WHERE h.id = 0 AND f.id = 2
-CREATE UNIQUE (h)-[:FRIEND]-(f);
-commit
-
-
-begin
-MATCH (h:User), (f:User)
-WHERE h.id = 0 AND f.id = 72
-CREATE UNIQUE (h)-[:FRIEND]-(f);
-commit
-
-
-begin
-MATCH (h:User), (f:User)
-WHERE h.id = 0 AND f.id = 37
-CREATE UNIQUE (h)-[:FRIEND]-(f);
-commit
-
-
-begin
-MATCH (h:User), (f:User)
-WHERE h.id = 0 AND f.id = 93
+WHERE h.id = 0 AND f.id = 8
 CREATE UNIQUE (h)-[:FRIEND]-(f);
 commit
  
     begin
-    MERGE (:User { 
-           firstname: "Elliot", lastname: "Hughes",
-           fullname: "Elliot Hughes", id: 1, 
+    CREATE (:User { 
+           firstname: "Logan", lastname: "Davis",
+           fullname: "Logan Davis", id: 1, 
            gender: "male", age: 32});
     commit
 
 begin
 MATCH (h:User), (f:User)
-WHERE h.id = 1 AND f.id = 41
-CREATE UNIQUE (h)-[:FRIEND]-(f);
-commit
-
-
-begin
-MATCH (h:User), (f:User)
-WHERE h.id = 1 AND f.id = 3
+WHERE h.id = 1 AND f.id = 40
 CREATE UNIQUE (h)-[:FRIEND]-(f);
 commit
  
     begin
-    MERGE (:User { 
-           firstname: "Riley", lastname: "Peterson",
-           fullname: "Riley Peterson", id: 2, 
-           gender: "female", age: 33});
+    CREATE (:User { 
+           firstname: "Payton", lastname: "Evans",
+           fullname: "Payton Evans", id: 2, 
+           gender: "female", age: 22});
     commit
 
 begin
 MATCH (h:User), (f:User)
-WHERE h.id = 2 AND f.id = 41
+WHERE h.id = 2 AND f.id = 90
 CREATE UNIQUE (h)-[:FRIEND]-(f);
 commit
 
 
 begin
 MATCH (h:User), (f:User)
-WHERE h.id = 2 AND f.id = 52
+WHERE h.id = 2 AND f.id = 69
+CREATE UNIQUE (h)-[:FRIEND]-(f);
+commit
+
+
+begin
+MATCH (h:User), (f:User)
+WHERE h.id = 2 AND f.id = 30
+CREATE UNIQUE (h)-[:FRIEND]-(f);
+commit
+
+
+begin
+MATCH (h:User), (f:User)
+WHERE h.id = 2 AND f.id = 88
+CREATE UNIQUE (h)-[:FRIEND]-(f);
+commit
+
+
+begin
+MATCH (h:User), (f:User)
+WHERE h.id = 2 AND f.id = 10
+CREATE UNIQUE (h)-[:FRIEND]-(f);
+commit
+
+
+begin
+MATCH (h:User), (f:User)
+WHERE h.id = 2 AND f.id = 66
 CREATE UNIQUE (h)-[:FRIEND]-(f);
 commit
  
     begin
-    MERGE (:User { 
-           firstname: "Kamryn", lastname: "White",
-           fullname: "Kamryn White", id: 3, 
-           gender: "female", age: 19});
+    CREATE (:User { 
+           firstname: "Morgan", lastname: "Kelly",
+           fullname: "Morgan Kelly", id: 3, 
+           gender: "male", age: 18});
     commit
 
 begin
 MATCH (h:User), (f:User)
-WHERE h.id = 3 AND f.id = 62
+WHERE h.id = 3 AND f.id = 98
 CREATE UNIQUE (h)-[:FRIEND]-(f);
 commit
 
 
 begin
 MATCH (h:User), (f:User)
-WHERE h.id = 3 AND f.id = 28
+WHERE h.id = 3 AND f.id = 52
+CREATE UNIQUE (h)-[:FRIEND]-(f);
+commit
+
+
+begin
+MATCH (h:User), (f:User)
+WHERE h.id = 3 AND f.id = 44
 CREATE UNIQUE (h)-[:FRIEND]-(f);
 commit
  
     begin
-    MERGE (:User { 
-           firstname: "Sage", lastname: "Reyes",
-           fullname: "Sage Reyes", id: 4, 
-           gender: "female", age: 26});
+    CREATE (:User { 
+           firstname: "Finley", lastname: "Hughes",
+           fullname: "Finley Hughes", id: 4, 
+           gender: "male", age: 23});
     commit
-
-begin
-MATCH (h:User), (f:User)
-WHERE h.id = 4 AND f.id = 3
-CREATE UNIQUE (h)-[:FRIEND]-(f);
-commit
-
-
-begin
-MATCH (h:User), (f:User)
-WHERE h.id = 4 AND f.id = 94
-CREATE UNIQUE (h)-[:FRIEND]-(f);
-commit
-
-
-begin
-MATCH (h:User), (f:User)
-WHERE h.id = 4 AND f.id = 77
-CREATE UNIQUE (h)-[:FRIEND]-(f);
-commit
-
-
-begin
-MATCH (h:User), (f:User)
-WHERE h.id = 4 AND f.id = 6
-CREATE UNIQUE (h)-[:FRIEND]-(f);
-commit
-
 
 begin
 MATCH (h:User), (f:User)
@@ -11097,41 +11335,48 @@ commit
 
 begin
 MATCH (h:User), (f:User)
-WHERE h.id = 4 AND f.id = 7
+WHERE h.id = 4 AND f.id = 38
+CREATE UNIQUE (h)-[:FRIEND]-(f);
+commit
+
+
+begin
+MATCH (h:User), (f:User)
+WHERE h.id = 4 AND f.id = 59
 CREATE UNIQUE (h)-[:FRIEND]-(f);
 commit
  
     begin
-    MERGE (:User { 
-           firstname: "Amari", lastname: "Pérez",
-           fullname: "Amari Pérez", id: 5, 
-           gender: "male", age: 34});
+    CREATE (:User { 
+           firstname: "Rylan", lastname: "Walker",
+           fullname: "Rylan Walker", id: 5, 
+           gender: "male", age: 25});
     commit
 
 begin
 MATCH (h:User), (f:User)
-WHERE h.id = 5 AND f.id = 85
+WHERE h.id = 5 AND f.id = 72
 CREATE UNIQUE (h)-[:FRIEND]-(f);
 commit
 
 
 begin
 MATCH (h:User), (f:User)
-WHERE h.id = 5 AND f.id = 1
+WHERE h.id = 5 AND f.id = 45
 CREATE UNIQUE (h)-[:FRIEND]-(f);
 commit
 
 
 begin
 MATCH (h:User), (f:User)
-WHERE h.id = 5 AND f.id = 16
+WHERE h.id = 5 AND f.id = 42
 CREATE UNIQUE (h)-[:FRIEND]-(f);
 commit
 
 
 begin
 MATCH (h:User), (f:User)
-WHERE h.id = 5 AND f.id = 19
+WHERE h.id = 5 AND f.id = 55
 CREATE UNIQUE (h)-[:FRIEND]-(f);
 commit
 
@@ -11141,66 +11386,80 @@ MATCH (h:User), (f:User)
 WHERE h.id = 5 AND f.id = 6
 CREATE UNIQUE (h)-[:FRIEND]-(f);
 commit
-
-
-begin
-MATCH (h:User), (f:User)
-WHERE h.id = 5 AND f.id = 35
-CREATE UNIQUE (h)-[:FRIEND]-(f);
-commit
  
     begin
-    MERGE (:User { 
-           firstname: "Charlie", lastname: "Cohen",
-           fullname: "Charlie Cohen", id: 6, 
-           gender: "male", age: 25});
+    CREATE (:User { 
+           firstname: "Peyton", lastname: "Hughes",
+           fullname: "Peyton Hughes", id: 6, 
+           gender: "female", age: 28});
     commit
 
 begin
 MATCH (h:User), (f:User)
-WHERE h.id = 6 AND f.id = 52
+WHERE h.id = 6 AND f.id = 95
+CREATE UNIQUE (h)-[:FRIEND]-(f);
+commit
+
+
+begin
+MATCH (h:User), (f:User)
+WHERE h.id = 6 AND f.id = 11
+CREATE UNIQUE (h)-[:FRIEND]-(f);
+commit
+
+
+begin
+MATCH (h:User), (f:User)
+WHERE h.id = 6 AND f.id = 28
+CREATE UNIQUE (h)-[:FRIEND]-(f);
+commit
+
+
+begin
+MATCH (h:User), (f:User)
+WHERE h.id = 6 AND f.id = 65
 CREATE UNIQUE (h)-[:FRIEND]-(f);
 commit
  
     begin
-    MERGE (:User { 
-           firstname: "Lyric", lastname: "Nakamoto",
-           fullname: "Lyric Nakamoto", id: 7, 
-           gender: "male", age: 19});
+    CREATE (:User { 
+           firstname: "Angel", lastname: "Ward",
+           fullname: "Angel Ward", id: 7, 
+           gender: "female", age: 26});
     commit
 
 begin
 MATCH (h:User), (f:User)
-WHERE h.id = 7 AND f.id = 0
+WHERE h.id = 7 AND f.id = 60
 CREATE UNIQUE (h)-[:FRIEND]-(f);
 commit
 
 
 begin
 MATCH (h:User), (f:User)
-WHERE h.id = 7 AND f.id = 49
+WHERE h.id = 7 AND f.id = 47
 CREATE UNIQUE (h)-[:FRIEND]-(f);
 commit
 
 
 begin
 MATCH (h:User), (f:User)
-WHERE h.id = 7 AND f.id = 91
+WHERE h.id = 7 AND f.id = 9
 CREATE UNIQUE (h)-[:FRIEND]-(f);
 commit
 
 
 begin
 MATCH (h:User), (f:User)
-WHERE h.id = 7 AND f.id = 3
+WHERE h.id = 7 AND f.id = 67
 CREATE UNIQUE (h)-[:FRIEND]-(f);
 commit
  
     begin
-    MERGE (:User { 
-           firstname: "Jessie", lastname: "Price",
-           fullname: "Jessie Price", id: 8, 
-           gender: "male", age: 22});
+    CREATE (:User { 
+           firstname: "Rowan", lastname: "Morales",
+           fullname: "Rowan Morales", id: 8, 
+           gender: "female", age: 23});
     commit
 
 begin
@@ -11212,74 +11471,74 @@ commit
 
 begin
 MATCH (h:User), (f:User)
-WHERE h.id = 8 AND f.id = 72
+WHERE h.id = 8 AND f.id = 94
 CREATE UNIQUE (h)-[:FRIEND]-(f);
 commit
 
 
 begin
 MATCH (h:User), (f:User)
-WHERE h.id = 8 AND f.id = 96
+WHERE h.id = 8 AND f.id = 74
 CREATE UNIQUE (h)-[:FRIEND]-(f);
 commit
 
 
 begin
 MATCH (h:User), (f:User)
-WHERE h.id = 8 AND f.id = 50
-CREATE UNIQUE (h)-[:FRIEND]-(f);
-commit
-
-
-begin
-MATCH (h:User), (f:User)
-WHERE h.id = 8 AND f.id = 62
+WHERE h.id = 8 AND f.id = 47
 CREATE UNIQUE (h)-[:FRIEND]-(f);
 commit
  
     begin
-    MERGE (:User { 
-           firstname: "Landry", lastname: "Gray",
-           fullname: "Landry Gray", id: 9, 
+    CREATE (:User { 
+           firstname: "Taylor", lastname: "Allen",
+           fullname: "Taylor Allen", id: 9, 
            gender: "male", age: 24});
     commit
 
 begin
 MATCH (h:User), (f:User)
-WHERE h.id = 9 AND f.id = 20
-CREATE UNIQUE (h)-[:FRIEND]-(f);
-commit
-
-
-begin
-MATCH (h:User), (f:User)
-WHERE h.id = 9 AND f.id = 85
+WHERE h.id = 9 AND f.id = 27
 CREATE UNIQUE (h)-[:FRIEND]-(f);
 commit
  
     begin
-    MERGE (:User { 
-           firstname: "Morgan", lastname: "Peterson",
-           fullname: "Morgan Peterson", id: 10, 
-           gender: "male", age: 19});
+    CREATE (:User { 
+           firstname: "Eden", lastname: "Cooper",
+           fullname: "Eden Cooper", id: 10, 
+           gender: "female", age: 28});
     commit
 
 begin
 MATCH (h:User), (f:User)
-WHERE h.id = 10 AND f.id = 81
+WHERE h.id = 10 AND f.id = 26
+CREATE UNIQUE (h)-[:FRIEND]-(f);
+commit
+
+
+begin
+MATCH (h:User), (f:User)
+WHERE h.id = 10 AND f.id = 20
+CREATE UNIQUE (h)-[:FRIEND]-(f);
+commit
+
+
+begin
+MATCH (h:User), (f:User)
+WHERE h.id = 10 AND f.id = 95
 CREATE UNIQUE (h)-[:FRIEND]-(f);
 commit
  
     begin
-    MERGE (:User { 
-           firstname: "Skyler", lastname: "Rivera",
-           fullname: "Skyler Rivera", id: 11, 
-           gender: "male", age: 20});
+    CREATE (:User { 
+           firstname: "Logan", lastname: "Campbell",
+           fullname: "Logan Campbell", id: 11, 
+           gender: "female", age: 29});
     commit
 
 begin
 MATCH (h:User), (f:User)
-WHERE h.id = 11 AND f.id = 7
+WHERE h.id = 11 AND f.id = 84
 CREATE UNIQUE (h)-[:FRIEND]-(f);
 commit
 
@@ -11289,13 +11548,69 @@ MATCH (h:User), (f:User)
 WHERE h.id = 11 AND f.id = 40
 CREATE UNIQUE (h)-[:FRIEND]-(f);
 commit
+
+
+begin
+MATCH (h:User), (f:User)
+WHERE h.id = 11 AND f.id = 16
+CREATE UNIQUE (h)-[:FRIEND]-(f);
+commit
+
+
+begin
+MATCH (h:User), (f:User)
+WHERE h.id = 11 AND f.id = 62
+CREATE UNIQUE (h)-[:FRIEND]-(f);
+commit
+
+
+begin
+MATCH (h:User), (f:User)
+WHERE h.id = 11 AND f.id = 80
+CREATE UNIQUE (h)-[:FRIEND]-(f);
+commit
+
+
+begin
+MATCH (h:User), (f:User)
+WHERE h.id = 11 AND f.id = 97
+CREATE UNIQUE (h)-[:FRIEND]-(f);
+commit
  
     begin
-    MERGE (:User { 
-           firstname: "Tatum", lastname: "Harris",
-           fullname: "Tatum Harris", id: 12, 
-           gender: "male", age: 35});
+    CREATE (:User { 
+           firstname: "London", lastname: "Jones",
+           fullname: "London Jones", id: 12, 
+           gender: "female", age: 22});
     commit
+
+begin
+MATCH (h:User), (f:User)
+WHERE h.id = 12 AND f.id = 73
+CREATE UNIQUE (h)-[:FRIEND]-(f);
+commit
+
+
+begin
+MATCH (h:User), (f:User)
+WHERE h.id = 12 AND f.id = 41
+CREATE UNIQUE (h)-[:FRIEND]-(f);
+commit
+
+
+begin
+MATCH (h:User), (f:User)
+WHERE h.id = 12 AND f.id = 65
+CREATE UNIQUE (h)-[:FRIEND]-(f);
+commit
+
+
+begin
+MATCH (h:User), (f:User)
+WHERE h.id = 12 AND f.id = 25
+CREATE UNIQUE (h)-[:FRIEND]-(f);
+commit
+
 
 begin
 MATCH (h:User), (f:User)
@@ -11306,149 +11621,128 @@ commit
 
 begin
 MATCH (h:User), (f:User)
-WHERE h.id = 12 AND f.id = 89
-CREATE UNIQUE (h)-[:FRIEND]-(f);
-commit
-
-
-begin
-MATCH (h:User), (f:User)
-WHERE h.id = 12 AND f.id = 41
+WHERE h.id = 12 AND f.id = 58
 CREATE UNIQUE (h)-[:FRIEND]-(f);
 commit
  
     begin
-    MERGE (:User { 
-           firstname: "Zion", lastname: "Hernández",
-           fullname: "Zion Hernández", id: 13, 
+    CREATE (:User { 
+           firstname: "Teagan", lastname: "González",
+           fullname: "Teagan González", id: 13, 
            gender: "female", age: 35});
     commit
 
 begin
 MATCH (h:User), (f:User)
-WHERE h.id = 13 AND f.id = 16
+WHERE h.id = 13 AND f.id = 35
 CREATE UNIQUE (h)-[:FRIEND]-(f);
 commit
 
 
 begin
 MATCH (h:User), (f:User)
-WHERE h.id = 13 AND f.id = 66
+WHERE h.id = 13 AND f.id = 8
+CREATE UNIQUE (h)-[:FRIEND]-(f);
+commit
+
+
+begin
+MATCH (h:User), (f:User)
+WHERE h.id = 13 AND f.id = 24
+CREATE UNIQUE (h)-[:FRIEND]-(f);
+commit
+
+
+begin
+MATCH (h:User), (f:User)
+WHERE h.id = 13 AND f.id = 48
+CREATE UNIQUE (h)-[:FRIEND]-(f);
+commit
+
+
+begin
+MATCH (h:User), (f:User)
+WHERE h.id = 13 AND f.id = 55
 CREATE UNIQUE (h)-[:FRIEND]-(f);
 commit
  
     begin
-    MERGE (:User { 
-           firstname: "Logan", lastname: "Wilson",
-           fullname: "Logan Wilson", id: 14, 
+    CREATE (:User { 
+           firstname: "Teagan", lastname: "Hill",
+           fullname: "Teagan Hill", id: 14, 
+           gender: "male", age: 34});
+    commit
+
+begin
+MATCH (h:User), (f:User)
+WHERE h.id = 14 AND f.id = 62
+CREATE UNIQUE (h)-[:FRIEND]-(f);
+commit
+ 
+    begin
+    CREATE (:User { 
+           firstname: "Angel", lastname: "Bennett",
+           fullname: "Angel Bennett", id: 15, 
            gender: "female", age: 22});
     commit
 
 begin
 MATCH (h:User), (f:User)
-WHERE h.id = 14 AND f.id = 79
+WHERE h.id = 15 AND f.id = 8
 CREATE UNIQUE (h)-[:FRIEND]-(f);
 commit
 
 
 begin
 MATCH (h:User), (f:User)
-WHERE h.id = 14 AND f.id = 12
+WHERE h.id = 15 AND f.id = 46
 CREATE UNIQUE (h)-[:FRIEND]-(f);
 commit
 
 
 begin
 MATCH (h:User), (f:User)
-WHERE h.id = 14 AND f.id = 41
-CREATE UNIQUE (h)-[:FRIEND]-(f);
-commit
-
-
-begin
-MATCH (h:User), (f:User)
-WHERE h.id = 14 AND f.id = 19
-CREATE UNIQUE (h)-[:FRIEND]-(f);
-commit
-
-
-begin
-MATCH (h:User), (f:User)
-WHERE h.id = 14 AND f.id = 52
+WHERE h.id = 15 AND f.id = 53
 CREATE UNIQUE (h)-[:FRIEND]-(f);
 commit
  
     begin
-    MERGE (:User { 
-           firstname: "Micah", lastname: "Jackson",
-           fullname: "Micah Jackson", id: 15, 
-           gender: "male", age: 32});
+    CREATE (:User { 
+           firstname: "Morgan", lastname: "Nakamoto",
+           fullname: "Morgan Nakamoto", id: 16, 
+           gender: "female", age: 25});
     commit
 
 begin
 MATCH (h:User), (f:User)
-WHERE h.id = 15 AND f.id = 11
+WHERE h.id = 16 AND f.id = 28
 CREATE UNIQUE (h)-[:FRIEND]-(f);
 commit
 
 
 begin
 MATCH (h:User), (f:User)
-WHERE h.id = 15 AND f.id = 57
+WHERE h.id = 16 AND f.id = 5
 CREATE UNIQUE (h)-[:FRIEND]-(f);
 commit
  
     begin
-    MERGE (:User { 
-           firstname: "Lyric", lastname: "Stewart",
-           fullname: "Lyric Stewart", id: 16, 
-           gender: "male", age: 18});
+    CREATE (:User { 
+           firstname: "Kayden", lastname: "Adams",
+           fullname: "Kayden Adams", id: 17, 
+           gender: "male", age: 34});
     commit
 
 begin
 MATCH (h:User), (f:User)
-WHERE h.id = 16 AND f.id = 34
+WHERE h.id = 17 AND f.id = 11
 CREATE UNIQUE (h)-[:FRIEND]-(f);
 commit
 
 
 begin
 MATCH (h:User), (f:User)
-WHERE h.id = 16 AND f.id = 27
-CREATE UNIQUE (h)-[:FRIEND]-(f);
-commit
-
-
-begin
-MATCH (h:User), (f:User)
-WHERE h.id = 16 AND f.id = 52
-CREATE UNIQUE (h)-[:FRIEND]-(f);
-commit
-
-
-begin
-MATCH (h:User), (f:User)
-WHERE h.id = 16 AND f.id = 41
-CREATE UNIQUE (h)-[:FRIEND]-(f);
-commit
-
-
-begin
-MATCH (h:User), (f:User)
-WHERE h.id = 16 AND f.id = 45
-CREATE UNIQUE (h)-[:FRIEND]-(f);
-commit
- 
-    begin
-    MERGE (:User { 
-           firstname: "Amari", lastname: "Cohen",
-           fullname: "Amari Cohen", id: 17, 
-           gender: "male", age: 20});
-    commit
-
-begin
-MATCH (h:User), (f:User)
-WHERE h.id = 17 AND f.id = 85
+WHERE h.id = 17 AND f.id = 95
 CREATE UNIQUE (h)-[:FRIEND]-(f);
 commit
 
@@ -11462,1882 +11756,1791 @@ commit
 
 begin
 MATCH (h:User), (f:User)
-WHERE h.id = 17 AND f.id = 27
+WHERE h.id = 17 AND f.id = 21
 CREATE UNIQUE (h)-[:FRIEND]-(f);
 commit
 
 
 begin
 MATCH (h:User), (f:User)
-WHERE h.id = 17 AND f.id = 2
-CREATE UNIQUE (h)-[:FRIEND]-(f);
-commit
-
-
-begin
-MATCH (h:User), (f:User)
-WHERE h.id = 17 AND f.id = 83
-CREATE UNIQUE (h)-[:FRIEND]-(f);
-commit
-
-
-begin
-MATCH (h:User), (f:User)
-WHERE h.id = 17 AND f.id = 10
+WHERE h.id = 17 AND f.id = 9
 CREATE UNIQUE (h)-[:FRIEND]-(f);
 commit
  
     begin
-    MERGE (:User { 
-           firstname: "Teagan", lastname: "Stewart",
-           fullname: "Teagan Stewart", id: 18, 
-           gender: "male", age: 34});
+    CREATE (:User { 
+           firstname: "Morgan", lastname: "Flores",
+           fullname: "Morgan Flores", id: 18, 
+           gender: "female", age: 24});
     commit
 
 begin
 MATCH (h:User), (f:User)
-WHERE h.id = 18 AND f.id = 67
+WHERE h.id = 18 AND f.id = 13
 CREATE UNIQUE (h)-[:FRIEND]-(f);
 commit
 
 
 begin
 MATCH (h:User), (f:User)
-WHERE h.id = 18 AND f.id = 59
+WHERE h.id = 18 AND f.id = 25
 CREATE UNIQUE (h)-[:FRIEND]-(f);
 commit
 
 
 begin
 MATCH (h:User), (f:User)
-WHERE h.id = 18 AND f.id = 79
-CREATE UNIQUE (h)-[:FRIEND]-(f);
-commit
-
-
-begin
-MATCH (h:User), (f:User)
-WHERE h.id = 18 AND f.id = 18
+WHERE h.id = 18 AND f.id = 66
 CREATE UNIQUE (h)-[:FRIEND]-(f);
 commit
  
     begin
-    MERGE (:User { 
-           firstname: "Jordan", lastname: "Brown",
-           fullname: "Jordan Brown", id: 19, 
+    CREATE (:User { 
+           firstname: "Alexis", lastname: "López",
+           fullname: "Alexis López", id: 19, 
+           gender: "female", age: 31});
+    commit
+
+begin
+MATCH (h:User), (f:User)
+WHERE h.id = 19 AND f.id = 51
+CREATE UNIQUE (h)-[:FRIEND]-(f);
+commit
+
+
+begin
+MATCH (h:User), (f:User)
+WHERE h.id = 19 AND f.id = 47
+CREATE UNIQUE (h)-[:FRIEND]-(f);
+commit
+
+
+begin
+MATCH (h:User), (f:User)
+WHERE h.id = 19 AND f.id = 21
+CREATE UNIQUE (h)-[:FRIEND]-(f);
+commit
+
+
+begin
+MATCH (h:User), (f:User)
+WHERE h.id = 19 AND f.id = 36
+CREATE UNIQUE (h)-[:FRIEND]-(f);
+commit
+
+
+begin
+MATCH (h:User), (f:User)
+WHERE h.id = 19 AND f.id = 6
+CREATE UNIQUE (h)-[:FRIEND]-(f);
+commit
+ 
+    begin
+    CREATE (:User { 
+           firstname: "Dakota", lastname: "Johnson",
+           fullname: "Dakota Johnson", id: 20, 
+           gender: "female", age: 26});
+    commit
+
+begin
+MATCH (h:User), (f:User)
+WHERE h.id = 20 AND f.id = 86
+CREATE UNIQUE (h)-[:FRIEND]-(f);
+commit
+
+
+begin
+MATCH (h:User), (f:User)
+WHERE h.id = 20 AND f.id = 5
+CREATE UNIQUE (h)-[:FRIEND]-(f);
+commit
+
+
+begin
+MATCH (h:User), (f:User)
+WHERE h.id = 20 AND f.id = 72
+CREATE UNIQUE (h)-[:FRIEND]-(f);
+commit
+ 
+    begin
+    CREATE (:User { 
+           firstname: "Justice", lastname: "Bennett",
+           fullname: "Justice Bennett", id: 21, 
+           gender: "female", age: 31});
+    commit
+
+begin
+MATCH (h:User), (f:User)
+WHERE h.id = 21 AND f.id = 47
+CREATE UNIQUE (h)-[:FRIEND]-(f);
+commit
+
+
+begin
+MATCH (h:User), (f:User)
+WHERE h.id = 21 AND f.id = 9
+CREATE UNIQUE (h)-[:FRIEND]-(f);
+commit
+
+
+begin
+MATCH (h:User), (f:User)
+WHERE h.id = 21 AND f.id = 42
+CREATE UNIQUE (h)-[:FRIEND]-(f);
+commit
+
+
+begin
+MATCH (h:User), (f:User)
+WHERE h.id = 21 AND f.id = 3
+CREATE UNIQUE (h)-[:FRIEND]-(f);
+commit
+ 
+    begin
+    CREATE (:User { 
+           firstname: "Emory", lastname: "Williams",
+           fullname: "Emory Williams", id: 22, 
+           gender: "female", age: 33});
+    commit
+
+begin
+MATCH (h:User), (f:User)
+WHERE h.id = 22 AND f.id = 83
+CREATE UNIQUE (h)-[:FRIEND]-(f);
+commit
+
+
+begin
+MATCH (h:User), (f:User)
+WHERE h.id = 22 AND f.id = 92
+CREATE UNIQUE (h)-[:FRIEND]-(f);
+commit
+
+
+begin
+MATCH (h:User), (f:User)
+WHERE h.id = 22 AND f.id = 42
+CREATE UNIQUE (h)-[:FRIEND]-(f);
+commit
+
+
+begin
+MATCH (h:User), (f:User)
+WHERE h.id = 22 AND f.id = 56
+CREATE UNIQUE (h)-[:FRIEND]-(f);
+commit
+
+
+begin
+MATCH (h:User), (f:User)
+WHERE h.id = 22 AND f.id = 40
+CREATE UNIQUE (h)-[:FRIEND]-(f);
+commit
+ 
+    begin
+    CREATE (:User { 
+           firstname: "Camryn", lastname: "Taylor",
+           fullname: "Camryn Taylor", id: 23, 
+           gender: "male", age: 21});
+    commit
+
+begin
+MATCH (h:User), (f:User)
+WHERE h.id = 23 AND f.id = 35
+CREATE UNIQUE (h)-[:FRIEND]-(f);
+commit
+ 
+    begin
+    CREATE (:User { 
+           firstname: "Micah", lastname: "Ross",
+           fullname: "Micah Ross", id: 24, 
            gender: "male", age: 19});
     commit
 
 begin
 MATCH (h:User), (f:User)
-WHERE h.id = 19 AND f.id = 95
+WHERE h.id = 24 AND f.id = 60
 CREATE UNIQUE (h)-[:FRIEND]-(f);
 commit
 
 
 begin
 MATCH (h:User), (f:User)
-WHERE h.id = 19 AND f.id = 74
+WHERE h.id = 24 AND f.id = 49
 CREATE UNIQUE (h)-[:FRIEND]-(f);
 commit
 
 
 begin
 MATCH (h:User), (f:User)
-WHERE h.id = 19 AND f.id = 18
+WHERE h.id = 24 AND f.id = 15
+CREATE UNIQUE (h)-[:FRIEND]-(f);
+commit
+
+
+begin
+MATCH (h:User), (f:User)
+WHERE h.id = 24 AND f.id = 30
+CREATE UNIQUE (h)-[:FRIEND]-(f);
+commit
+
+
+begin
+MATCH (h:User), (f:User)
+WHERE h.id = 24 AND f.id = 64
 CREATE UNIQUE (h)-[:FRIEND]-(f);
 commit
  
     begin
-    MERGE (:User { 
-           firstname: "Rowan", lastname: "Ward",
-           fullname: "Rowan Ward", id: 20, 
-           gender: "male", age: 19});
-    commit
-
-begin
-MATCH (h:User), (f:User)
-WHERE h.id = 20 AND f.id = 45
-CREATE UNIQUE (h)-[:FRIEND]-(f);
-commit
- 
-    begin
-    MERGE (:User { 
-           firstname: "Angel", lastname: "Reyes",
-           fullname: "Angel Reyes", id: 21, 
-           gender: "male", age: 33});
-    commit
-
-begin
-MATCH (h:User), (f:User)
-WHERE h.id = 21 AND f.id = 19
-CREATE UNIQUE (h)-[:FRIEND]-(f);
-commit
- 
-    begin
-    MERGE (:User { 
-           firstname: "Armani", lastname: "Watson",
-           fullname: "Armani Watson", id: 22, 
+    CREATE (:User { 
+           firstname: "Reese", lastname: "Kelly",
+           fullname: "Reese Kelly", id: 25, 
            gender: "female", age: 20});
     commit
 
 begin
 MATCH (h:User), (f:User)
-WHERE h.id = 22 AND f.id = 52
+WHERE h.id = 25 AND f.id = 2
 CREATE UNIQUE (h)-[:FRIEND]-(f);
 commit
 
 
 begin
 MATCH (h:User), (f:User)
-WHERE h.id = 22 AND f.id = 43
-CREATE UNIQUE (h)-[:FRIEND]-(f);
-commit
-
-
-begin
-MATCH (h:User), (f:User)
-WHERE h.id = 22 AND f.id = 17
+WHERE h.id = 25 AND f.id = 49
 CREATE UNIQUE (h)-[:FRIEND]-(f);
 commit
  
     begin
-    MERGE (:User { 
-           firstname: "Amari", lastname: "Phillips",
-           fullname: "Amari Phillips", id: 23, 
-           gender: "female", age: 29});
-    commit
-
-begin
-MATCH (h:User), (f:User)
-WHERE h.id = 23 AND f.id = 3
-CREATE UNIQUE (h)-[:FRIEND]-(f);
-commit
-
-
-begin
-MATCH (h:User), (f:User)
-WHERE h.id = 23 AND f.id = 2
-CREATE UNIQUE (h)-[:FRIEND]-(f);
-commit
-
-
-begin
-MATCH (h:User), (f:User)
-WHERE h.id = 23 AND f.id = 12
-CREATE UNIQUE (h)-[:FRIEND]-(f);
-commit
- 
-    begin
-    MERGE (:User { 
-           firstname: "Sage", lastname: "Allen",
-           fullname: "Sage Allen", id: 24, 
-           gender: "female", age: 33});
-    commit
-
-begin
-MATCH (h:User), (f:User)
-WHERE h.id = 24 AND f.id = 38
-CREATE UNIQUE (h)-[:FRIEND]-(f);
-commit
-
-
-begin
-MATCH (h:User), (f:User)
-WHERE h.id = 24 AND f.id = 80
-CREATE UNIQUE (h)-[:FRIEND]-(f);
-commit
-
-
-begin
-MATCH (h:User), (f:User)
-WHERE h.id = 24 AND f.id = 11
-CREATE UNIQUE (h)-[:FRIEND]-(f);
-commit
-
-
-begin
-MATCH (h:User), (f:User)
-WHERE h.id = 24 AND f.id = 40
-CREATE UNIQUE (h)-[:FRIEND]-(f);
-commit
-
-
-begin
-MATCH (h:User), (f:User)
-WHERE h.id = 24 AND f.id = 76
-CREATE UNIQUE (h)-[:FRIEND]-(f);
-commit
-
-
-begin
-MATCH (h:User), (f:User)
-WHERE h.id = 24 AND f.id = 61
-CREATE UNIQUE (h)-[:FRIEND]-(f);
-commit
- 
-    begin
-    MERGE (:User { 
-           firstname: "Parker", lastname: "Taylor",
-           fullname: "Parker Taylor", id: 25, 
-           gender: "female", age: 29});
-    commit
-
-begin
-MATCH (h:User), (f:User)
-WHERE h.id = 25 AND f.id = 29
-CREATE UNIQUE (h)-[:FRIEND]-(f);
-commit
-
-
-begin
-MATCH (h:User), (f:User)
-WHERE h.id = 25 AND f.id = 41
-CREATE UNIQUE (h)-[:FRIEND]-(f);
-commit
- 
-    begin
-    MERGE (:User { 
-           firstname: "Landry", lastname: "Reyes",
-           fullname: "Landry Reyes", id: 26, 
-           gender: "female", age: 19});
-    commit
-
-begin
-MATCH (h:User), (f:User)
-WHERE h.id = 26 AND f.id = 15
-CREATE UNIQUE (h)-[:FRIEND]-(f);
-commit
-
-
-begin
-MATCH (h:User), (f:User)
-WHERE h.id = 26 AND f.id = 8
-CREATE UNIQUE (h)-[:FRIEND]-(f);
-commit
-
-
-begin
-MATCH (h:User), (f:User)
-WHERE h.id = 26 AND f.id = 21
-CREATE UNIQUE (h)-[:FRIEND]-(f);
-commit
-
-
-begin
-MATCH (h:User), (f:User)
-WHERE h.id = 26 AND f.id = 61
-CREATE UNIQUE (h)-[:FRIEND]-(f);
-commit
-
-
-begin
-MATCH (h:User), (f:User)
-WHERE h.id = 26 AND f.id = 38
-CREATE UNIQUE (h)-[:FRIEND]-(f);
-commit
- 
-    begin
-    MERGE (:User { 
-           firstname: "Casey", lastname: "Sato",
-           fullname: "Casey Sato", id: 27, 
-           gender: "male", age: 30});
-    commit
-
-begin
-MATCH (h:User), (f:User)
-WHERE h.id = 27 AND f.id = 62
-CREATE UNIQUE (h)-[:FRIEND]-(f);
-commit
-
-
-begin
-MATCH (h:User), (f:User)
-WHERE h.id = 27 AND f.id = 25
-CREATE UNIQUE (h)-[:FRIEND]-(f);
-commit
-
-
-begin
-MATCH (h:User), (f:User)
-WHERE h.id = 27 AND f.id = 24
-CREATE UNIQUE (h)-[:FRIEND]-(f);
-commit
-
-
-begin
-MATCH (h:User), (f:User)
-WHERE h.id = 27 AND f.id = 60
-CREATE UNIQUE (h)-[:FRIEND]-(f);
-commit
- 
-    begin
-    MERGE (:User { 
-           firstname: "Charlie", lastname: "Ramírez",
-           fullname: "Charlie Ramírez", id: 28, 
-           gender: "male", age: 30});
-    commit
-
-begin
-MATCH (h:User), (f:User)
-WHERE h.id = 28 AND f.id = 46
-CREATE UNIQUE (h)-[:FRIEND]-(f);
-commit
-
-
-begin
-MATCH (h:User), (f:User)
-WHERE h.id = 28 AND f.id = 82
-CREATE UNIQUE (h)-[:FRIEND]-(f);
-commit
-
-
-begin
-MATCH (h:User), (f:User)
-WHERE h.id = 28 AND f.id = 57
-CREATE UNIQUE (h)-[:FRIEND]-(f);
-commit
-
-
-begin
-MATCH (h:User), (f:User)
-WHERE h.id = 28 AND f.id = 4
-CREATE UNIQUE (h)-[:FRIEND]-(f);
-commit
-
-
-begin
-MATCH (h:User), (f:User)
-WHERE h.id = 28 AND f.id = 54
-CREATE UNIQUE (h)-[:FRIEND]-(f);
-commit
-
-
-begin
-MATCH (h:User), (f:User)
-WHERE h.id = 28 AND f.id = 3
-CREATE UNIQUE (h)-[:FRIEND]-(f);
-commit
- 
-    begin
-    MERGE (:User { 
-           firstname: "London", lastname: "Nelson",
-           fullname: "London Nelson", id: 29, 
-           gender: "male", age: 21});
-    commit
-
-begin
-MATCH (h:User), (f:User)
-WHERE h.id = 29 AND f.id = 95
-CREATE UNIQUE (h)-[:FRIEND]-(f);
-commit
-
-
-begin
-MATCH (h:User), (f:User)
-WHERE h.id = 29 AND f.id = 0
-CREATE UNIQUE (h)-[:FRIEND]-(f);
-commit
- 
-    begin
-    MERGE (:User { 
-           firstname: "Jordyn", lastname: "Scott",
-           fullname: "Jordyn Scott", id: 30, 
-           gender: "female", age: 22});
-    commit
-
-begin
-MATCH (h:User), (f:User)
-WHERE h.id = 30 AND f.id = 22
-CREATE UNIQUE (h)-[:FRIEND]-(f);
-commit
-
-
-begin
-MATCH (h:User), (f:User)
-WHERE h.id = 30 AND f.id = 52
-CREATE UNIQUE (h)-[:FRIEND]-(f);
-commit
- 
-    begin
-    MERGE (:User { 
-           firstname: "Phoenix", lastname: "Cook",
-           fullname: "Phoenix Cook", id: 31, 
-           gender: "female", age: 28});
-    commit
-
-begin
-MATCH (h:User), (f:User)
-WHERE h.id = 31 AND f.id = 53
-CREATE UNIQUE (h)-[:FRIEND]-(f);
-commit
-
-
-begin
-MATCH (h:User), (f:User)
-WHERE h.id = 31 AND f.id = 62
-CREATE UNIQUE (h)-[:FRIEND]-(f);
-commit
-
-
-begin
-MATCH (h:User), (f:User)
-WHERE h.id = 31 AND f.id = 36
-CREATE UNIQUE (h)-[:FRIEND]-(f);
-commit
- 
-    begin
-    MERGE (:User { 
-           firstname: "Alexis", lastname: "Cooper",
-           fullname: "Alexis Cooper", id: 32, 
-           gender: "male", age: 32});
-    commit
-
-begin
-MATCH (h:User), (f:User)
-WHERE h.id = 32 AND f.id = 61
-CREATE UNIQUE (h)-[:FRIEND]-(f);
-commit
-
-
-begin
-MATCH (h:User), (f:User)
-WHERE h.id = 32 AND f.id = 23
-CREATE UNIQUE (h)-[:FRIEND]-(f);
-commit
- 
-    begin
-    MERGE (:User { 
-           firstname: "Tatum", lastname: "Stewart",
-           fullname: "Tatum Stewart", id: 33, 
-           gender: "female", age: 24});
-    commit
-
-begin
-MATCH (h:User), (f:User)
-WHERE h.id = 33 AND f.id = 61
-CREATE UNIQUE (h)-[:FRIEND]-(f);
-commit
-
-
-begin
-MATCH (h:User), (f:User)
-WHERE h.id = 33 AND f.id = 53
-CREATE UNIQUE (h)-[:FRIEND]-(f);
-commit
-
-
-begin
-MATCH (h:User), (f:User)
-WHERE h.id = 33 AND f.id = 25
-CREATE UNIQUE (h)-[:FRIEND]-(f);
-commit
- 
-    begin
-    MERGE (:User { 
-           firstname: "River", lastname: "Phillips",
-           fullname: "River Phillips", id: 34, 
-           gender: "male", age: 21});
-    commit
-
-begin
-MATCH (h:User), (f:User)
-WHERE h.id = 34 AND f.id = 5
-CREATE UNIQUE (h)-[:FRIEND]-(f);
-commit
-
-
-begin
-MATCH (h:User), (f:User)
-WHERE h.id = 34 AND f.id = 58
-CREATE UNIQUE (h)-[:FRIEND]-(f);
-commit
-
-
-begin
-MATCH (h:User), (f:User)
-WHERE h.id = 34 AND f.id = 14
-CREATE UNIQUE (h)-[:FRIEND]-(f);
-commit
-
-
-begin
-MATCH (h:User), (f:User)
-WHERE h.id = 34 AND f.id = 76
-CREATE UNIQUE (h)-[:FRIEND]-(f);
-commit
- 
-    begin
-    MERGE (:User { 
-           firstname: "Eden", lastname: "Rogers",
-           fullname: "Eden Rogers", id: 35, 
-           gender: "female", age: 22});
-    commit
-
-begin
-MATCH (h:User), (f:User)
-WHERE h.id = 35 AND f.id = 88
-CREATE UNIQUE (h)-[:FRIEND]-(f);
-commit
-
-
-begin
-MATCH (h:User), (f:User)
-WHERE h.id = 35 AND f.id = 63
-CREATE UNIQUE (h)-[:FRIEND]-(f);
-commit
-
-
-begin
-MATCH (h:User), (f:User)
-WHERE h.id = 35 AND f.id = 39
-CREATE UNIQUE (h)-[:FRIEND]-(f);
-commit
-
-
-begin
-MATCH (h:User), (f:User)
-WHERE h.id = 35 AND f.id = 57
-CREATE UNIQUE (h)-[:FRIEND]-(f);
-commit
- 
-    begin
-    MERGE (:User { 
-           firstname: "Dallas", lastname: "Lee",
-           fullname: "Dallas Lee", id: 36, 
-           gender: "male", age: 30});
-    commit
-
-begin
-MATCH (h:User), (f:User)
-WHERE h.id = 36 AND f.id = 41
-CREATE UNIQUE (h)-[:FRIEND]-(f);
-commit
-
-
-begin
-MATCH (h:User), (f:User)
-WHERE h.id = 36 AND f.id = 36
-CREATE UNIQUE (h)-[:FRIEND]-(f);
-commit
-
-
-begin
-MATCH (h:User), (f:User)
-WHERE h.id = 36 AND f.id = 21
-CREATE UNIQUE (h)-[:FRIEND]-(f);
-commit
-
-
-begin
-MATCH (h:User), (f:User)
-WHERE h.id = 36 AND f.id = 1
-CREATE UNIQUE (h)-[:FRIEND]-(f);
-commit
-
-
-begin
-MATCH (h:User), (f:User)
-WHERE h.id = 36 AND f.id = 74
-CREATE UNIQUE (h)-[:FRIEND]-(f);
-commit
-
-
-begin
-MATCH (h:User), (f:User)
-WHERE h.id = 36 AND f.id = 79
-CREATE UNIQUE (h)-[:FRIEND]-(f);
-commit
- 
-    begin
-    MERGE (:User { 
-           firstname: "Cameron", lastname: "Perry",
-           fullname: "Cameron Perry", id: 37, 
-           gender: "male", age: 26});
-    commit
-
-begin
-MATCH (h:User), (f:User)
-WHERE h.id = 37 AND f.id = 3
-CREATE UNIQUE (h)-[:FRIEND]-(f);
-commit
-
-
-begin
-MATCH (h:User), (f:User)
-WHERE h.id = 37 AND f.id = 19
-CREATE UNIQUE (h)-[:FRIEND]-(f);
-commit
-
-
-begin
-MATCH (h:User), (f:User)
-WHERE h.id = 37 AND f.id = 15
-CREATE UNIQUE (h)-[:FRIEND]-(f);
-commit
- 
-    begin
-    MERGE (:User { 
-           firstname: "Kayden", lastname: "Russell",
-           fullname: "Kayden Russell", id: 38, 
-           gender: "female", age: 31});
-    commit
-
-begin
-MATCH (h:User), (f:User)
-WHERE h.id = 38 AND f.id = 72
-CREATE UNIQUE (h)-[:FRIEND]-(f);
-commit
-
-
-begin
-MATCH (h:User), (f:User)
-WHERE h.id = 38 AND f.id = 94
-CREATE UNIQUE (h)-[:FRIEND]-(f);
-commit
-
-
-begin
-MATCH (h:User), (f:User)
-WHERE h.id = 38 AND f.id = 7
-CREATE UNIQUE (h)-[:FRIEND]-(f);
-commit
-
-
-begin
-MATCH (h:User), (f:User)
-WHERE h.id = 38 AND f.id = 17
-CREATE UNIQUE (h)-[:FRIEND]-(f);
-commit
- 
-    begin
-    MERGE (:User { 
-           firstname: "Teagan", lastname: "Thompson",
-           fullname: "Teagan Thompson", id: 39, 
-           gender: "male", age: 28});
-    commit
-
-begin
-MATCH (h:User), (f:User)
-WHERE h.id = 39 AND f.id = 26
-CREATE UNIQUE (h)-[:FRIEND]-(f);
-commit
-
-
-begin
-MATCH (h:User), (f:User)
-WHERE h.id = 39 AND f.id = 20
-CREATE UNIQUE (h)-[:FRIEND]-(f);
-commit
- 
-    begin
-    MERGE (:User { 
-           firstname: "Tatum", lastname: "Wilson",
-           fullname: "Tatum Wilson", id: 40, 
-           gender: "female", age: 31});
-    commit
-
-begin
-MATCH (h:User), (f:User)
-WHERE h.id = 40 AND f.id = 56
-CREATE UNIQUE (h)-[:FRIEND]-(f);
-commit
-
-
-begin
-MATCH (h:User), (f:User)
-WHERE h.id = 40 AND f.id = 57
-CREATE UNIQUE (h)-[:FRIEND]-(f);
-commit
-
-
-begin
-MATCH (h:User), (f:User)
-WHERE h.id = 40 AND f.id = 96
-CREATE UNIQUE (h)-[:FRIEND]-(f);
-commit
-
-
-begin
-MATCH (h:User), (f:User)
-WHERE h.id = 40 AND f.id = 12
-CREATE UNIQUE (h)-[:FRIEND]-(f);
-commit
-
-
-begin
-MATCH (h:User), (f:User)
-WHERE h.id = 40 AND f.id = 24
-CREATE UNIQUE (h)-[:FRIEND]-(f);
-commit
-
-
-begin
-MATCH (h:User), (f:User)
-WHERE h.id = 40 AND f.id = 95
-CREATE UNIQUE (h)-[:FRIEND]-(f);
-commit
- 
-    begin
-    MERGE (:User { 
-           firstname: "Jaylin", lastname: "Jones",
-           fullname: "Jaylin Jones", id: 41, 
-           gender: "male", age: 20});
-    commit
-
-begin
-MATCH (h:User), (f:User)
-WHERE h.id = 41 AND f.id = 61
-CREATE UNIQUE (h)-[:FRIEND]-(f);
-commit
-
-
-begin
-MATCH (h:User), (f:User)
-WHERE h.id = 41 AND f.id = 22
-CREATE UNIQUE (h)-[:FRIEND]-(f);
-commit
-
-
-begin
-MATCH (h:User), (f:User)
-WHERE h.id = 41 AND f.id = 39
-CREATE UNIQUE (h)-[:FRIEND]-(f);
-commit
-
-
-begin
-MATCH (h:User), (f:User)
-WHERE h.id = 41 AND f.id = 3
-CREATE UNIQUE (h)-[:FRIEND]-(f);
-commit
-
-
-begin
-MATCH (h:User), (f:User)
-WHERE h.id = 41 AND f.id = 78
-CREATE UNIQUE (h)-[:FRIEND]-(f);
-commit
-
-
-begin
-MATCH (h:User), (f:User)
-WHERE h.id = 41 AND f.id = 16
-CREATE UNIQUE (h)-[:FRIEND]-(f);
-commit
- 
-    begin
-    MERGE (:User { 
-           firstname: "Sage", lastname: "Lewis",
-           fullname: "Sage Lewis", id: 42, 
-           gender: "female", age: 29});
-    commit
-
-begin
-MATCH (h:User), (f:User)
-WHERE h.id = 42 AND f.id = 33
-CREATE UNIQUE (h)-[:FRIEND]-(f);
-commit
-
-
-begin
-MATCH (h:User), (f:User)
-WHERE h.id = 42 AND f.id = 47
-CREATE UNIQUE (h)-[:FRIEND]-(f);
-commit
-
-
-begin
-MATCH (h:User), (f:User)
-WHERE h.id = 42 AND f.id = 16
-CREATE UNIQUE (h)-[:FRIEND]-(f);
-commit
- 
-    begin
-    MERGE (:User { 
-           firstname: "Harper", lastname: "Jackson",
-           fullname: "Harper Jackson", id: 43, 
-           gender: "male", age: 34});
-    commit
-
-begin
-MATCH (h:User), (f:User)
-WHERE h.id = 43 AND f.id = 71
-CREATE UNIQUE (h)-[:FRIEND]-(f);
-commit
-
-
-begin
-MATCH (h:User), (f:User)
-WHERE h.id = 43 AND f.id = 31
-CREATE UNIQUE (h)-[:FRIEND]-(f);
-commit
-
-
-begin
-MATCH (h:User), (f:User)
-WHERE h.id = 43 AND f.id = 35
-CREATE UNIQUE (h)-[:FRIEND]-(f);
-commit
-
-
-begin
-MATCH (h:User), (f:User)
-WHERE h.id = 43 AND f.id = 76
-CREATE UNIQUE (h)-[:FRIEND]-(f);
-commit
-
-
-begin
-MATCH (h:User), (f:User)
-WHERE h.id = 43 AND f.id = 8
-CREATE UNIQUE (h)-[:FRIEND]-(f);
-commit
- 
-    begin
-    MERGE (:User { 
-           firstname: "Armani", lastname: "Baker",
-           fullname: "Armani Baker", id: 44, 
-           gender: "female", age: 18});
-    commit
-
-begin
-MATCH (h:User), (f:User)
-WHERE h.id = 44 AND f.id = 17
-CREATE UNIQUE (h)-[:FRIEND]-(f);
-commit
-
-
-begin
-MATCH (h:User), (f:User)
-WHERE h.id = 44 AND f.id = 34
-CREATE UNIQUE (h)-[:FRIEND]-(f);
-commit
-
-
-begin
-MATCH (h:User), (f:User)
-WHERE h.id = 44 AND f.id = 76
-CREATE UNIQUE (h)-[:FRIEND]-(f);
-commit
- 
-    begin
-    MERGE (:User { 
-           firstname: "Kai", lastname: "Foster",
-           fullname: "Kai Foster", id: 45, 
-           gender: "male", age: 19});
-    commit
-
-begin
-MATCH (h:User), (f:User)
-WHERE h.id = 45 AND f.id = 29
-CREATE UNIQUE (h)-[:FRIEND]-(f);
-commit
-
-
-begin
-MATCH (h:User), (f:User)
-WHERE h.id = 45 AND f.id = 40
-CREATE UNIQUE (h)-[:FRIEND]-(f);
-commit
-
-
-begin
-MATCH (h:User), (f:User)
-WHERE h.id = 45 AND f.id = 78
-CREATE UNIQUE (h)-[:FRIEND]-(f);
-commit
- 
-    begin
-    MERGE (:User { 
-           firstname: "Dakota", lastname: "Cooper",
-           fullname: "Dakota Cooper", id: 46, 
-           gender: "female", age: 27});
-    commit
-
-begin
-MATCH (h:User), (f:User)
-WHERE h.id = 46 AND f.id = 0
-CREATE UNIQUE (h)-[:FRIEND]-(f);
-commit
-
-
-begin
-MATCH (h:User), (f:User)
-WHERE h.id = 46 AND f.id = 27
-CREATE UNIQUE (h)-[:FRIEND]-(f);
-commit
-
-
-begin
-MATCH (h:User), (f:User)
-WHERE h.id = 46 AND f.id = 98
-CREATE UNIQUE (h)-[:FRIEND]-(f);
-commit
- 
-    begin
-    MERGE (:User { 
-           firstname: "Skyler", lastname: "Reyes",
-           fullname: "Skyler Reyes", id: 47, 
-           gender: "female", age: 18});
-    commit
-
-begin
-MATCH (h:User), (f:User)
-WHERE h.id = 47 AND f.id = 40
-CREATE UNIQUE (h)-[:FRIEND]-(f);
-commit
- 
-    begin
-    MERGE (:User { 
-           firstname: "Cameron", lastname: "Carter",
-           fullname: "Cameron Carter", id: 48, 
-           gender: "male", age: 27});
-    commit
-
-begin
-MATCH (h:User), (f:User)
-WHERE h.id = 48 AND f.id = 56
-CREATE UNIQUE (h)-[:FRIEND]-(f);
-commit
- 
-    begin
-    MERGE (:User { 
-           firstname: "Reese", lastname: "Hughes",
-           fullname: "Reese Hughes", id: 49, 
-           gender: "male", age: 27});
-    commit
-
-begin
-MATCH (h:User), (f:User)
-WHERE h.id = 49 AND f.id = 18
-CREATE UNIQUE (h)-[:FRIEND]-(f);
-commit
- 
-    begin
-    MERGE (:User { 
-           firstname: "Reese", lastname: "Jenkins",
-           fullname: "Reese Jenkins", id: 50, 
-           gender: "female", age: 28});
-    commit
-
-begin
-MATCH (h:User), (f:User)
-WHERE h.id = 50 AND f.id = 51
-CREATE UNIQUE (h)-[:FRIEND]-(f);
-commit
-
-
-begin
-MATCH (h:User), (f:User)
-WHERE h.id = 50 AND f.id = 93
-CREATE UNIQUE (h)-[:FRIEND]-(f);
-commit
- 
-    begin
-    MERGE (:User { 
-           firstname: "Casey", lastname: "Edwards",
-           fullname: "Casey Edwards", id: 51, 
-           gender: "female", age: 26});
-    commit
-
-begin
-MATCH (h:User), (f:User)
-WHERE h.id = 51 AND f.id = 23
-CREATE UNIQUE (h)-[:FRIEND]-(f);
-commit
-
-
-begin
-MATCH (h:User), (f:User)
-WHERE h.id = 51 AND f.id = 63
-CREATE UNIQUE (h)-[:FRIEND]-(f);
-commit
-
-
-begin
-MATCH (h:User), (f:User)
-WHERE h.id = 51 AND f.id = 80
-CREATE UNIQUE (h)-[:FRIEND]-(f);
-commit
-
-
-begin
-MATCH (h:User), (f:User)
-WHERE h.id = 51 AND f.id = 82
-CREATE UNIQUE (h)-[:FRIEND]-(f);
-commit
-
-
-begin
-MATCH (h:User), (f:User)
-WHERE h.id = 51 AND f.id = 97
-CREATE UNIQUE (h)-[:FRIEND]-(f);
-commit
-
-
-begin
-MATCH (h:User), (f:User)
-WHERE h.id = 51 AND f.id = 34
-CREATE UNIQUE (h)-[:FRIEND]-(f);
-commit
- 
-    begin
-    MERGE (:User { 
-           firstname: "Harley", lastname: "Rogers",
-           fullname: "Harley Rogers", id: 52, 
-           gender: "female", age: 24});
-    commit
-
-begin
-MATCH (h:User), (f:User)
-WHERE h.id = 52 AND f.id = 87
-CREATE UNIQUE (h)-[:FRIEND]-(f);
-commit
-
-
-begin
-MATCH (h:User), (f:User)
-WHERE h.id = 52 AND f.id = 9
-CREATE UNIQUE (h)-[:FRIEND]-(f);
-commit
-
-
-begin
-MATCH (h:User), (f:User)
-WHERE h.id = 52 AND f.id = 7
-CREATE UNIQUE (h)-[:FRIEND]-(f);
-commit
-
-
-begin
-MATCH (h:User), (f:User)
-WHERE h.id = 52 AND f.id = 96
-CREATE UNIQUE (h)-[:FRIEND]-(f);
-commit
- 
-    begin
-    MERGE (:User { 
-           firstname: "Jaylin", lastname: "Morales",
-           fullname: "Jaylin Morales", id: 53, 
-           gender: "male", age: 34});
-    commit
-
-begin
-MATCH (h:User), (f:User)
-WHERE h.id = 53 AND f.id = 97
-CREATE UNIQUE (h)-[:FRIEND]-(f);
-commit
-
-
-begin
-MATCH (h:User), (f:User)
-WHERE h.id = 53 AND f.id = 31
-CREATE UNIQUE (h)-[:FRIEND]-(f);
-commit
-
-
-begin
-MATCH (h:User), (f:User)
-WHERE h.id = 53 AND f.id = 34
-CREATE UNIQUE (h)-[:FRIEND]-(f);
-commit
-
-
-begin
-MATCH (h:User), (f:User)
-WHERE h.id = 53 AND f.id = 52
-CREATE UNIQUE (h)-[:FRIEND]-(f);
-commit
-
-
-begin
-MATCH (h:User), (f:User)
-WHERE h.id = 53 AND f.id = 25
-CREATE UNIQUE (h)-[:FRIEND]-(f);
-commit
-
-
-begin
-MATCH (h:User), (f:User)
-WHERE h.id = 53 AND f.id = 29
-CREATE UNIQUE (h)-[:FRIEND]-(f);
-commit
- 
-    begin
-    MERGE (:User { 
-           firstname: "Jayden", lastname: "García",
-           fullname: "Jayden García", id: 54, 
-           gender: "female", age: 30});
-    commit
-
-begin
-MATCH (h:User), (f:User)
-WHERE h.id = 54 AND f.id = 19
-CREATE UNIQUE (h)-[:FRIEND]-(f);
-commit
-
-
-begin
-MATCH (h:User), (f:User)
-WHERE h.id = 54 AND f.id = 38
-CREATE UNIQUE (h)-[:FRIEND]-(f);
-commit
-
-
-begin
-MATCH (h:User), (f:User)
-WHERE h.id = 54 AND f.id = 2
-CREATE UNIQUE (h)-[:FRIEND]-(f);
-commit
- 
-    begin
-    MERGE (:User { 
-           firstname: "Reese", lastname: "Williams",
-           fullname: "Reese Williams", id: 55, 
-           gender: "male", age: 34});
-    commit
-
-begin
-MATCH (h:User), (f:User)
-WHERE h.id = 55 AND f.id = 56
-CREATE UNIQUE (h)-[:FRIEND]-(f);
-commit
-
-
-begin
-MATCH (h:User), (f:User)
-WHERE h.id = 55 AND f.id = 48
-CREATE UNIQUE (h)-[:FRIEND]-(f);
-commit
- 
-    begin
-    MERGE (:User { 
-           firstname: "Alexis", lastname: "Wong",
-           fullname: "Alexis Wong", id: 56, 
-           gender: "female", age: 35});
-    commit
-
-begin
-MATCH (h:User), (f:User)
-WHERE h.id = 56 AND f.id = 37
-CREATE UNIQUE (h)-[:FRIEND]-(f);
-commit
-
-
-begin
-MATCH (h:User), (f:User)
-WHERE h.id = 56 AND f.id = 38
-CREATE UNIQUE (h)-[:FRIEND]-(f);
-commit
- 
-    begin
-    MERGE (:User { 
-           firstname: "Camryn", lastname: "Nguyen",
-           fullname: "Camryn Nguyen", id: 57, 
-           gender: "female", age: 27});
-    commit
-
-begin
-MATCH (h:User), (f:User)
-WHERE h.id = 57 AND f.id = 38
-CREATE UNIQUE (h)-[:FRIEND]-(f);
-commit
-
-
-begin
-MATCH (h:User), (f:User)
-WHERE h.id = 57 AND f.id = 41
-CREATE UNIQUE (h)-[:FRIEND]-(f);
-commit
-
-
-begin
-MATCH (h:User), (f:User)
-WHERE h.id = 57 AND f.id = 75
-CREATE UNIQUE (h)-[:FRIEND]-(f);
-commit
-
-
-begin
-MATCH (h:User), (f:User)
-WHERE h.id = 57 AND f.id = 29
-CREATE UNIQUE (h)-[:FRIEND]-(f);
-commit
- 
-    begin
-    MERGE (:User { 
-           firstname: "Rowan", lastname: "Jones",
-           fullname: "Rowan Jones", id: 58, 
-           gender: "male", age: 32});
-    commit
-
-begin
-MATCH (h:User), (f:User)
-WHERE h.id = 58 AND f.id = 66
-CREATE UNIQUE (h)-[:FRIEND]-(f);
-commit
-
-
-begin
-MATCH (h:User), (f:User)
-WHERE h.id = 58 AND f.id = 80
-CREATE UNIQUE (h)-[:FRIEND]-(f);
-commit
-
-
-begin
-MATCH (h:User), (f:User)
-WHERE h.id = 58 AND f.id = 33
-CREATE UNIQUE (h)-[:FRIEND]-(f);
-commit
-
-
-begin
-MATCH (h:User), (f:User)
-WHERE h.id = 58 AND f.id = 48
-CREATE UNIQUE (h)-[:FRIEND]-(f);
-commit
-
-
-begin
-MATCH (h:User), (f:User)
-WHERE h.id = 58 AND f.id = 50
-CREATE UNIQUE (h)-[:FRIEND]-(f);
-commit
- 
-    begin
-    MERGE (:User { 
-           firstname: "Kendall", lastname: "Sato",
-           fullname: "Kendall Sato", id: 59, 
-           gender: "female", age: 26});
-    commit
-
-begin
-MATCH (h:User), (f:User)
-WHERE h.id = 59 AND f.id = 86
-CREATE UNIQUE (h)-[:FRIEND]-(f);
-commit
-
-
-begin
-MATCH (h:User), (f:User)
-WHERE h.id = 59 AND f.id = 89
-CREATE UNIQUE (h)-[:FRIEND]-(f);
-commit
-
-
-begin
-MATCH (h:User), (f:User)
-WHERE h.id = 59 AND f.id = 25
-CREATE UNIQUE (h)-[:FRIEND]-(f);
-commit
-
-
-begin
-MATCH (h:User), (f:User)
-WHERE h.id = 59 AND f.id = 26
-CREATE UNIQUE (h)-[:FRIEND]-(f);
-commit
-
-
-begin
-MATCH (h:User), (f:User)
-WHERE h.id = 59 AND f.id = 91
-CREATE UNIQUE (h)-[:FRIEND]-(f);
-commit
-
-
-begin
-MATCH (h:User), (f:User)
-WHERE h.id = 59 AND f.id = 20
-CREATE UNIQUE (h)-[:FRIEND]-(f);
-commit
- 
-    begin
-    MERGE (:User { 
-           firstname: "Charlie", lastname: "Nakamoto",
-           fullname: "Charlie Nakamoto", id: 60, 
-           gender: "female", age: 32});
-    commit
-
-begin
-MATCH (h:User), (f:User)
-WHERE h.id = 60 AND f.id = 52
-CREATE UNIQUE (h)-[:FRIEND]-(f);
-commit
-
-
-begin
-MATCH (h:User), (f:User)
-WHERE h.id = 60 AND f.id = 64
-CREATE UNIQUE (h)-[:FRIEND]-(f);
-commit
-
-
-begin
-MATCH (h:User), (f:User)
-WHERE h.id = 60 AND f.id = 42
-CREATE UNIQUE (h)-[:FRIEND]-(f);
-commit
-
-
-begin
-MATCH (h:User), (f:User)
-WHERE h.id = 60 AND f.id = 11
-CREATE UNIQUE (h)-[:FRIEND]-(f);
-commit
- 
-    begin
-    MERGE (:User { 
-           firstname: "Reagan", lastname: "Thomas",
-           fullname: "Reagan Thomas", id: 61, 
-           gender: "female", age: 31});
-    commit
-
-begin
-MATCH (h:User), (f:User)
-WHERE h.id = 61 AND f.id = 78
-CREATE UNIQUE (h)-[:FRIEND]-(f);
-commit
- 
-    begin
-    MERGE (:User { 
-           firstname: "Avery", lastname: "Nakamoto",
-           fullname: "Avery Nakamoto", id: 62, 
-           gender: "female", age: 24});
-    commit
-
-begin
-MATCH (h:User), (f:User)
-WHERE h.id = 62 AND f.id = 30
-CREATE UNIQUE (h)-[:FRIEND]-(f);
-commit
-
-
-begin
-MATCH (h:User), (f:User)
-WHERE h.id = 62 AND f.id = 6
-CREATE UNIQUE (h)-[:FRIEND]-(f);
-commit
- 
-    begin
-    MERGE (:User { 
-           firstname: "Jaylin", lastname: "Martin",
-           fullname: "Jaylin Martin", id: 63, 
-           gender: "female", age: 22});
-    commit
-
-begin
-MATCH (h:User), (f:User)
-WHERE h.id = 63 AND f.id = 41
-CREATE UNIQUE (h)-[:FRIEND]-(f);
-commit
-
-
-begin
-MATCH (h:User), (f:User)
-WHERE h.id = 63 AND f.id = 60
-CREATE UNIQUE (h)-[:FRIEND]-(f);
-commit
-
-
-begin
-MATCH (h:User), (f:User)
-WHERE h.id = 63 AND f.id = 66
-CREATE UNIQUE (h)-[:FRIEND]-(f);
-commit
-
-
-begin
-MATCH (h:User), (f:User)
-WHERE h.id = 63 AND f.id = 24
-CREATE UNIQUE (h)-[:FRIEND]-(f);
-commit
-
-
-begin
-MATCH (h:User), (f:User)
-WHERE h.id = 63 AND f.id = 54
-CREATE UNIQUE (h)-[:FRIEND]-(f);
-commit
- 
-    begin
-    MERGE (:User { 
-           firstname: "Angel", lastname: "Murphy",
-           fullname: "Angel Murphy", id: 64, 
-           gender: "female", age: 25});
-    commit
-
-begin
-MATCH (h:User), (f:User)
-WHERE h.id = 64 AND f.id = 83
-CREATE UNIQUE (h)-[:FRIEND]-(f);
-commit
- 
-    begin
-    MERGE (:User { 
-           firstname: "Dylan", lastname: "Moore",
-           fullname: "Dylan Moore", id: 65, 
-           gender: "female", age: 22});
-    commit
-
-begin
-MATCH (h:User), (f:User)
-WHERE h.id = 65 AND f.id = 38
-CREATE UNIQUE (h)-[:FRIEND]-(f);
-commit
-
-
-begin
-MATCH (h:User), (f:User)
-WHERE h.id = 65 AND f.id = 14
-CREATE UNIQUE (h)-[:FRIEND]-(f);
-commit
-
-
-begin
-MATCH (h:User), (f:User)
-WHERE h.id = 65 AND f.id = 2
-CREATE UNIQUE (h)-[:FRIEND]-(f);
-commit
- 
-    begin
-    MERGE (:User { 
-           firstname: "Emory", lastname: "Pérez",
-           fullname: "Emory Pérez", id: 66, 
+    CREATE (:User { 
+           firstname: "Blake", lastname: "Ortiz",
+           fullname: "Blake Ortiz", id: 26, 
            gender: "male", age: 22});
     commit
 
 begin
 MATCH (h:User), (f:User)
-WHERE h.id = 66 AND f.id = 36
+WHERE h.id = 26 AND f.id = 64
 CREATE UNIQUE (h)-[:FRIEND]-(f);
 commit
 
 
 begin
 MATCH (h:User), (f:User)
-WHERE h.id = 66 AND f.id = 90
+WHERE h.id = 26 AND f.id = 71
 CREATE UNIQUE (h)-[:FRIEND]-(f);
 commit
 
 
 begin
 MATCH (h:User), (f:User)
-WHERE h.id = 66 AND f.id = 98
+WHERE h.id = 26 AND f.id = 56
+CREATE UNIQUE (h)-[:FRIEND]-(f);
+commit
+
+
+begin
+MATCH (h:User), (f:User)
+WHERE h.id = 26 AND f.id = 85
+CREATE UNIQUE (h)-[:FRIEND]-(f);
+commit
+
+
+begin
+MATCH (h:User), (f:User)
+WHERE h.id = 26 AND f.id = 17
+CREATE UNIQUE (h)-[:FRIEND]-(f);
+commit
+
+
+begin
+MATCH (h:User), (f:User)
+WHERE h.id = 26 AND f.id = 88
 CREATE UNIQUE (h)-[:FRIEND]-(f);
 commit
  
     begin
-    MERGE (:User { 
-           firstname: "Kayden", lastname: "Perry",
-           fullname: "Kayden Perry", id: 67, 
-           gender: "male", age: 33});
+    CREATE (:User { 
+           firstname: "Angel", lastname: "Powell",
+           fullname: "Angel Powell", id: 27, 
+           gender: "female", age: 29});
     commit
 
 begin
 MATCH (h:User), (f:User)
-WHERE h.id = 67 AND f.id = 44
+WHERE h.id = 27 AND f.id = 30
 CREATE UNIQUE (h)-[:FRIEND]-(f);
 commit
  
     begin
-    MERGE (:User { 
-           firstname: "Finley", lastname: "Young",
-           fullname: "Finley Young", id: 68, 
-           gender: "male", age: 34});
+    CREATE (:User { 
+           firstname: "Lyric", lastname: "Hughes",
+           fullname: "Lyric Hughes", id: 28, 
+           gender: "female", age: 19});
     commit
 
 begin
 MATCH (h:User), (f:User)
-WHERE h.id = 68 AND f.id = 23
+WHERE h.id = 28 AND f.id = 66
 CREATE UNIQUE (h)-[:FRIEND]-(f);
 commit
 
 
 begin
 MATCH (h:User), (f:User)
-WHERE h.id = 68 AND f.id = 16
-CREATE UNIQUE (h)-[:FRIEND]-(f);
-commit
-
-
-begin
-MATCH (h:User), (f:User)
-WHERE h.id = 68 AND f.id = 0
-CREATE UNIQUE (h)-[:FRIEND]-(f);
-commit
-
-
-begin
-MATCH (h:User), (f:User)
-WHERE h.id = 68 AND f.id = 71
+WHERE h.id = 28 AND f.id = 13
 CREATE UNIQUE (h)-[:FRIEND]-(f);
 commit
  
     begin
-    MERGE (:User { 
-           firstname: "Jordan", lastname: "Cox",
-           fullname: "Jordan Cox", id: 69, 
-           gender: "male", age: 26});
+    CREATE (:User { 
+           firstname: "Charlie", lastname: "Scott",
+           fullname: "Charlie Scott", id: 29, 
+           gender: "female", age: 20});
     commit
 
 begin
 MATCH (h:User), (f:User)
-WHERE h.id = 69 AND f.id = 18
+WHERE h.id = 29 AND f.id = 21
 CREATE UNIQUE (h)-[:FRIEND]-(f);
 commit
 
 
 begin
 MATCH (h:User), (f:User)
-WHERE h.id = 69 AND f.id = 32
-CREATE UNIQUE (h)-[:FRIEND]-(f);
-commit
-
-
-begin
-MATCH (h:User), (f:User)
-WHERE h.id = 69 AND f.id = 7
-CREATE UNIQUE (h)-[:FRIEND]-(f);
-commit
-
-
-begin
-MATCH (h:User), (f:User)
-WHERE h.id = 69 AND f.id = 30
-CREATE UNIQUE (h)-[:FRIEND]-(f);
-commit
-
-
-begin
-MATCH (h:User), (f:User)
-WHERE h.id = 69 AND f.id = 60
+WHERE h.id = 29 AND f.id = 25
 CREATE UNIQUE (h)-[:FRIEND]-(f);
 commit
  
     begin
-    MERGE (:User { 
-           firstname: "Kai", lastname: "Bennett",
-           fullname: "Kai Bennett", id: 70, 
-           gender: "female", age: 21});
+    CREATE (:User { 
+           firstname: "Jordan", lastname: "Sato",
+           fullname: "Jordan Sato", id: 30, 
+           gender: "male", age: 20});
     commit
 
 begin
 MATCH (h:User), (f:User)
-WHERE h.id = 70 AND f.id = 89
-CREATE UNIQUE (h)-[:FRIEND]-(f);
-commit
-
-
-begin
-MATCH (h:User), (f:User)
-WHERE h.id = 70 AND f.id = 39
-CREATE UNIQUE (h)-[:FRIEND]-(f);
-commit
-
-
-begin
-MATCH (h:User), (f:User)
-WHERE h.id = 70 AND f.id = 38
-CREATE UNIQUE (h)-[:FRIEND]-(f);
-commit
-
-
-begin
-MATCH (h:User), (f:User)
-WHERE h.id = 70 AND f.id = 53
-CREATE UNIQUE (h)-[:FRIEND]-(f);
-commit
-
-
-begin
-MATCH (h:User), (f:User)
-WHERE h.id = 70 AND f.id = 57
-CREATE UNIQUE (h)-[:FRIEND]-(f);
-commit
-
-
-begin
-MATCH (h:User), (f:User)
-WHERE h.id = 70 AND f.id = 20
+WHERE h.id = 30 AND f.id = 18
 CREATE UNIQUE (h)-[:FRIEND]-(f);
 commit
  
     begin
-    MERGE (:User { 
-           firstname: "Emory", lastname: "Lee",
-           fullname: "Emory Lee", id: 71, 
+    CREATE (:User { 
+           firstname: "Rowan", lastname: "Kelly",
+           fullname: "Rowan Kelly", id: 31, 
+           gender: "female", age: 35});
+    commit
+
+begin
+MATCH (h:User), (f:User)
+WHERE h.id = 31 AND f.id = 72
+CREATE UNIQUE (h)-[:FRIEND]-(f);
+commit
+
+
+begin
+MATCH (h:User), (f:User)
+WHERE h.id = 31 AND f.id = 13
+CREATE UNIQUE (h)-[:FRIEND]-(f);
+commit
+ 
+    begin
+    CREATE (:User { 
+           firstname: "Jessie", lastname: "Long",
+           fullname: "Jessie Long", id: 32, 
+           gender: "female", age: 25});
+    commit
+
+begin
+MATCH (h:User), (f:User)
+WHERE h.id = 32 AND f.id = 86
+CREATE UNIQUE (h)-[:FRIEND]-(f);
+commit
+
+
+begin
+MATCH (h:User), (f:User)
+WHERE h.id = 32 AND f.id = 25
+CREATE UNIQUE (h)-[:FRIEND]-(f);
+commit
+
+
+begin
+MATCH (h:User), (f:User)
+WHERE h.id = 32 AND f.id = 29
+CREATE UNIQUE (h)-[:FRIEND]-(f);
+commit
+
+
+begin
+MATCH (h:User), (f:User)
+WHERE h.id = 32 AND f.id = 44
+CREATE UNIQUE (h)-[:FRIEND]-(f);
+commit
+
+
+begin
+MATCH (h:User), (f:User)
+WHERE h.id = 32 AND f.id = 92
+CREATE UNIQUE (h)-[:FRIEND]-(f);
+commit
+ 
+    begin
+    CREATE (:User { 
+           firstname: "Morgan", lastname: "Brown",
+           fullname: "Morgan Brown", id: 33, 
+           gender: "male", age: 31});
+    commit
+
+begin
+MATCH (h:User), (f:User)
+WHERE h.id = 33 AND f.id = 2
+CREATE UNIQUE (h)-[:FRIEND]-(f);
+commit
+
+
+begin
+MATCH (h:User), (f:User)
+WHERE h.id = 33 AND f.id = 59
+CREATE UNIQUE (h)-[:FRIEND]-(f);
+commit
+
+
+begin
+MATCH (h:User), (f:User)
+WHERE h.id = 33 AND f.id = 16
+CREATE UNIQUE (h)-[:FRIEND]-(f);
+commit
+ 
+    begin
+    CREATE (:User { 
+           firstname: "Skyler", lastname: "Young",
+           fullname: "Skyler Young", id: 34, 
            gender: "female", age: 27});
     commit
 
 begin
 MATCH (h:User), (f:User)
-WHERE h.id = 71 AND f.id = 59
+WHERE h.id = 34 AND f.id = 28
 CREATE UNIQUE (h)-[:FRIEND]-(f);
 commit
 
 
 begin
 MATCH (h:User), (f:User)
-WHERE h.id = 71 AND f.id = 41
+WHERE h.id = 34 AND f.id = 22
+CREATE UNIQUE (h)-[:FRIEND]-(f);
+commit
+
+
+begin
+MATCH (h:User), (f:User)
+WHERE h.id = 34 AND f.id = 26
+CREATE UNIQUE (h)-[:FRIEND]-(f);
+commit
+
+
+begin
+MATCH (h:User), (f:User)
+WHERE h.id = 34 AND f.id = 51
 CREATE UNIQUE (h)-[:FRIEND]-(f);
 commit
  
     begin
-    MERGE (:User { 
-           firstname: "Elliot", lastname: "Sullivan",
-           fullname: "Elliot Sullivan", id: 72, 
-           gender: "male", age: 33});
+    CREATE (:User { 
+           firstname: "Phoenix", lastname: "Richardson",
+           fullname: "Phoenix Richardson", id: 35, 
+           gender: "female", age: 32});
     commit
 
 begin
 MATCH (h:User), (f:User)
-WHERE h.id = 72 AND f.id = 63
+WHERE h.id = 35 AND f.id = 12
 CREATE UNIQUE (h)-[:FRIEND]-(f);
 commit
 
 
 begin
 MATCH (h:User), (f:User)
-WHERE h.id = 72 AND f.id = 67
+WHERE h.id = 35 AND f.id = 22
 CREATE UNIQUE (h)-[:FRIEND]-(f);
 commit
 
 
 begin
 MATCH (h:User), (f:User)
-WHERE h.id = 72 AND f.id = 81
-CREATE UNIQUE (h)-[:FRIEND]-(f);
-commit
-
-
-begin
-MATCH (h:User), (f:User)
-WHERE h.id = 72 AND f.id = 32
-CREATE UNIQUE (h)-[:FRIEND]-(f);
-commit
-
-
-begin
-MATCH (h:User), (f:User)
-WHERE h.id = 72 AND f.id = 20
+WHERE h.id = 35 AND f.id = 78
 CREATE UNIQUE (h)-[:FRIEND]-(f);
 commit
  
     begin
-    MERGE (:User { 
-           firstname: "Armani", lastname: "Allen",
-           fullname: "Armani Allen", id: 73, 
-           gender: "male", age: 23});
+    CREATE (:User { 
+           firstname: "Emory", lastname: "Reed",
+           fullname: "Emory Reed", id: 36, 
+           gender: "female", age: 25});
     commit
 
 begin
 MATCH (h:User), (f:User)
-WHERE h.id = 73 AND f.id = 91
+WHERE h.id = 36 AND f.id = 89
 CREATE UNIQUE (h)-[:FRIEND]-(f);
 commit
 
 
 begin
 MATCH (h:User), (f:User)
-WHERE h.id = 73 AND f.id = 58
+WHERE h.id = 36 AND f.id = 31
 CREATE UNIQUE (h)-[:FRIEND]-(f);
 commit
 
 
 begin
 MATCH (h:User), (f:User)
-WHERE h.id = 73 AND f.id = 70
+WHERE h.id = 36 AND f.id = 18
+CREATE UNIQUE (h)-[:FRIEND]-(f);
+commit
+
+
+begin
+MATCH (h:User), (f:User)
+WHERE h.id = 36 AND f.id = 18
 CREATE UNIQUE (h)-[:FRIEND]-(f);
 commit
  
     begin
-    MERGE (:User { 
-           firstname: "Payton", lastname: "Lewis",
-           fullname: "Payton Lewis", id: 74, 
-           gender: "female", age: 24});
+    CREATE (:User { 
+           firstname: "Parker", lastname: "Nguyen",
+           fullname: "Parker Nguyen", id: 37, 
+           gender: "female", age: 31});
     commit
 
 begin
 MATCH (h:User), (f:User)
-WHERE h.id = 74 AND f.id = 40
+WHERE h.id = 37 AND f.id = 9
 CREATE UNIQUE (h)-[:FRIEND]-(f);
 commit
 
 
 begin
 MATCH (h:User), (f:User)
-WHERE h.id = 74 AND f.id = 23
-CREATE UNIQUE (h)-[:FRIEND]-(f);
-commit
-
-
-begin
-MATCH (h:User), (f:User)
-WHERE h.id = 74 AND f.id = 41
-CREATE UNIQUE (h)-[:FRIEND]-(f);
-commit
-
-
-begin
-MATCH (h:User), (f:User)
-WHERE h.id = 74 AND f.id = 71
+WHERE h.id = 37 AND f.id = 23
 CREATE UNIQUE (h)-[:FRIEND]-(f);
 commit
  
     begin
-    MERGE (:User { 
-           firstname: "Teagan", lastname: "Phillips",
-           fullname: "Teagan Phillips", id: 75, 
-           gender: "male", age: 35});
-    commit
-
-begin
-MATCH (h:User), (f:User)
-WHERE h.id = 75 AND f.id = 45
-CREATE UNIQUE (h)-[:FRIEND]-(f);
-commit
- 
-    begin
-    MERGE (:User { 
-           firstname: "Kayden", lastname: "Gray",
-           fullname: "Kayden Gray", id: 76, 
-           gender: "male", age: 25});
-    commit
-
-begin
-MATCH (h:User), (f:User)
-WHERE h.id = 76 AND f.id = 50
-CREATE UNIQUE (h)-[:FRIEND]-(f);
-commit
-
-
-begin
-MATCH (h:User), (f:User)
-WHERE h.id = 76 AND f.id = 70
-CREATE UNIQUE (h)-[:FRIEND]-(f);
-commit
-
-
-begin
-MATCH (h:User), (f:User)
-WHERE h.id = 76 AND f.id = 12
-CREATE UNIQUE (h)-[:FRIEND]-(f);
-commit
-
-
-begin
-MATCH (h:User), (f:User)
-WHERE h.id = 76 AND f.id = 7
-CREATE UNIQUE (h)-[:FRIEND]-(f);
-commit
-
-
-begin
-MATCH (h:User), (f:User)
-WHERE h.id = 76 AND f.id = 25
-CREATE UNIQUE (h)-[:FRIEND]-(f);
-commit
- 
-    begin
-    MERGE (:User { 
-           firstname: "Amari", lastname: "Thomas",
-           fullname: "Amari Thomas", id: 77, 
-           gender: "male", age: 33});
-    commit
-
-begin
-MATCH (h:User), (f:User)
-WHERE h.id = 77 AND f.id = 44
-CREATE UNIQUE (h)-[:FRIEND]-(f);
-commit
- 
-    begin
-    MERGE (:User { 
-           firstname: "Ali", lastname: "Bailey",
-           fullname: "Ali Bailey", id: 78, 
-           gender: "male", age: 18});
-    commit
-
-begin
-MATCH (h:User), (f:User)
-WHERE h.id = 78 AND f.id = 69
-CREATE UNIQUE (h)-[:FRIEND]-(f);
-commit
- 
-    begin
-    MERGE (:User { 
-           firstname: "Dylan", lastname: "Stewart",
-           fullname: "Dylan Stewart", id: 79, 
+    CREATE (:User { 
+           firstname: "Skyler", lastname: "Hill",
+           fullname: "Skyler Hill", id: 38, 
            gender: "female", age: 34});
     commit
 
 begin
 MATCH (h:User), (f:User)
-WHERE h.id = 79 AND f.id = 45
+WHERE h.id = 38 AND f.id = 32
 CREATE UNIQUE (h)-[:FRIEND]-(f);
 commit
 
 
 begin
 MATCH (h:User), (f:User)
-WHERE h.id = 79 AND f.id = 75
+WHERE h.id = 38 AND f.id = 59
 CREATE UNIQUE (h)-[:FRIEND]-(f);
 commit
 
 
 begin
 MATCH (h:User), (f:User)
-WHERE h.id = 79 AND f.id = 79
-CREATE UNIQUE (h)-[:FRIEND]-(f);
-commit
-
-
-begin
-MATCH (h:User), (f:User)
-WHERE h.id = 79 AND f.id = 37
-CREATE UNIQUE (h)-[:FRIEND]-(f);
-commit
-
-
-begin
-MATCH (h:User), (f:User)
-WHERE h.id = 79 AND f.id = 33
+WHERE h.id = 38 AND f.id = 5
 CREATE UNIQUE (h)-[:FRIEND]-(f);
 commit
  
     begin
-    MERGE (:User { 
-           firstname: "Alexis", lastname: "Butler",
-           fullname: "Alexis Butler", id: 80, 
-           gender: "male", age: 32});
+    CREATE (:User { 
+           firstname: "Zion", lastname: "Edwards",
+           fullname: "Zion Edwards", id: 39, 
+           gender: "female", age: 29});
     commit
 
 begin
 MATCH (h:User), (f:User)
-WHERE h.id = 80 AND f.id = 8
+WHERE h.id = 39 AND f.id = 65
 CREATE UNIQUE (h)-[:FRIEND]-(f);
 commit
 
 
 begin
 MATCH (h:User), (f:User)
-WHERE h.id = 80 AND f.id = 74
+WHERE h.id = 39 AND f.id = 53
+CREATE UNIQUE (h)-[:FRIEND]-(f);
+commit
+
+
+begin
+MATCH (h:User), (f:User)
+WHERE h.id = 39 AND f.id = 1
+CREATE UNIQUE (h)-[:FRIEND]-(f);
+commit
+
+
+begin
+MATCH (h:User), (f:User)
+WHERE h.id = 39 AND f.id = 85
 CREATE UNIQUE (h)-[:FRIEND]-(f);
 commit
  
     begin
-    MERGE (:User { 
-           firstname: "Rylan", lastname: "Jones",
-           fullname: "Rylan Jones", id: 81, 
+    CREATE (:User { 
+           firstname: "Kendall", lastname: "Reyes",
+           fullname: "Kendall Reyes", id: 40, 
+           gender: "female", age: 20});
+    commit
+
+begin
+MATCH (h:User), (f:User)
+WHERE h.id = 40 AND f.id = 32
+CREATE UNIQUE (h)-[:FRIEND]-(f);
+commit
+ 
+    begin
+    CREATE (:User { 
+           firstname: "Riley", lastname: "Davis",
+           fullname: "Riley Davis", id: 41, 
+           gender: "male", age: 30});
+    commit
+
+begin
+MATCH (h:User), (f:User)
+WHERE h.id = 41 AND f.id = 49
+CREATE UNIQUE (h)-[:FRIEND]-(f);
+commit
+
+
+begin
+MATCH (h:User), (f:User)
+WHERE h.id = 41 AND f.id = 2
+CREATE UNIQUE (h)-[:FRIEND]-(f);
+commit
+
+
+begin
+MATCH (h:User), (f:User)
+WHERE h.id = 41 AND f.id = 0
+CREATE UNIQUE (h)-[:FRIEND]-(f);
+commit
+
+
+begin
+MATCH (h:User), (f:User)
+WHERE h.id = 41 AND f.id = 47
+CREATE UNIQUE (h)-[:FRIEND]-(f);
+commit
+ 
+    begin
+    CREATE (:User { 
+           firstname: "Phoenix", lastname: "Martínez",
+           fullname: "Phoenix Martínez", id: 42, 
+           gender: "male", age: 34});
+    commit
+
+begin
+MATCH (h:User), (f:User)
+WHERE h.id = 42 AND f.id = 41
+CREATE UNIQUE (h)-[:FRIEND]-(f);
+commit
+
+
+begin
+MATCH (h:User), (f:User)
+WHERE h.id = 42 AND f.id = 3
+CREATE UNIQUE (h)-[:FRIEND]-(f);
+commit
+
+
+begin
+MATCH (h:User), (f:User)
+WHERE h.id = 42 AND f.id = 29
+CREATE UNIQUE (h)-[:FRIEND]-(f);
+commit
+
+
+begin
+MATCH (h:User), (f:User)
+WHERE h.id = 42 AND f.id = 67
+CREATE UNIQUE (h)-[:FRIEND]-(f);
+commit
+ 
+    begin
+    CREATE (:User { 
+           firstname: "Jamie", lastname: "Hughes",
+           fullname: "Jamie Hughes", id: 43, 
+           gender: "female", age: 22});
+    commit
+
+begin
+MATCH (h:User), (f:User)
+WHERE h.id = 43 AND f.id = 36
+CREATE UNIQUE (h)-[:FRIEND]-(f);
+commit
+
+
+begin
+MATCH (h:User), (f:User)
+WHERE h.id = 43 AND f.id = 94
+CREATE UNIQUE (h)-[:FRIEND]-(f);
+commit
+
+
+begin
+MATCH (h:User), (f:User)
+WHERE h.id = 43 AND f.id = 91
+CREATE UNIQUE (h)-[:FRIEND]-(f);
+commit
+ 
+    begin
+    CREATE (:User { 
+           firstname: "Landry", lastname: "Cooper",
+           fullname: "Landry Cooper", id: 44, 
+           gender: "female", age: 19});
+    commit
+
+begin
+MATCH (h:User), (f:User)
+WHERE h.id = 44 AND f.id = 0
+CREATE UNIQUE (h)-[:FRIEND]-(f);
+commit
+
+
+begin
+MATCH (h:User), (f:User)
+WHERE h.id = 44 AND f.id = 48
+CREATE UNIQUE (h)-[:FRIEND]-(f);
+commit
+
+
+begin
+MATCH (h:User), (f:User)
+WHERE h.id = 44 AND f.id = 79
+CREATE UNIQUE (h)-[:FRIEND]-(f);
+commit
+
+
+begin
+MATCH (h:User), (f:User)
+WHERE h.id = 44 AND f.id = 18
+CREATE UNIQUE (h)-[:FRIEND]-(f);
+commit
+
+
+begin
+MATCH (h:User), (f:User)
+WHERE h.id = 44 AND f.id = 6
+CREATE UNIQUE (h)-[:FRIEND]-(f);
+commit
+
+
+begin
+MATCH (h:User), (f:User)
+WHERE h.id = 44 AND f.id = 20
+CREATE UNIQUE (h)-[:FRIEND]-(f);
+commit
+ 
+    begin
+    CREATE (:User { 
+           firstname: "Micah", lastname: "Hughes",
+           fullname: "Micah Hughes", id: 45, 
+           gender: "male", age: 30});
+    commit
+
+begin
+MATCH (h:User), (f:User)
+WHERE h.id = 45 AND f.id = 24
+CREATE UNIQUE (h)-[:FRIEND]-(f);
+commit
+
+
+begin
+MATCH (h:User), (f:User)
+WHERE h.id = 45 AND f.id = 92
+CREATE UNIQUE (h)-[:FRIEND]-(f);
+commit
+ 
+    begin
+    CREATE (:User { 
+           firstname: "Harper", lastname: "Walker",
+           fullname: "Harper Walker", id: 46, 
+           gender: "male", age: 23});
+    commit
+
+begin
+MATCH (h:User), (f:User)
+WHERE h.id = 46 AND f.id = 52
+CREATE UNIQUE (h)-[:FRIEND]-(f);
+commit
+
+
+begin
+MATCH (h:User), (f:User)
+WHERE h.id = 46 AND f.id = 22
+CREATE UNIQUE (h)-[:FRIEND]-(f);
+commit
+
+
+begin
+MATCH (h:User), (f:User)
+WHERE h.id = 46 AND f.id = 58
+CREATE UNIQUE (h)-[:FRIEND]-(f);
+commit
+
+
+begin
+MATCH (h:User), (f:User)
+WHERE h.id = 46 AND f.id = 87
+CREATE UNIQUE (h)-[:FRIEND]-(f);
+commit
+ 
+    begin
+    CREATE (:User { 
+           firstname: "Tatum", lastname: "Li",
+           fullname: "Tatum Li", id: 47, 
+           gender: "male", age: 34});
+    commit
+
+begin
+MATCH (h:User), (f:User)
+WHERE h.id = 47 AND f.id = 30
+CREATE UNIQUE (h)-[:FRIEND]-(f);
+commit
+
+
+begin
+MATCH (h:User), (f:User)
+WHERE h.id = 47 AND f.id = 88
+CREATE UNIQUE (h)-[:FRIEND]-(f);
+commit
+
+
+begin
+MATCH (h:User), (f:User)
+WHERE h.id = 47 AND f.id = 98
+CREATE UNIQUE (h)-[:FRIEND]-(f);
+commit
+
+
+begin
+MATCH (h:User), (f:User)
+WHERE h.id = 47 AND f.id = 25
+CREATE UNIQUE (h)-[:FRIEND]-(f);
+commit
+ 
+    begin
+    CREATE (:User { 
+           firstname: "Micah", lastname: "González",
+           fullname: "Micah González", id: 48, 
+           gender: "female", age: 34});
+    commit
+
+begin
+MATCH (h:User), (f:User)
+WHERE h.id = 48 AND f.id = 36
+CREATE UNIQUE (h)-[:FRIEND]-(f);
+commit
+
+
+begin
+MATCH (h:User), (f:User)
+WHERE h.id = 48 AND f.id = 87
+CREATE UNIQUE (h)-[:FRIEND]-(f);
+commit
+
+
+begin
+MATCH (h:User), (f:User)
+WHERE h.id = 48 AND f.id = 81
+CREATE UNIQUE (h)-[:FRIEND]-(f);
+commit
+
+
+begin
+MATCH (h:User), (f:User)
+WHERE h.id = 48 AND f.id = 19
+CREATE UNIQUE (h)-[:FRIEND]-(f);
+commit
+
+
+begin
+MATCH (h:User), (f:User)
+WHERE h.id = 48 AND f.id = 70
+CREATE UNIQUE (h)-[:FRIEND]-(f);
+commit
+ 
+    begin
+    CREATE (:User { 
+           firstname: "Rylee", lastname: "Butler",
+           fullname: "Rylee Butler", id: 49, 
+           gender: "male", age: 24});
+    commit
+
+begin
+MATCH (h:User), (f:User)
+WHERE h.id = 49 AND f.id = 10
+CREATE UNIQUE (h)-[:FRIEND]-(f);
+commit
+
+
+begin
+MATCH (h:User), (f:User)
+WHERE h.id = 49 AND f.id = 49
+CREATE UNIQUE (h)-[:FRIEND]-(f);
+commit
+
+
+begin
+MATCH (h:User), (f:User)
+WHERE h.id = 49 AND f.id = 7
+CREATE UNIQUE (h)-[:FRIEND]-(f);
+commit
+ 
+    begin
+    CREATE (:User { 
+           firstname: "Rowan", lastname: "Scott",
+           fullname: "Rowan Scott", id: 50, 
+           gender: "female", age: 23});
+    commit
+
+begin
+MATCH (h:User), (f:User)
+WHERE h.id = 50 AND f.id = 19
+CREATE UNIQUE (h)-[:FRIEND]-(f);
+commit
+
+
+begin
+MATCH (h:User), (f:User)
+WHERE h.id = 50 AND f.id = 78
+CREATE UNIQUE (h)-[:FRIEND]-(f);
+commit
+
+
+begin
+MATCH (h:User), (f:User)
+WHERE h.id = 50 AND f.id = 40
+CREATE UNIQUE (h)-[:FRIEND]-(f);
+commit
+
+
+begin
+MATCH (h:User), (f:User)
+WHERE h.id = 50 AND f.id = 14
+CREATE UNIQUE (h)-[:FRIEND]-(f);
+commit
+ 
+    begin
+    CREATE (:User { 
+           firstname: "Casey", lastname: "López",
+           fullname: "Casey López", id: 51, 
+           gender: "male", age: 33});
+    commit
+
+begin
+MATCH (h:User), (f:User)
+WHERE h.id = 51 AND f.id = 12
+CREATE UNIQUE (h)-[:FRIEND]-(f);
+commit
+ 
+    begin
+    CREATE (:User { 
+           firstname: "Sage", lastname: "Hill",
+           fullname: "Sage Hill", id: 52, 
+           gender: "male", age: 20});
+    commit
+
+begin
+MATCH (h:User), (f:User)
+WHERE h.id = 52 AND f.id = 55
+CREATE UNIQUE (h)-[:FRIEND]-(f);
+commit
+
+
+begin
+MATCH (h:User), (f:User)
+WHERE h.id = 52 AND f.id = 36
+CREATE UNIQUE (h)-[:FRIEND]-(f);
+commit
+
+
+begin
+MATCH (h:User), (f:User)
+WHERE h.id = 52 AND f.id = 76
+CREATE UNIQUE (h)-[:FRIEND]-(f);
+commit
+
+
+begin
+MATCH (h:User), (f:User)
+WHERE h.id = 52 AND f.id = 11
+CREATE UNIQUE (h)-[:FRIEND]-(f);
+commit
+
+
+begin
+MATCH (h:User), (f:User)
+WHERE h.id = 52 AND f.id = 35
+CREATE UNIQUE (h)-[:FRIEND]-(f);
+commit
+
+
+begin
+MATCH (h:User), (f:User)
+WHERE h.id = 52 AND f.id = 33
+CREATE UNIQUE (h)-[:FRIEND]-(f);
+commit
+ 
+    begin
+    CREATE (:User { 
+           firstname: "Jamie", lastname: "Long",
+           fullname: "Jamie Long", id: 53, 
+           gender: "female", age: 34});
+    commit
+
+begin
+MATCH (h:User), (f:User)
+WHERE h.id = 53 AND f.id = 11
+CREATE UNIQUE (h)-[:FRIEND]-(f);
+commit
+ 
+    begin
+    CREATE (:User { 
+           firstname: "Zion", lastname: "Bennett",
+           fullname: "Zion Bennett", id: 54, 
+           gender: "female", age: 20});
+    commit
+
+begin
+MATCH (h:User), (f:User)
+WHERE h.id = 54 AND f.id = 22
+CREATE UNIQUE (h)-[:FRIEND]-(f);
+commit
+
+
+begin
+MATCH (h:User), (f:User)
+WHERE h.id = 54 AND f.id = 6
+CREATE UNIQUE (h)-[:FRIEND]-(f);
+commit
+ 
+    begin
+    CREATE (:User { 
+           firstname: "Sawyer", lastname: "Martin",
+           fullname: "Sawyer Martin", id: 55, 
+           gender: "female", age: 19});
+    commit
+
+begin
+MATCH (h:User), (f:User)
+WHERE h.id = 55 AND f.id = 50
+CREATE UNIQUE (h)-[:FRIEND]-(f);
+commit
+
+
+begin
+MATCH (h:User), (f:User)
+WHERE h.id = 55 AND f.id = 8
+CREATE UNIQUE (h)-[:FRIEND]-(f);
+commit
+
+
+begin
+MATCH (h:User), (f:User)
+WHERE h.id = 55 AND f.id = 18
+CREATE UNIQUE (h)-[:FRIEND]-(f);
+commit
+ 
+    begin
+    CREATE (:User { 
+           firstname: "Cameron", lastname: "Ward",
+           fullname: "Cameron Ward", id: 56, 
+           gender: "female", age: 34});
+    commit
+
+begin
+MATCH (h:User), (f:User)
+WHERE h.id = 56 AND f.id = 34
+CREATE UNIQUE (h)-[:FRIEND]-(f);
+commit
+
+
+begin
+MATCH (h:User), (f:User)
+WHERE h.id = 56 AND f.id = 44
+CREATE UNIQUE (h)-[:FRIEND]-(f);
+commit
+
+
+begin
+MATCH (h:User), (f:User)
+WHERE h.id = 56 AND f.id = 11
+CREATE UNIQUE (h)-[:FRIEND]-(f);
+commit
+
+
+begin
+MATCH (h:User), (f:User)
+WHERE h.id = 56 AND f.id = 98
+CREATE UNIQUE (h)-[:FRIEND]-(f);
+commit
+
+
+begin
+MATCH (h:User), (f:User)
+WHERE h.id = 56 AND f.id = 23
+CREATE UNIQUE (h)-[:FRIEND]-(f);
+commit
+
+
+begin
+MATCH (h:User), (f:User)
+WHERE h.id = 56 AND f.id = 20
+CREATE UNIQUE (h)-[:FRIEND]-(f);
+commit
+ 
+    begin
+    CREATE (:User { 
+           firstname: "Sawyer", lastname: "Clark",
+           fullname: "Sawyer Clark", id: 57, 
+           gender: "female", age: 27});
+    commit
+
+begin
+MATCH (h:User), (f:User)
+WHERE h.id = 57 AND f.id = 76
+CREATE UNIQUE (h)-[:FRIEND]-(f);
+commit
+
+
+begin
+MATCH (h:User), (f:User)
+WHERE h.id = 57 AND f.id = 70
+CREATE UNIQUE (h)-[:FRIEND]-(f);
+commit
+
+
+begin
+MATCH (h:User), (f:User)
+WHERE h.id = 57 AND f.id = 28
+CREATE UNIQUE (h)-[:FRIEND]-(f);
+commit
+
+
+begin
+MATCH (h:User), (f:User)
+WHERE h.id = 57 AND f.id = 4
+CREATE UNIQUE (h)-[:FRIEND]-(f);
+commit
+ 
+    begin
+    CREATE (:User { 
+           firstname: "Emory", lastname: "Pérez",
+           fullname: "Emory Pérez", id: 58, 
+           gender: "male", age: 29});
+    commit
+
+begin
+MATCH (h:User), (f:User)
+WHERE h.id = 58 AND f.id = 32
+CREATE UNIQUE (h)-[:FRIEND]-(f);
+commit
+
+
+begin
+MATCH (h:User), (f:User)
+WHERE h.id = 58 AND f.id = 64
+CREATE UNIQUE (h)-[:FRIEND]-(f);
+commit
+ 
+    begin
+    CREATE (:User { 
+           firstname: "Payton", lastname: "Richardson",
+           fullname: "Payton Richardson", id: 59, 
            gender: "female", age: 33});
     commit
 
 begin
 MATCH (h:User), (f:User)
-WHERE h.id = 81 AND f.id = 54
+WHERE h.id = 59 AND f.id = 49
+CREATE UNIQUE (h)-[:FRIEND]-(f);
+commit
+
+
+begin
+MATCH (h:User), (f:User)
+WHERE h.id = 59 AND f.id = 45
+CREATE UNIQUE (h)-[:FRIEND]-(f);
+commit
+
+
+begin
+MATCH (h:User), (f:User)
+WHERE h.id = 59 AND f.id = 49
+CREATE UNIQUE (h)-[:FRIEND]-(f);
+commit
+
+
+begin
+MATCH (h:User), (f:User)
+WHERE h.id = 59 AND f.id = 45
+CREATE UNIQUE (h)-[:FRIEND]-(f);
+commit
+
+
+begin
+MATCH (h:User), (f:User)
+WHERE h.id = 59 AND f.id = 7
+CREATE UNIQUE (h)-[:FRIEND]-(f);
+commit
+
+
+begin
+MATCH (h:User), (f:User)
+WHERE h.id = 59 AND f.id = 1
+CREATE UNIQUE (h)-[:FRIEND]-(f);
+commit
+ 
+    begin
+    CREATE (:User { 
+           firstname: "Ali", lastname: "González",
+           fullname: "Ali González", id: 60, 
+           gender: "male", age: 24});
+    commit
+
+begin
+MATCH (h:User), (f:User)
+WHERE h.id = 60 AND f.id = 88
+CREATE UNIQUE (h)-[:FRIEND]-(f);
+commit
+ 
+    begin
+    CREATE (:User { 
+           firstname: "Charlie", lastname: "Lewis",
+           fullname: "Charlie Lewis", id: 61, 
+           gender: "male", age: 22});
+    commit
+
+begin
+MATCH (h:User), (f:User)
+WHERE h.id = 61 AND f.id = 10
+CREATE UNIQUE (h)-[:FRIEND]-(f);
+commit
+ 
+    begin
+    CREATE (:User { 
+           firstname: "Elliot", lastname: "Jackson",
+           fullname: "Elliot Jackson", id: 62, 
+           gender: "male", age: 20});
+    commit
+
+begin
+MATCH (h:User), (f:User)
+WHERE h.id = 62 AND f.id = 41
+CREATE UNIQUE (h)-[:FRIEND]-(f);
+commit
+ 
+    begin
+    CREATE (:User { 
+           firstname: "Logan", lastname: "Sánchez",
+           fullname: "Logan Sánchez", id: 63, 
+           gender: "male", age: 19});
+    commit
+
+begin
+MATCH (h:User), (f:User)
+WHERE h.id = 63 AND f.id = 61
+CREATE UNIQUE (h)-[:FRIEND]-(f);
+commit
+
+
+begin
+MATCH (h:User), (f:User)
+WHERE h.id = 63 AND f.id = 58
+CREATE UNIQUE (h)-[:FRIEND]-(f);
+commit
+
+
+begin
+MATCH (h:User), (f:User)
+WHERE h.id = 63 AND f.id = 45
+CREATE UNIQUE (h)-[:FRIEND]-(f);
+commit
+ 
+    begin
+    CREATE (:User { 
+           firstname: "Emerson", lastname: "Gómez",
+           fullname: "Emerson Gómez", id: 64, 
+           gender: "female", age: 26});
+    commit
+
+begin
+MATCH (h:User), (f:User)
+WHERE h.id = 64 AND f.id = 79
+CREATE UNIQUE (h)-[:FRIEND]-(f);
+commit
+
+
+begin
+MATCH (h:User), (f:User)
+WHERE h.id = 64 AND f.id = 23
+CREATE UNIQUE (h)-[:FRIEND]-(f);
+commit
+ 
+    begin
+    CREATE (:User { 
+           firstname: "Kendall", lastname: "Russell",
+           fullname: "Kendall Russell", id: 65, 
+           gender: "male", age: 21});
+    commit
+
+begin
+MATCH (h:User), (f:User)
+WHERE h.id = 65 AND f.id = 61
+CREATE UNIQUE (h)-[:FRIEND]-(f);
+commit
+
+
+begin
+MATCH (h:User), (f:User)
+WHERE h.id = 65 AND f.id = 47
+CREATE UNIQUE (h)-[:FRIEND]-(f);
+commit
+
+
+begin
+MATCH (h:User), (f:User)
+WHERE h.id = 65 AND f.id = 20
+CREATE UNIQUE (h)-[:FRIEND]-(f);
+commit
+
+
+begin
+MATCH (h:User), (f:User)
+WHERE h.id = 65 AND f.id = 16
+CREATE UNIQUE (h)-[:FRIEND]-(f);
+commit
+
+
+begin
+MATCH (h:User), (f:User)
+WHERE h.id = 65 AND f.id = 62
+CREATE UNIQUE (h)-[:FRIEND]-(f);
+commit
+
+
+begin
+MATCH (h:User), (f:User)
+WHERE h.id = 65 AND f.id = 29
+CREATE UNIQUE (h)-[:FRIEND]-(f);
+commit
+ 
+    begin
+    CREATE (:User { 
+           firstname: "Armani", lastname: "Long",
+           fullname: "Armani Long", id: 66, 
+           gender: "female", age: 22});
+    commit
+
+begin
+MATCH (h:User), (f:User)
+WHERE h.id = 66 AND f.id = 40
+CREATE UNIQUE (h)-[:FRIEND]-(f);
+commit
+ 
+    begin
+    CREATE (:User { 
+           firstname: "Ali", lastname: "Watson",
+           fullname: "Ali Watson", id: 67, 
+           gender: "male", age: 24});
+    commit
+
+begin
+MATCH (h:User), (f:User)
+WHERE h.id = 67 AND f.id = 20
+CREATE UNIQUE (h)-[:FRIEND]-(f);
+commit
+
+
+begin
+MATCH (h:User), (f:User)
+WHERE h.id = 67 AND f.id = 30
+CREATE UNIQUE (h)-[:FRIEND]-(f);
+commit
+
+
+begin
+MATCH (h:User), (f:User)
+WHERE h.id = 67 AND f.id = 31
+CREATE UNIQUE (h)-[:FRIEND]-(f);
+commit
+
+
+begin
+MATCH (h:User), (f:User)
+WHERE h.id = 67 AND f.id = 59
+CREATE UNIQUE (h)-[:FRIEND]-(f);
+commit
+
+
+begin
+MATCH (h:User), (f:User)
+WHERE h.id = 67 AND f.id = 77
+CREATE UNIQUE (h)-[:FRIEND]-(f);
+commit
+
+
+begin
+MATCH (h:User), (f:User)
+WHERE h.id = 67 AND f.id = 13
+CREATE UNIQUE (h)-[:FRIEND]-(f);
+commit
+ 
+    begin
+    CREATE (:User { 
+           firstname: "Charlie", lastname: "Harris",
+           fullname: "Charlie Harris", id: 68, 
+           gender: "female", age: 28});
+    commit
+
+begin
+MATCH (h:User), (f:User)
+WHERE h.id = 68 AND f.id = 17
+CREATE UNIQUE (h)-[:FRIEND]-(f);
+commit
+ 
+    begin
+    CREATE (:User { 
+           firstname: "Rylan", lastname: "Murphy",
+           fullname: "Rylan Murphy", id: 69, 
+           gender: "male", age: 23});
+    commit
+
+begin
+MATCH (h:User), (f:User)
+WHERE h.id = 69 AND f.id = 86
+CREATE UNIQUE (h)-[:FRIEND]-(f);
+commit
+
+
+begin
+MATCH (h:User), (f:User)
+WHERE h.id = 69 AND f.id = 59
+CREATE UNIQUE (h)-[:FRIEND]-(f);
+commit
+
+
+begin
+MATCH (h:User), (f:User)
+WHERE h.id = 69 AND f.id = 40
+CREATE UNIQUE (h)-[:FRIEND]-(f);
+commit
+
+
+begin
+MATCH (h:User), (f:User)
+WHERE h.id = 69 AND f.id = 14
+CREATE UNIQUE (h)-[:FRIEND]-(f);
+commit
+
+
+begin
+MATCH (h:User), (f:User)
+WHERE h.id = 69 AND f.id = 74
+CREATE UNIQUE (h)-[:FRIEND]-(f);
+commit
+ 
+    begin
+    CREATE (:User { 
+           firstname: "Ryan", lastname: "Hall",
+           fullname: "Ryan Hall", id: 70, 
+           gender: "male", age: 28});
+    commit
+
+begin
+MATCH (h:User), (f:User)
+WHERE h.id = 70 AND f.id = 9
+CREATE UNIQUE (h)-[:FRIEND]-(f);
+commit
+
+
+begin
+MATCH (h:User), (f:User)
+WHERE h.id = 70 AND f.id = 15
+CREATE UNIQUE (h)-[:FRIEND]-(f);
+commit
+
+
+begin
+MATCH (h:User), (f:User)
+WHERE h.id = 70 AND f.id = 23
+CREATE UNIQUE (h)-[:FRIEND]-(f);
+commit
+
+
+begin
+MATCH (h:User), (f:User)
+WHERE h.id = 70 AND f.id = 30
+CREATE UNIQUE (h)-[:FRIEND]-(f);
+commit
+
+
+begin
+MATCH (h:User), (f:User)
+WHERE h.id = 70 AND f.id = 4
+CREATE UNIQUE (h)-[:FRIEND]-(f);
+commit
+
+
+begin
+MATCH (h:User), (f:User)
+WHERE h.id = 70 AND f.id = 5
+CREATE UNIQUE (h)-[:FRIEND]-(f);
+commit
+ 
+    begin
+    CREATE (:User { 
+           firstname: "Quinn", lastname: "Rodríguez",
+           fullname: "Quinn Rodríguez", id: 71, 
+           gender: "male", age: 27});
+    commit
+
+begin
+MATCH (h:User), (f:User)
+WHERE h.id = 71 AND f.id = 55
+CREATE UNIQUE (h)-[:FRIEND]-(f);
+commit
+
+
+begin
+MATCH (h:User), (f:User)
+WHERE h.id = 71 AND f.id = 64
+CREATE UNIQUE (h)-[:FRIEND]-(f);
+commit
+
+
+begin
+MATCH (h:User), (f:User)
+WHERE h.id = 71 AND f.id = 66
+CREATE UNIQUE (h)-[:FRIEND]-(f);
+commit
+ 
+    begin
+    CREATE (:User { 
+           firstname: "Zion", lastname: "Jackson",
+           fullname: "Zion Jackson", id: 72, 
+           gender: "female", age: 35});
+    commit
+
+begin
+MATCH (h:User), (f:User)
+WHERE h.id = 72 AND f.id = 1
+CREATE UNIQUE (h)-[:FRIEND]-(f);
+commit
+ 
+    begin
+    CREATE (:User { 
+           firstname: "Skylar", lastname: "Williams",
+           fullname: "Skylar Williams", id: 73, 
+           gender: "male", age: 26});
+    commit
+
+begin
+MATCH (h:User), (f:User)
+WHERE h.id = 73 AND f.id = 54
+CREATE UNIQUE (h)-[:FRIEND]-(f);
+commit
+
+
+begin
+MATCH (h:User), (f:User)
+WHERE h.id = 73 AND f.id = 97
+CREATE UNIQUE (h)-[:FRIEND]-(f);
+commit
+
+
+begin
+MATCH (h:User), (f:User)
+WHERE h.id = 73 AND f.id = 90
+CREATE UNIQUE (h)-[:FRIEND]-(f);
+commit
+
+
+begin
+MATCH (h:User), (f:User)
+WHERE h.id = 73 AND f.id = 26
+CREATE UNIQUE (h)-[:FRIEND]-(f);
+commit
+
+
+begin
+MATCH (h:User), (f:User)
+WHERE h.id = 73 AND f.id = 9
+CREATE UNIQUE (h)-[:FRIEND]-(f);
+commit
+
+
+begin
+MATCH (h:User), (f:User)
+WHERE h.id = 73 AND f.id = 31
+CREATE UNIQUE (h)-[:FRIEND]-(f);
+commit
+ 
+    begin
+    CREATE (:User { 
+           firstname: "Tatum", lastname: "Walker",
+           fullname: "Tatum Walker", id: 74, 
+           gender: "female", age: 34});
+    commit
+
+begin
+MATCH (h:User), (f:User)
+WHERE h.id = 74 AND f.id = 20
+CREATE UNIQUE (h)-[:FRIEND]-(f);
+commit
+ 
+    begin
+    CREATE (:User { 
+           firstname: "Phoenix", lastname: "López",
+           fullname: "Phoenix López", id: 75, 
+           gender: "female", age: 20});
+    commit
+
+begin
+MATCH (h:User), (f:User)
+WHERE h.id = 75 AND f.id = 10
+CREATE UNIQUE (h)-[:FRIEND]-(f);
+commit
+ 
+    begin
+    CREATE (:User { 
+           firstname: "Logan", lastname: "Harris",
+           fullname: "Logan Harris", id: 76, 
+           gender: "female", age: 25});
+    commit
+
+begin
+MATCH (h:User), (f:User)
+WHERE h.id = 76 AND f.id = 2
+CREATE UNIQUE (h)-[:FRIEND]-(f);
+commit
+
+
+begin
+MATCH (h:User), (f:User)
+WHERE h.id = 76 AND f.id = 49
+CREATE UNIQUE (h)-[:FRIEND]-(f);
+commit
+
+
+begin
+MATCH (h:User), (f:User)
+WHERE h.id = 76 AND f.id = 56
+CREATE UNIQUE (h)-[:FRIEND]-(f);
+commit
+
+
+begin
+MATCH (h:User), (f:User)
+WHERE h.id = 76 AND f.id = 57
+CREATE UNIQUE (h)-[:FRIEND]-(f);
+commit
+ 
+    begin
+    CREATE (:User { 
+           firstname: "Casey", lastname: "Rivera",
+           fullname: "Casey Rivera", id: 77, 
+           gender: "male", age: 25});
+    commit
+
+begin
+MATCH (h:User), (f:User)
+WHERE h.id = 77 AND f.id = 11
+CREATE UNIQUE (h)-[:FRIEND]-(f);
+commit
+
+
+begin
+MATCH (h:User), (f:User)
+WHERE h.id = 77 AND f.id = 95
+CREATE UNIQUE (h)-[:FRIEND]-(f);
+commit
+ 
+    begin
+    CREATE (:User { 
+           firstname: "Kai", lastname: "Ramírez",
+           fullname: "Kai Ramírez", id: 78, 
+           gender: "male", age: 20});
+    commit
+
+begin
+MATCH (h:User), (f:User)
+WHERE h.id = 78 AND f.id = 32
+CREATE UNIQUE (h)-[:FRIEND]-(f);
+commit
+ 
+    begin
+    CREATE (:User { 
+           firstname: "Ryan", lastname: "Rogers",
+           fullname: "Ryan Rogers", id: 79, 
+           gender: "male", age: 30});
+    commit
+
+begin
+MATCH (h:User), (f:User)
+WHERE h.id = 79 AND f.id = 69
+CREATE UNIQUE (h)-[:FRIEND]-(f);
+commit
+ 
+    begin
+    CREATE (:User { 
+           firstname: "Jamie", lastname: "Green",
+           fullname: "Jamie Green", id: 80, 
+           gender: "female", age: 28});
+    commit
+
+begin
+MATCH (h:User), (f:User)
+WHERE h.id = 80 AND f.id = 84
+CREATE UNIQUE (h)-[:FRIEND]-(f);
+commit
+
+
+begin
+MATCH (h:User), (f:User)
+WHERE h.id = 80 AND f.id = 3
+CREATE UNIQUE (h)-[:FRIEND]-(f);
+commit
+
+
+begin
+MATCH (h:User), (f:User)
+WHERE h.id = 80 AND f.id = 10
+CREATE UNIQUE (h)-[:FRIEND]-(f);
+commit
+
+
+begin
+MATCH (h:User), (f:User)
+WHERE h.id = 80 AND f.id = 46
+CREATE UNIQUE (h)-[:FRIEND]-(f);
+commit
+ 
+    begin
+    CREATE (:User { 
+           firstname: "Morgan", lastname: "Green",
+           fullname: "Morgan Green", id: 81, 
+           gender: "female", age: 34});
+    commit
+
+begin
+MATCH (h:User), (f:User)
+WHERE h.id = 81 AND f.id = 47
 CREATE UNIQUE (h)-[:FRIEND]-(f);
 commit
 
@@ -13351,244 +13554,216 @@ commit
 
 begin
 MATCH (h:User), (f:User)
-WHERE h.id = 81 AND f.id = 40
-CREATE UNIQUE (h)-[:FRIEND]-(f);
-commit
-
-
-begin
-MATCH (h:User), (f:User)
-WHERE h.id = 81 AND f.id = 43
-CREATE UNIQUE (h)-[:FRIEND]-(f);
-commit
-
-
-begin
-MATCH (h:User), (f:User)
-WHERE h.id = 81 AND f.id = 23
-CREATE UNIQUE (h)-[:FRIEND]-(f);
-commit
-
-
-begin
-MATCH (h:User), (f:User)
-WHERE h.id = 81 AND f.id = 37
+WHERE h.id = 81 AND f.id = 24
 CREATE UNIQUE (h)-[:FRIEND]-(f);
 commit
  
     begin
-    MERGE (:User { 
-           firstname: "Harley", lastname: "Bennett",
-           fullname: "Harley Bennett", id: 82, 
-           gender: "female", age: 29});
+    CREATE (:User { 
+           firstname: "Camryn", lastname: "Murphy",
+           fullname: "Camryn Murphy", id: 82, 
+           gender: "male", age: 26});
     commit
 
 begin
 MATCH (h:User), (f:User)
-WHERE h.id = 82 AND f.id = 8
-CREATE UNIQUE (h)-[:FRIEND]-(f);
-commit
-
-
-begin
-MATCH (h:User), (f:User)
-WHERE h.id = 82 AND f.id = 11
-CREATE UNIQUE (h)-[:FRIEND]-(f);
-commit
-
-
-begin
-MATCH (h:User), (f:User)
-WHERE h.id = 82 AND f.id = 34
-CREATE UNIQUE (h)-[:FRIEND]-(f);
-commit
-
-
-begin
-MATCH (h:User), (f:User)
-WHERE h.id = 82 AND f.id = 91
+WHERE h.id = 82 AND f.id = 51
 CREATE UNIQUE (h)-[:FRIEND]-(f);
 commit
  
     begin
-    MERGE (:User { 
-           firstname: "Harley", lastname: "Long",
-           fullname: "Harley Long", id: 83, 
-           gender: "male", age: 33});
+    CREATE (:User { 
+           firstname: "Parker", lastname: "Thompson",
+           fullname: "Parker Thompson", id: 83, 
+           gender: "female", age: 30});
     commit
 
 begin
 MATCH (h:User), (f:User)
-WHERE h.id = 83 AND f.id = 76
+WHERE h.id = 83 AND f.id = 21
 CREATE UNIQUE (h)-[:FRIEND]-(f);
 commit
 
 
 begin
 MATCH (h:User), (f:User)
-WHERE h.id = 83 AND f.id = 68
+WHERE h.id = 83 AND f.id = 72
 CREATE UNIQUE (h)-[:FRIEND]-(f);
 commit
 
 
 begin
 MATCH (h:User), (f:User)
-WHERE h.id = 83 AND f.id = 51
-CREATE UNIQUE (h)-[:FRIEND]-(f);
-commit
-
-
-begin
-MATCH (h:User), (f:User)
-WHERE h.id = 83 AND f.id = 89
-CREATE UNIQUE (h)-[:FRIEND]-(f);
-commit
-
-
-begin
-MATCH (h:User), (f:User)
-WHERE h.id = 83 AND f.id = 69
-CREATE UNIQUE (h)-[:FRIEND]-(f);
-commit
-
-
-begin
-MATCH (h:User), (f:User)
-WHERE h.id = 83 AND f.id = 74
+WHERE h.id = 83 AND f.id = 47
 CREATE UNIQUE (h)-[:FRIEND]-(f);
 commit
  
     begin
-    MERGE (:User { 
-           firstname: "Jaylin", lastname: "Ward",
-           fullname: "Jaylin Ward", id: 84, 
+    CREATE (:User { 
+           firstname: "Armani", lastname: "Scott",
+           fullname: "Armani Scott", id: 84, 
+           gender: "male", age: 27});
+    commit
+
+begin
+MATCH (h:User), (f:User)
+WHERE h.id = 84 AND f.id = 6
+CREATE UNIQUE (h)-[:FRIEND]-(f);
+commit
+
+
+begin
+MATCH (h:User), (f:User)
+WHERE h.id = 84 AND f.id = 5
+CREATE UNIQUE (h)-[:FRIEND]-(f);
+commit
+
+
+begin
+MATCH (h:User), (f:User)
+WHERE h.id = 84 AND f.id = 24
+CREATE UNIQUE (h)-[:FRIEND]-(f);
+commit
+
+
+begin
+MATCH (h:User), (f:User)
+WHERE h.id = 84 AND f.id = 38
+CREATE UNIQUE (h)-[:FRIEND]-(f);
+commit
+
+
+begin
+MATCH (h:User), (f:User)
+WHERE h.id = 84 AND f.id = 10
+CREATE UNIQUE (h)-[:FRIEND]-(f);
+commit
+ 
+    begin
+    CREATE (:User { 
+           firstname: "Zion", lastname: "Cox",
+           fullname: "Zion Cox", id: 85, 
+           gender: "male", age: 31});
+    commit
+
+begin
+MATCH (h:User), (f:User)
+WHERE h.id = 85 AND f.id = 2
+CREATE UNIQUE (h)-[:FRIEND]-(f);
+commit
+
+
+begin
+MATCH (h:User), (f:User)
+WHERE h.id = 85 AND f.id = 61
+CREATE UNIQUE (h)-[:FRIEND]-(f);
+commit
+ 
+    begin
+    CREATE (:User { 
+           firstname: "Rylan", lastname: "Bennett",
+           fullname: "Rylan Bennett", id: 86, 
+           gender: "female", age: 21});
+    commit
+
+begin
+MATCH (h:User), (f:User)
+WHERE h.id = 86 AND f.id = 67
+CREATE UNIQUE (h)-[:FRIEND]-(f);
+commit
+
+
+begin
+MATCH (h:User), (f:User)
+WHERE h.id = 86 AND f.id = 70
+CREATE UNIQUE (h)-[:FRIEND]-(f);
+commit
+
+
+begin
+MATCH (h:User), (f:User)
+WHERE h.id = 86 AND f.id = 40
+CREATE UNIQUE (h)-[:FRIEND]-(f);
+commit
+
+
+begin
+MATCH (h:User), (f:User)
+WHERE h.id = 86 AND f.id = 89
+CREATE UNIQUE (h)-[:FRIEND]-(f);
+commit
+
+
+begin
+MATCH (h:User), (f:User)
+WHERE h.id = 86 AND f.id = 27
+CREATE UNIQUE (h)-[:FRIEND]-(f);
+commit
+
+
+begin
+MATCH (h:User), (f:User)
+WHERE h.id = 86 AND f.id = 14
+CREATE UNIQUE (h)-[:FRIEND]-(f);
+commit
+ 
+    begin
+    CREATE (:User { 
+           firstname: "Reagan", lastname: "Torres",
+           fullname: "Reagan Torres", id: 87, 
            gender: "female", age: 28});
     commit
 
 begin
 MATCH (h:User), (f:User)
-WHERE h.id = 84 AND f.id = 44
+WHERE h.id = 87 AND f.id = 36
 CREATE UNIQUE (h)-[:FRIEND]-(f);
 commit
 
 
 begin
 MATCH (h:User), (f:User)
-WHERE h.id = 84 AND f.id = 45
+WHERE h.id = 87 AND f.id = 74
+CREATE UNIQUE (h)-[:FRIEND]-(f);
+commit
+
+
+begin
+MATCH (h:User), (f:User)
+WHERE h.id = 87 AND f.id = 22
 CREATE UNIQUE (h)-[:FRIEND]-(f);
 commit
  
     begin
-    MERGE (:User { 
-           firstname: "Emerson", lastname: "Ramírez",
-           fullname: "Emerson Ramírez", id: 85, 
-           gender: "female", age: 31});
-    commit
-
-begin
-MATCH (h:User), (f:User)
-WHERE h.id = 85 AND f.id = 29
-CREATE UNIQUE (h)-[:FRIEND]-(f);
-commit
-
-
-begin
-MATCH (h:User), (f:User)
-WHERE h.id = 85 AND f.id = 28
-CREATE UNIQUE (h)-[:FRIEND]-(f);
-commit
-
-
-begin
-MATCH (h:User), (f:User)
-WHERE h.id = 85 AND f.id = 8
-CREATE UNIQUE (h)-[:FRIEND]-(f);
-commit
-
-
-begin
-MATCH (h:User), (f:User)
-WHERE h.id = 85 AND f.id = 25
-CREATE UNIQUE (h)-[:FRIEND]-(f);
-commit
- 
-    begin
-    MERGE (:User { 
-           firstname: "Hayden", lastname: "Baker",
-           fullname: "Hayden Baker", id: 86, 
-           gender: "male", age: 32});
-    commit
-
-begin
-MATCH (h:User), (f:User)
-WHERE h.id = 86 AND f.id = 6
-CREATE UNIQUE (h)-[:FRIEND]-(f);
-commit
-
-
-begin
-MATCH (h:User), (f:User)
-WHERE h.id = 86 AND f.id = 15
-CREATE UNIQUE (h)-[:FRIEND]-(f);
-commit
- 
-    begin
-    MERGE (:User { 
-           firstname: "Emory", lastname: "Wong",
-           fullname: "Emory Wong", id: 87, 
-           gender: "female", age: 33});
-    commit
-
-begin
-MATCH (h:User), (f:User)
-WHERE h.id = 87 AND f.id = 27
-CREATE UNIQUE (h)-[:FRIEND]-(f);
-commit
-
-
-begin
-MATCH (h:User), (f:User)
-WHERE h.id = 87 AND f.id = 33
-CREATE UNIQUE (h)-[:FRIEND]-(f);
-commit
-
-
-begin
-MATCH (h:User), (f:User)
-WHERE h.id = 87 AND f.id = 35
-CREATE UNIQUE (h)-[:FRIEND]-(f);
-commit
- 
-    begin
-    MERGE (:User { 
-           firstname: "Dylan", lastname: "Jones",
-           fullname: "Dylan Jones", id: 88, 
-           gender: "male", age: 19});
-    commit
-
-begin
-MATCH (h:User), (f:User)
-WHERE h.id = 88 AND f.id = 74
-CREATE UNIQUE (h)-[:FRIEND]-(f);
-commit
-
-
-begin
-MATCH (h:User), (f:User)
-WHERE h.id = 88 AND f.id = 88
-CREATE UNIQUE (h)-[:FRIEND]-(f);
-commit
- 
-    begin
-    MERGE (:User { 
-           firstname: "Sage", lastname: "Nelson",
-           fullname: "Sage Nelson", id: 89, 
+    CREATE (:User { 
+           firstname: "Alexis", lastname: "Hernández",
+           fullname: "Alexis Hernández", id: 88, 
            gender: "male", age: 24});
     commit
 
 begin
 MATCH (h:User), (f:User)
-WHERE h.id = 89 AND f.id = 15
+WHERE h.id = 88 AND f.id = 79
+CREATE UNIQUE (h)-[:FRIEND]-(f);
+commit
+
+
+begin
+MATCH (h:User), (f:User)
+WHERE h.id = 88 AND f.id = 12
+CREATE UNIQUE (h)-[:FRIEND]-(f);
+commit
+ 
+    begin
+    CREATE (:User { 
+           firstname: "Peyton", lastname: "Thompson",
+           fullname: "Peyton Thompson", id: 89, 
+           gender: "male", age: 18});
+    commit
+
+begin
+MATCH (h:User), (f:User)
+WHERE h.id = 89 AND f.id = 66
 CREATE UNIQUE (h)-[:FRIEND]-(f);
 commit
 
@@ -13602,47 +13777,103 @@ commit
 
 begin
 MATCH (h:User), (f:User)
-WHERE h.id = 89 AND f.id = 37
+WHERE h.id = 89 AND f.id = 75
+CREATE UNIQUE (h)-[:FRIEND]-(f);
+commit
+
+
+begin
+MATCH (h:User), (f:User)
+WHERE h.id = 89 AND f.id = 7
+CREATE UNIQUE (h)-[:FRIEND]-(f);
+commit
+
+
+begin
+MATCH (h:User), (f:User)
+WHERE h.id = 89 AND f.id = 79
+CREATE UNIQUE (h)-[:FRIEND]-(f);
+commit
+
+
+begin
+MATCH (h:User), (f:User)
+WHERE h.id = 89 AND f.id = 63
 CREATE UNIQUE (h)-[:FRIEND]-(f);
 commit
  
     begin
-    MERGE (:User { 
-           firstname: "Jordyn", lastname: "García",
-           fullname: "Jordyn García", id: 90, 
-           gender: "male", age: 26});
+    CREATE (:User { 
+           firstname: "Hayden", lastname: "Phillips",
+           fullname: "Hayden Phillips", id: 90, 
+           gender: "male", age: 22});
     commit
 
 begin
 MATCH (h:User), (f:User)
-WHERE h.id = 90 AND f.id = 28
+WHERE h.id = 90 AND f.id = 31
 CREATE UNIQUE (h)-[:FRIEND]-(f);
 commit
 
 
 begin
 MATCH (h:User), (f:User)
-WHERE h.id = 90 AND f.id = 73
+WHERE h.id = 90 AND f.id = 78
+CREATE UNIQUE (h)-[:FRIEND]-(f);
+commit
+
+
+begin
+MATCH (h:User), (f:User)
+WHERE h.id = 90 AND f.id = 4
+CREATE UNIQUE (h)-[:FRIEND]-(f);
+commit
+
+
+begin
+MATCH (h:User), (f:User)
+WHERE h.id = 90 AND f.id = 70
+CREATE UNIQUE (h)-[:FRIEND]-(f);
+commit
+
+
+begin
+MATCH (h:User), (f:User)
+WHERE h.id = 90 AND f.id = 24
+CREATE UNIQUE (h)-[:FRIEND]-(f);
+commit
+
+
+begin
+MATCH (h:User), (f:User)
+WHERE h.id = 90 AND f.id = 88
 CREATE UNIQUE (h)-[:FRIEND]-(f);
 commit
  
     begin
-    MERGE (:User { 
-           firstname: "Sawyer", lastname: "Ross",
-           fullname: "Sawyer Ross", id: 91, 
-           gender: "male", age: 33});
+    CREATE (:User { 
+           firstname: "Finley", lastname: "Sullivan",
+           fullname: "Finley Sullivan", id: 91, 
+           gender: "female", age: 24});
     commit
 
 begin
 MATCH (h:User), (f:User)
-WHERE h.id = 91 AND f.id = 20
+WHERE h.id = 91 AND f.id = 40
 CREATE UNIQUE (h)-[:FRIEND]-(f);
 commit
 
 
 begin
 MATCH (h:User), (f:User)
-WHERE h.id = 91 AND f.id = 43
+WHERE h.id = 91 AND f.id = 62
+CREATE UNIQUE (h)-[:FRIEND]-(f);
+commit
+
+
+begin
+MATCH (h:User), (f:User)
+WHERE h.id = 91 AND f.id = 41
 CREATE UNIQUE (h)-[:FRIEND]-(f);
 commit
 
@@ -13654,232 +13885,190 @@ CREATE UNIQUE (h)-[:FRIEND]-(f);
 commit
  
     begin
-    MERGE (:User { 
-           firstname: "Ariel", lastname: "Gray",
-           fullname: "Ariel Gray", id: 92, 
-           gender: "female", age: 29});
-    commit
-
-begin
-MATCH (h:User), (f:User)
-WHERE h.id = 92 AND f.id = 88
-CREATE UNIQUE (h)-[:FRIEND]-(f);
-commit
-
-
-begin
-MATCH (h:User), (f:User)
-WHERE h.id = 92 AND f.id = 32
-CREATE UNIQUE (h)-[:FRIEND]-(f);
-commit
-
-
-begin
-MATCH (h:User), (f:User)
-WHERE h.id = 92 AND f.id = 91
-CREATE UNIQUE (h)-[:FRIEND]-(f);
-commit
- 
-    begin
-    MERGE (:User { 
-           firstname: "Dakota", lastname: "Wood",
-           fullname: "Dakota Wood", id: 93, 
-           gender: "male", age: 21});
-    commit
-
-begin
-MATCH (h:User), (f:User)
-WHERE h.id = 93 AND f.id = 62
-CREATE UNIQUE (h)-[:FRIEND]-(f);
-commit
-
-
-begin
-MATCH (h:User), (f:User)
-WHERE h.id = 93 AND f.id = 10
-CREATE UNIQUE (h)-[:FRIEND]-(f);
-commit
-
-
-begin
-MATCH (h:User), (f:User)
-WHERE h.id = 93 AND f.id = 90
-CREATE UNIQUE (h)-[:FRIEND]-(f);
-commit
- 
-    begin
-    MERGE (:User { 
-           firstname: "Jamie", lastname: "Peterson",
-           fullname: "Jamie Peterson", id: 94, 
-           gender: "male", age: 18});
-    commit
-
-begin
-MATCH (h:User), (f:User)
-WHERE h.id = 94 AND f.id = 4
-CREATE UNIQUE (h)-[:FRIEND]-(f);
-commit
-
-
-begin
-MATCH (h:User), (f:User)
-WHERE h.id = 94 AND f.id = 49
-CREATE UNIQUE (h)-[:FRIEND]-(f);
-commit
-
-
-begin
-MATCH (h:User), (f:User)
-WHERE h.id = 94 AND f.id = 78
-CREATE UNIQUE (h)-[:FRIEND]-(f);
-commit
-
-
-begin
-MATCH (h:User), (f:User)
-WHERE h.id = 94 AND f.id = 18
-CREATE UNIQUE (h)-[:FRIEND]-(f);
-commit
-
-
-begin
-MATCH (h:User), (f:User)
-WHERE h.id = 94 AND f.id = 85
-CREATE UNIQUE (h)-[:FRIEND]-(f);
-commit
- 
-    begin
-    MERGE (:User { 
-           firstname: "Phoenix", lastname: "Johnson",
-           fullname: "Phoenix Johnson", id: 95, 
-           gender: "male", age: 22});
-    commit
-
-begin
-MATCH (h:User), (f:User)
-WHERE h.id = 95 AND f.id = 2
-CREATE UNIQUE (h)-[:FRIEND]-(f);
-commit
-
-
-begin
-MATCH (h:User), (f:User)
-WHERE h.id = 95 AND f.id = 23
-CREATE UNIQUE (h)-[:FRIEND]-(f);
-commit
-
-
-begin
-MATCH (h:User), (f:User)
-WHERE h.id = 95 AND f.id = 33
-CREATE UNIQUE (h)-[:FRIEND]-(f);
-commit
-
-
-begin
-MATCH (h:User), (f:User)
-WHERE h.id = 95 AND f.id = 24
-CREATE UNIQUE (h)-[:FRIEND]-(f);
-commit
-
-
-begin
-MATCH (h:User), (f:User)
-WHERE h.id = 95 AND f.id = 74
-CREATE UNIQUE (h)-[:FRIEND]-(f);
-commit
-
-
-begin
-MATCH (h:User), (f:User)
-WHERE h.id = 95 AND f.id = 19
-CREATE UNIQUE (h)-[:FRIEND]-(f);
-commit
- 
-    begin
-    MERGE (:User { 
-           firstname: "Eden", lastname: "Gutiérrez",
-           fullname: "Eden Gutiérrez", id: 96, 
+    CREATE (:User { 
+           firstname: "Logan", lastname: "Moore",
+           fullname: "Logan Moore", id: 92, 
            gender: "female", age: 30});
     commit
 
 begin
 MATCH (h:User), (f:User)
-WHERE h.id = 96 AND f.id = 8
+WHERE h.id = 92 AND f.id = 0
 CREATE UNIQUE (h)-[:FRIEND]-(f);
 commit
 
 
 begin
 MATCH (h:User), (f:User)
-WHERE h.id = 96 AND f.id = 75
-CREATE UNIQUE (h)-[:FRIEND]-(f);
-commit
- 
-    begin
-    MERGE (:User { 
-           firstname: "Logan", lastname: "Anderson",
-           fullname: "Logan Anderson", id: 97, 
-           gender: "male", age: 23});
-    commit
-
-begin
-MATCH (h:User), (f:User)
-WHERE h.id = 97 AND f.id = 41
-CREATE UNIQUE (h)-[:FRIEND]-(f);
-commit
- 
-    begin
-    MERGE (:User { 
-           firstname: "Lyric", lastname: "Perry",
-           fullname: "Lyric Perry", id: 98, 
-           gender: "male", age: 19});
-    commit
-
-begin
-MATCH (h:User), (f:User)
-WHERE h.id = 98 AND f.id = 85
+WHERE h.id = 92 AND f.id = 80
 CREATE UNIQUE (h)-[:FRIEND]-(f);
 commit
 
 
 begin
 MATCH (h:User), (f:User)
-WHERE h.id = 98 AND f.id = 75
+WHERE h.id = 92 AND f.id = 19
 CREATE UNIQUE (h)-[:FRIEND]-(f);
 commit
 
 
 begin
 MATCH (h:User), (f:User)
-WHERE h.id = 98 AND f.id = 72
+WHERE h.id = 92 AND f.id = 67
 CREATE UNIQUE (h)-[:FRIEND]-(f);
 commit
 
 
 begin
 MATCH (h:User), (f:User)
-WHERE h.id = 98 AND f.id = 48
+WHERE h.id = 92 AND f.id = 67
 CREATE UNIQUE (h)-[:FRIEND]-(f);
 commit
  
     begin
-    MERGE (:User { 
-           firstname: "Dallas", lastname: "Phillips",
-           fullname: "Dallas Phillips", id: 99, 
-           gender: "male", age: 21});
+    CREATE (:User { 
+           firstname: "Lyric", lastname: "Richardson",
+           fullname: "Lyric Richardson", id: 93, 
+           gender: "male", age: 24});
     commit
 
 begin
 MATCH (h:User), (f:User)
-WHERE h.id = 99 AND f.id = 72
+WHERE h.id = 93 AND f.id = 81
 CREATE UNIQUE (h)-[:FRIEND]-(f);
 commit
 
 
 begin
 MATCH (h:User), (f:User)
-WHERE h.id = 99 AND f.id = 14
+WHERE h.id = 93 AND f.id = 79
+CREATE UNIQUE (h)-[:FRIEND]-(f);
+commit
+
+
+begin
+MATCH (h:User), (f:User)
+WHERE h.id = 93 AND f.id = 29
+CREATE UNIQUE (h)-[:FRIEND]-(f);
+commit
+ 
+    begin
+    CREATE (:User { 
+           firstname: "Camryn", lastname: "Rivera",
+           fullname: "Camryn Rivera", id: 94, 
+           gender: "male", age: 26});
+    commit
+
+begin
+MATCH (h:User), (f:User)
+WHERE h.id = 94 AND f.id = 79
+CREATE UNIQUE (h)-[:FRIEND]-(f);
+commit
+ 
+    begin
+    CREATE (:User { 
+           firstname: "Sawyer", lastname: "Jones",
+           fullname: "Sawyer Jones", id: 95, 
+           gender: "female", age: 34});
+    commit
+
+begin
+MATCH (h:User), (f:User)
+WHERE h.id = 95 AND f.id = 88
+CREATE UNIQUE (h)-[:FRIEND]-(f);
+commit
+ 
+    begin
+    CREATE (:User { 
+           firstname: "Reese", lastname: "Baker",
+           fullname: "Reese Baker", id: 96, 
+           gender: "male", age: 28});
+    commit
+
+begin
+MATCH (h:User), (f:User)
+WHERE h.id = 96 AND f.id = 38
+CREATE UNIQUE (h)-[:FRIEND]-(f);
+commit
+
+
+begin
+MATCH (h:User), (f:User)
+WHERE h.id = 96 AND f.id = 30
+CREATE UNIQUE (h)-[:FRIEND]-(f);
+commit
+ 
+    begin
+    CREATE (:User { 
+           firstname: "Jayden", lastname: "Howard",
+           fullname: "Jayden Howard", id: 97, 
+           gender: "male", age: 26});
+    commit
+
+begin
+MATCH (h:User), (f:User)
+WHERE h.id = 97 AND f.id = 53
+CREATE UNIQUE (h)-[:FRIEND]-(f);
+commit
+
+
+begin
+MATCH (h:User), (f:User)
+WHERE h.id = 97 AND f.id = 80
+CREATE UNIQUE (h)-[:FRIEND]-(f);
+commit
+
+
+begin
+MATCH (h:User), (f:User)
+WHERE h.id = 97 AND f.id = 67
+CREATE UNIQUE (h)-[:FRIEND]-(f);
+commit
+ 
+    begin
+    CREATE (:User { 
+           firstname: "Peyton", lastname: "Peterson",
+           fullname: "Peyton Peterson", id: 98, 
+           gender: "male", age: 34});
+    commit
+
+begin
+MATCH (h:User), (f:User)
+WHERE h.id = 98 AND f.id = 83
+CREATE UNIQUE (h)-[:FRIEND]-(f);
+commit
+
+
+begin
+MATCH (h:User), (f:User)
+WHERE h.id = 98 AND f.id = 77
+CREATE UNIQUE (h)-[:FRIEND]-(f);
+commit
+
+
+begin
+MATCH (h:User), (f:User)
+WHERE h.id = 98 AND f.id = 9
+CREATE UNIQUE (h)-[:FRIEND]-(f);
+commit
+ 
+    begin
+    CREATE (:User { 
+           firstname: "Jaylin", lastname: "Lewis",
+           fullname: "Jaylin Lewis", id: 99, 
+           gender: "male", age: 25});
+    commit
+
+begin
+MATCH (h:User), (f:User)
+WHERE h.id = 99 AND f.id = 85
+CREATE UNIQUE (h)-[:FRIEND]-(f);
+commit
+
+
+begin
+MATCH (h:User), (f:User)
+WHERE h.id = 99 AND f.id = 8
 CREATE UNIQUE (h)-[:FRIEND]-(f);
 commit
 
@@ -13893,20 +14082,6 @@ commit
 
 begin
 MATCH (h:User), (f:User)
-WHERE h.id = 99 AND f.id = 89
-CREATE UNIQUE (h)-[:FRIEND]-(f);
-commit
-
-
-begin
-MATCH (h:User), (f:User)
-WHERE h.id = 99 AND f.id = 15
-CREATE UNIQUE (h)-[:FRIEND]-(f);
-commit
-
-
-begin
-MATCH (h:User), (f:User)
-WHERE h.id = 99 AND f.id = 22
+WHERE h.id = 99 AND f.id = 40
 CREATE UNIQUE (h)-[:FRIEND]-(f);
 commit

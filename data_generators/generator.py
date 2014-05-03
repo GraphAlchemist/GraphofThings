@@ -17,7 +17,7 @@ def set_up_db():
     CREATE CONSTRAINT ON (user:User) ASSERT user.fullname IS UNIQUE;
     CREATE CONSTRAINT ON (machine:Machine) ASSERT machine.id IS UNIQUE;
     CREATE CONSTRAINT ON (interest:Interest) ASSERT interest.name IS UNIQUE;
-    CREATE CONSTRAINT ON (devicetype:DeviceType) ASSERT devicetype.type IS UNIQUE;
+    CREATE CONSTRAINT ON (os:OperatingSystem) ASSERT os.name IS UNIQUE;
     commit
     """
   )
@@ -31,13 +31,23 @@ interests = [
   ]
 
 def create_interests():
-  temp = Template("MERGE (:Interest {name: '$interest', id: '$id'})")
+  temp = Template("CREATE (:Interest {name: '$interest', id: '$id'});")
   output = []
   for i, interest in enumerate(interests):
     # starting interest ids with a 0 index feels unnatural
     tx = temp.safe_substitute({'interest': interest, 'id': i + 1})
     output.append(tx)
-  return "begin\n" + "\n".join(output) + ";\ncommit"
+  return "begin\n" + "\n".join(output) + "\ncommit"
+
+def create_os():
+  cypher = (
+    """
+    begin
+    CREATE (n:OperatingSystem {name: "Android"});
+    CREATE (n:OperatingSystem {name: "iOS"});
+    commit
+    """)
+  return cypher
 
 def create_location_hier():
   location_file = open(os.path.join(projectroot, "source_data/locations.cyp"))
@@ -168,18 +178,31 @@ def pick_locations(human):
 
 Companies = {}
 def create_companies():
-  temp = Template(
+  tempCo = Template(
     """
     begin
-    MERGE (:Company {name: "$name"});
+    CREATE (c:Company {name: "$name"});  
     commit
     """)
-  companies = [{"name": "Google"},
+  tempOS = Template(
+    """
+    begin
+    MATCH (c:Company), (os:OperatingSystem)
+    WHERE c.name = "$name" AND os.name = "$os"
+    CREATE UNIQUE (c)-[:DISTRIBUTES]->(os);
+    commit
+    """)
+  companies = [{"name": "Google", "os": "Android"},
                {"name": "Motorola"},
                {"name": "Samsung"},
-               {"name": "Apple"},
-               {"name": "Fitbit"}]
-  output = [temp.safe_substitute(c) for c in companies]
+               {"name": "Apple", "os": "Apple"},
+               {"name": "Fitbit"},
+               {"name": "Nike"}]
+  output = []
+  for c in companies:
+    output.append(tempCo.safe_substitute(c))
+    if c.get('os'):
+      output.append(tempOS.safe_substitute(c))
   return textwrap.dedent("".join(output))
 
 Locations = []
@@ -187,7 +210,7 @@ def create_locations():
   tempLo = Template(
     """
     begin
-    MERGE (l:Location {type: "$type", name: "$name", lat: $randLat, lon: $randLon})
+    CREATE (l:Location {type: "$type", name: "$name", lat: $randLat, lon: $randLon})
     WITH l
     MATCH (lh:LocationHier)
     WHERE lh.lat = $lhLat
@@ -230,36 +253,47 @@ def create_locations():
 Devices = {}
 def create_devices(d):
   d += 1
-  temp = Template(
+  tempPhone = Template(
           """
           begin
-          MERGE (m:Machine {id: $id, name: "$name", type: "$type"})
+          CREATE (m:Machine {id: $id, name: "$name", type: "$type"})
           WITH m
-          MATCH (c:Company)
-          WHERE c.name = "$maker"
-          CREATE UNIQUE (m)<-[:MAKES]-(c);
+          MATCH (c:Company), (os:OperatingSystem)
+          WHERE c.name = "$maker" AND os.name = "$osName"
+          CREATE UNIQUE (m)<-[:MAKES]-(c)
+          CREATE UNIQUE (m)-[:RUNS {version: $version}]->(os);
           commit
-          """)
+          """) 
+  tempWear = Template(
+    """
+    begin
+    CREATE (m:Machine {id: $id, name: "$name", type: "$type"})
+    WITH m
+    MATCH (c:Company)
+    WHERE c.name = "$maker"
+    CREATE UNIQUE (m)<-[:MAKES]-(c);
+    commit
+    """)
   # rels = pass
   options = [{"name": "Droid Razr M", 
-              "operating_system": "Android", 
+              "osName": "Android", 
               "version": choice([4.1, 4.0]),
               "maker": "Motorola",
               "type": "phone"},
              {"name": "Samsung Galaxy S 4",
-              "operating_system": "Android",
+              "osName": "Android",
               "maker": "Samsung",
               "version": 4.2,
               "type": "phone"},
              {"name": "iPhone 4",
               "maker": "Apple",
-              "operating_system": "iOS",
-              "version": uniform(4.0, 7.1),
+              "osName": "iOS",
+              "version": round(uniform(4.0, 7.1), 2),
               "type": "phone"},
              {"name": "iPhone 4S",
               "maker": "Apple",
-              "operating_system": "iOS",
-              "version": uniform(5.0, 7.1),
+              "osName": "iOS",
+              "version": round(uniform(5.0, 7.1), 2),
               "type": "phone"},
              {"name": "Fitbit One",
               "type": "wearable",
@@ -271,10 +305,19 @@ def create_devices(d):
              {"name": "Google Glass",
               "type": "wearable",
               "maker": "Google",
-              "operating_system": "Android",
-              "version": 4.4}]
+              "osName": "Android",
+              "version": 4.4},
+              {"name": "Nike Fuelband SE",
+               "type": "wearable",
+               "maker": "Nike"},
+              {"name": "Nike Fuelband",
+               "type": "wearable",
+               "maker": "Nike"}]
   device = Devices[d] = choice(options)
-  output = [temp.safe_substitute(device, id=d)]
+  if device['type'] == 'phone':
+    output = [tempPhone.safe_substitute(device, id=d)]
+  else:
+    output = [tempWear.safe_substitute(device, id=d)]
   return textwrap.dedent("".join(output))
 
 Humans = {}
@@ -282,7 +325,7 @@ def create_humans(p):
   temp = Template(
     """
     begin
-    MERGE (:Human:User { 
+    CREATE (:Human:User { 
            firstname: "$firstname", lastname: "$lastname",
            fullname: "$firstname $lastname", id: $id, 
            gender: "$gender", age: $age});
@@ -316,7 +359,7 @@ def create_users(u):
   temp = Template(
     """
     begin
-    MERGE (:User { 
+    CREATE (:User { 
            firstname: "$firstname", lastname: "$lastname",
            fullname: "$firstname $lastname", id: $id, 
            gender: "$gender", age: $age});
@@ -343,6 +386,7 @@ def generate_cypher(number):
   set_up = set_up_db()
   interests = create_interests()
   location_hier = create_location_hier()
+  os = create_os()
   companies = create_companies().encode('utf-8')
   locations = create_locations().encode('utf-8')
   # create 20% more devices than humans
@@ -351,8 +395,8 @@ def generate_cypher(number):
   humans = "".join([create_humans(p) for p in range(number)]).encode('utf-8')
   users = join([create_users(u) for u in range(number)]).encode('utf-8')
   components = [set_up, interests, location_hier, 
-                companies, locations, devices, 
-                humans, users]
+                os, companies, locations, 
+                devices, humans, users]
   generated_cypher = "\n".join(components)
   return generated_cypher
 
