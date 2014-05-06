@@ -17,89 +17,85 @@ Because the IoT is all about interactions between devices and humans, the data i
 2. `./bin/neo4j-shell < path/to/<this_repo>/data/GraphofThings.cyp`    
 
 ## Using the Generator
-...
-<!-- ** Generate your own data with our generator: **
-...
-In the `data_generators/` directory use the command `python generate_humans.py` 
-and pipe the output to the neo4j shell or a file. `generate_humans.py` script 
-generates 100 profiles by default but can be called with a `-n <integer>` flag
-that will generate as many as you need 
-(caution: this will fail for larger values of n 
-since it needs to keep an array of profiles to link them)
- -->
+To generate a new, random data set run:
+`python data_generators/generator.py`   
+Optionally, you can include the `-n` parameter to specify more **:HUMAN nodes**.  
+`python data_generators/generator.py -n 500`
+The default value is 100, and the generator will fail with 'larger' values.
+
 ## The Data Model
 Neo4j operates off of a Property-Label Graph Model.  As concisely as possible, a graph is made up of nodes that can be categorized by one or more labels.  Node are connected by instances of directed relationships that can be queried bidirectionally.  Both relationships and nodes store properties which can be any primitive or array of primitives (string, float, integer, etc.).  You can read more about the Property-Label Graph Model [here](http://docs.neo4j.org/chunked/stable/graphdb-neo4j.html).
 
 Our IoT graph data model consists of the following:
 
-Node labels:
-* :User - a node that indicates a persona, for example from social media, that does not exist in the scope of the IoT application currently.  Obvious examples would include Facebook user, Linkedin, Twitter, etc. 
+### Node labels
+* **:User** - a node that indicates a persona, for example from social media, that does not exist in the scope of the IoT application currently.  Obvious examples would include Facebook user, Linkedin, Twitter, etc. 
     * Can have any number of properties relevant to the persona and use case - E.g age, email, gender.
     * Can form a relationship with any other :User or :Human node via explicit ties (e.g. for example :FRIEND, :FOLLOWS, etc.)
     * Can also carry labels that further denote the `type` of persona.  e.g. :Facebook, :Linkedin, :Meetup
 
 
-* :Human - an extra label that the :User nodes which exist in context of the current Internet of Things Scope (e.g. they have devices), and are not only a persona.
+* **:Human** - an extra label that the :User nodes which exist in context of the current Internet of Things Scope (e.g. they have devices), and are not only a persona.
     * Can have any number of properties that are relevant for the use case, e.g. age, hometown, gender, religion, email address, etc.
     * Can form relationships with :Machine, :User, and other :Human nodes.
 
-* :Machine - a node that indicates any wearable or mobile device, that communicates with other devices or humans directly, in the Internet of Things scope.
+* **:Machine** - a node that indicates any wearable or mobile device, that communicates with other devices or humans directly, in the Internet of Things scope.
     * Can have any number of properties relevant to the use case including type, id, and name.
     * Can form a relationship with :Human, :Location, and other :Machine nodes.
 
-* :Location - a node that indicates an event, activity, store, park, etc. that occupies a physical space.
+* **:Location** - a node that indicates an event, activity, store, park, etc. that occupies a physical space.
     * Must have a `lat` and `lon` property.
     * Can have a type property and name property indicating the event or name of the location.
 
-* :OperatingSystem - represents the major operating systems.  For simplicity sake, Android and iOS.
+* **:OperatingSystem** - represents the major operating systems.  For simplicity sake, Android and iOS.
     * Must contain relationships to :Machine denoting version. 
     * Can contain relationship to company that distributes operating system.
 
 
-* :Company - a node that represents a device manufacturer, designer, or operating system distributor.
+* **:Company** - a node that represents a device manufacturer, designer, or operating system distributor.
     * Must have relationship to :OperatingSystem and :Machine
 
-* :Interest - an intermediary node that holds a single 'interest' category.
+* **:Interest** - an intermediary node that holds a single 'interest' category.
     * May connect to n number of :Human, :Location, :User nodes.
     * May connect to other :Interest nodes to form a hierarchy [not included]
 
-* :LocationHier - a node in a spatial hierarchy up from a :Location node.
+* **:LocationHier** - a node in a spatial hierarchy up from a :Location node.
     * Can have a relationship to a :Location node
     * Can have a relationship to other :LocationHier nodes
 
-Relationship types:
-* :USES - a directed relationship between a human and any n number of devices they possess. 
+### Relationship types
+* **:USES** - a directed relationship between a human and any n number of devices they possess. 
     * (:Human)-[:USES]->(:Machine)
 
-* :LOCATED - an action taken by a device, implying that a user visited a location. 
+* **:LOCATED** - an action taken by a device, implying that a user visited a location. 
     * (:Machine)-[:LOCATED]->(:Location)
 
-* :FRIEND - an implicitly bi-directional relationship implying a connection on facebook.  
-    *(:Human|:User)-[:FRIEND]-(:Human|:User)
+* **:FRIEND** - an implicitly bi-directional relationship implying a connection on facebook.  
+    * (:Human|:User)-[:FRIEND]-(:Human|:User)
 
-* :PING - an interaction from one device to another indicating communication.  For instance, an implicit connecting generated when two :Humans that :HAS the same :Interest are in proximity of eachother.
+* **:PING** - an interaction from one device to another indicating communication.  For instance, an implicit connecting generated when two :Humans that :HAS the same :Interest are in proximity of eachother.
     * (:Machine)-[:PING]->(:Machine)
 
-* :HAS - a relationship that indicates connection to an interest.
+* **:HAS** - a relationship that indicates connection to an interest.
     * (:Location|:Human|:User)-[:HAS]->(:Interest)
 
-* :RUNS - a relationship between a device and the operating system it runs.
+* **:RUNS** - a relationship between a device and the operating system it runs.
     * (:Machine)-[:RUNS]->(:OperatingSystem)
     * holds the property **version**  which indicates the version of the os that is being run by that particular device.
   
-* :LOCATED - a relationship between levels in a location hierarchy.
+* **:LOCATED** - a relationship between levels in a location hierarchy.
     * (:Location)-[:LOCATED]->(:LocationHier {name: "Main Street"})-[:LOCATED]->(:LocationHier {name: "Everytown"})-[:LOCATED]->(:LocationHier {name: "Oregon"}).
 
-* :MAKES - for simplicity, a relationship indicating that a company designs, manufactuers, or distributes a device.  e.g. Nike makes Fuelband.  Apple makes iPhone.
+* **:MAKES** - for simplicity, a relationship indicating that a company designs, manufactuers, or distributes a device.  e.g. Nike makes Fuelband.  Apple makes iPhone.
     * (:Company)-[:MAKES]->(:MachineType)
 
-* :DISTRIBUTES
+* **:DISTRIBUTES**
     * (:Company)-[:DISTRIBUTES]->(:OperatingSystem)
 
 ![IoT Graph Data Model](assets/GraphModel.png)
 
 ## Example Queries
-#### Human based read queries:
+#### Human based read queries
 
 All friends and friends of friends of users that attended an event:
 ```
@@ -145,8 +141,8 @@ RETURN l, collect(DISTINCT otherLoc)
 ```
 ![Query4](assets/Query4.png)
 
-#### Machine based read queries:
-[DRAFT] Device Demographics for an event:
+#### Machine based read queries
+Device Demographics for an event:
 ```
 MATCH (h:Human)-[:USES]->(m:Machine)-[:LOCATED]->(l:Location)
 OPTIONAL MATCH (h)-[:USES]->(w)
@@ -184,7 +180,7 @@ RETURN h, c
 ```
 ![Query7](assets/Query7.png)
 
-#### Location based read queries:
+#### Location based read queries
 
 Return all users with Google Glass and Fitbit (early adopters) in Portland:
 ```
@@ -210,7 +206,7 @@ RETURN h
 ```
 ![Query9](assets/Query9.png)
 
-#### Human based write queries:
+#### Human based write queries
 Devices communicate for people who attend and event and are friends of friends:
 ```
 MATCH (h:Human)-[:USES]->(m:Machine)-[:LOCATED]->(l:Location), 
@@ -227,7 +223,7 @@ FOREACH (item IN friendsofFriends |
 ```
 ![Query10](assets/Query10.png)
 
-** Device based write queries: **
+#### Device based write queries
 Suggest update for any out of date Android or iOS phones that power a Nike Fuelband:
 ```
 MATCH (h:Human)-[:USES]->(m:Machine)-[r:RUNS]->(os:OperatingSystem),
@@ -237,7 +233,7 @@ CREATE UNIQUE (m)-[:ALERT {type: 'update', message: 'It looks like your ' + os.n
 ```
 ![Query11](assets/Query11.png)
 
-#### Cleaning the Database after write queries:
+#### Cleaning the Database after write queries
 ```
 MATCH ()-[r:PING|:ALERT]-()
 DELETE r
